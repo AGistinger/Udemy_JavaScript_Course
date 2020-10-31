@@ -292,7 +292,7 @@ if(mark_bmi_02 > john_bmi_02) {
     console.log(`John's BMI (${john_bmi_02}) is higher than Mark's (${mark_bmi_02}).`);
 }
 */
-
+/*
 // Type Conversion and Coercion
 // Conversion when you manually convert from one to another
 // Coercion when JS automtically changes types in the background
@@ -320,3 +320,171 @@ console.log(n);
 
 n = 2 + 3 + 4 + '5'; // 95
 n = '10' - '4' - '3' - 2 + '5'; // 15
+
+
+// Truthy and Falsy Values
+// Falsy values are not exactly false but will become false when converted into a boolean
+// 5 falsy values : 0, '', undefined, null, and NaN
+// Truthy values are any values that will be converted to true, any value that is not 0
+// and any string that isn't a empty string
+console.log(Boolean(0)); // false
+console.log(Boolean(undefined)); // false
+console.log(Boolean('Jonas')); // true
+console.log(Boolean({})); // true
+console.log(Boolean('')); // false
+
+const money = 100;
+if(money)
+{
+    console.log("Don't spend it all!");
+} else
+{
+    console.log("You should get a job!");
+}
+
+let height = 0;
+if(height)
+{
+    console.log("Yay! Height is defined!");
+} else
+{
+    console.log("Height is Undefined");
+}
+
+
+// Equality Operators == vs. ===
+// You need 3 equals to compare if something is equal to something else, strict equality operator
+const age = 18;
+if(age === 18)
+{
+    console.log("You're an adult");
+}
+
+// == loose equality operator which does type coercion
+if(age == "18")
+{
+    console.log("You're an adult");
+}
+
+// Always default to === operator for best practice
+const favorite = Number(prompt("What is your favorite number?"));
+console.log(favorite);
+console.log(typeof favorite); // string
+
+if(favorite === 23)
+{
+    console.log("Cool! 23 is an amazing number!");
+} else if(favorite === 7)
+{
+    console.log("7 is also a cool number");
+} else
+{
+    console.log(`${favorite} is not a cool number`);
+}
+
+// Different Operator, use two equal for strict version and one equal for loose version
+if(favorite !== 23)
+{
+    console.log("Why not 23?");
+}
+
+
+// Boolean Logic : The And, Or & Not Operators
+// And - All values must be true for the statment to be true, otherwise the statement is false
+// Or - One value must be true for the statement to be true
+// Not - Value must be false for the statement to be true
+
+// Logical Operators
+const has_drivers_license = true;
+const has_good_vision = true;
+const is_tired = false;
+
+console.log(has_drivers_license && has_good_vision); 
+console.log(has_drivers_license || has_good_vision); 
+console.log(!has_drivers_license); 
+
+if(has_drivers_license && has_good_vision && !is_tired)
+{
+    console.log("Sarah is able to drive");
+} else
+{
+    console.log("Someone else should drive...");
+}
+*/
+
+/////////////////////////////////////////////////////////
+// Coding Challenge #3
+/*
+There are two gymnastics teams, Dolphins and Koalas.
+They compete against each other 3 times.  The winter with the highest average score
+wins the trophy!
+
+1. Calculate the average score for each team, using the test data below.
+2. Compare the team's average scores to determine teh winner of the competition, and print
+it to the console.  Don't forget that there can be a draw, so test for that as well.
+3. Bonuse 1: include a requirement for a minimum score of 100.  With this rule, a team only wins
+if it has a higher score than the other team, and at the same time a score of at least 100 points.
+HINT: Use a logical operator to test for minimum score, as well as multiple else-if blocks.
+4. Bonuse 2: Minimum score also applies to a draw! So a draw only happens when both teams have the
+same score greater or equal to 100 points.  Otherwise, no team wins the trophy.
+
+Test Data: Dophins score 96, 108, and 89.
+Koalas score 88, 91, and 110.
+Test Data Bonus 1: Dolphins score 97, 112, and 101.
+Koalas score 109, 95 and 123.
+Test Data Bonus 2: Dolphins score 97, 112, and 101.
+Koalas score 109, 95, and 106.
+*/
+
+const min_score = 100;
+
+// Test data 1  - No team wins
+const dolphin_score_1 = 96;
+const dolphin_score_2 = 108;
+const dolphin_score_3 = 89;
+const koala_score_1 = 88;
+const koala_score_2 = 91;
+const koala_score_3 = 110;
+
+/*
+// Test data 2 - Koalas win
+const dolphin_score_1 = 97;
+const dolphin_score_2 = 112;
+const dolphin_score_3 = 101;
+const koala_score_1 = 109;
+const koala_score_2 = 95;
+const koala_score_3 = 123;
+*/
+
+/*
+// Test data 3 - No team wins
+const dolphin_score_1 = 97;
+const dolphin_score_2 = 112;
+const dolphin_score_3 = 101;
+const koala_score_1 = 109;
+const koala_score_2 = 95;
+const koala_score_3 = 106;
+*/
+
+function average_score(num1, num2, num3)
+{
+    return (num1 + num2 + num3) / 3;
+}
+
+const avg_dolphin_score = average_score(dolphin_score_1, dolphin_score_2, dolphin_score_3);
+const avg_koala_score = average_score(koala_score_1, koala_score_2, koala_score_3);
+console.log(`Dolphins score: ${avg_dolphin_score} : Koalas score: ${avg_koala_score}`);
+
+if(avg_dolphin_score > avg_koala_score && avg_dolphin_score >= min_score)
+{
+    console.log(`The Dolphins Win the trophy with a average score of ${avg_dolphin_score}`);
+} else if(avg_koala_score > avg_dolphin_score && avg_koala_score >= min_score)
+{
+    console.log(`The Koalas Win the trophy with a average score of ${avg_koala_score}`);
+} else if(avg_dolphin_score === avg_koala_score && avg_dolphin_score <= min_score)
+{
+    console.log(`There was a draw both the Dolphins and the Koalas have a average score of ${avg_dolphin_score}`);
+} else
+{
+    console.log("No team wins the trophy as their score is less than the minimum points 😭");
+}
