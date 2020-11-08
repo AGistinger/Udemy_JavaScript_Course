@@ -435,7 +435,7 @@ Koalas score 109, 95 and 123.
 Test Data Bonus 2: Dolphins score 97, 112, and 101.
 Koalas score 109, 95, and 106.
 */
-
+/*
 const min_score = 100;
 
 // Test data 1  - No team wins
@@ -465,7 +465,7 @@ const koala_score_1 = 109;
 const koala_score_2 = 95;
 const koala_score_3 = 106;
 */
-
+/*
 function average_score(num1, num2, num3)
 {
     return (num1 + num2 + num3) / 3;
@@ -477,14 +477,128 @@ console.log(`Dolphins score: ${avg_dolphin_score} : Koalas score: ${avg_koala_sc
 
 if(avg_dolphin_score > avg_koala_score && avg_dolphin_score >= min_score)
 {
-    console.log(`The Dolphins Win the trophy with a average score of ${avg_dolphin_score}`);
+    console.log(`The Dolphins Win the trophy 🏆 with a average score of ${avg_dolphin_score}`);
 } else if(avg_koala_score > avg_dolphin_score && avg_koala_score >= min_score)
 {
-    console.log(`The Koalas Win the trophy with a average score of ${avg_koala_score}`);
-} else if(avg_dolphin_score === avg_koala_score && avg_dolphin_score <= min_score)
+    console.log(`The Koalas Win the trophy 🏆 with a average score of ${avg_koala_score}`);
+} else if(avg_dolphin_score === avg_koala_score && avg_dolphin_score >= min_score && avg_score_koalas >= min_score)
 {
     console.log(`There was a draw both the Dolphins and the Koalas have a average score of ${avg_dolphin_score}`);
 } else
 {
     console.log("No team wins the trophy as their score is less than the minimum points 😭");
 }
+*/
+/*
+// The Switch Statment
+// Helps write a more complicated if statement with various options
+const day = "Monday";
+
+// Used for equality and not for comparison
+switch(day) 
+{
+    case "Monday" : // day === "Monday"
+        console.log("Plan course structure");
+        console.log("Go to coding meetup");
+        break; // you need to add a break in between each block to stop the others from executing
+    case "Tuesday" :
+        console.log("Prepare theory videos");
+        break;
+    case "Wednesday" :
+    case "Thursday" :
+        console.log("Write code examples");
+        break;
+    case "Friday" :
+        console.log("Record videos");
+        break;
+    case "Saturday" : 
+    case "Sunday" :
+        console.log("Enjoy the weekend :)");
+        break;
+    default :
+        console.log("Not a valid day!");
+        break;
+}
+
+// If the code above is written using if/else statements
+if(day === "Monday")
+{
+    console.log("Plan course structure");
+    console.log("Go to coding meetup");
+} else if(day === "Tuesday")
+{
+    console.log("Prepare theory videos");
+} else if(day === "Wednesday" || day === "Thursday")
+{
+    console.log("Write code examples");
+} else if(day === "Friday")
+{
+    console.log("Record videos");
+} else if(day === "Saturday" || day === "Sunday")
+{
+    console.log("Enjoy the weekend!");
+} else
+{
+    console.log("Not a valid day!");
+}
+
+
+// Statements and Expressions
+// A expression is a piece of code that produces a value ex) 3 + 4, 1991, true, !false
+// A statement is a bigger piece of code that is executed that does not produce a value on itself
+// ex) if(23 > 10) { const str = "23 is bigger"; }
+
+console.log(`I'm ${2037 - 1991} years old`);  // Expressions go in a template literal
+
+
+// The Conditional (Ternary) Operator
+const age = 23;
+age >= 18 ? (console.log("I like to drink wine")) : (console.log("I like to drink water"));
+
+const drink = age >= 18 ? "Wine" : "Water";
+console.log(drink);
+
+// old if/else block
+let drink_2;
+if(age >= 18)
+{
+    drink_2 = "Wine";
+}else
+{
+    drink_2 = "Water";
+}
+console.log(drink_2);
+
+// You can use a ternary expression in a template literal
+console.log(`I like to drink ${age >= 18 ? "Wine" : "water"}`);
+*/
+
+/////////////////////////////////////////////////////////////////
+// Coding Challenge #4
+/*
+Steven wants to build a very simple tip calculator for whenever he goes eating in a restaurant.
+In his country, it's usual to tip 15% if the bill balue is between 50 and 300.  If the value is
+different, the tip is 20%.
+
+1. your task is to calculate the tip, depending on the bill balue.  Create a variable called 'tip'
+for this.  It's not allowed to use an if/else statment.
+2. Print a string to the console containing the bill balue, the tip, and the final value
+(bill + tip).  
+Example: 'The bill was 275, the tip was 41.25, and the total value is 316.25'
+
+TEST DATA: Test for bill values, 275, 40 and 430
+*/
+/*
+// const bill = 275;
+// const bill = 40;
+const bill = 430;
+const tip = bill >= 50 && bill <= 300 ? (bill * .15) : (bill * .20);
+console.log(`The bill was $${bill}, the tip was $${tip}, and the total value is $${bill + tip}`);
+*/
+
+// ES5 and ES6+ and ESNEXT
+// JavaScript has backwards compatability to ES1
+// you can transpile modern code to work in older browsers using Babel
+// ES5 fully supported in all broswers down to IE9 from 2011
+// ES6 well supported in all modern browsers, no support in older browsers
+// You can look at the ES6 compatability table to see what is supported
