@@ -508,5 +508,172 @@ function compare_bmi(obj1, obj2)
 
 console.log(compare_bmi(mark, john));
 */
-
+/*
 // Iteration : The For Loop
+// Allows you to automate repeatitive tasks
+// For loop keeps running while condition is true
+for(let rep = 1; rep <= 10; rep++)
+{
+    console.log(`Lifting weights repitition ${rep}`);
+}
+
+// Looping Arrays, Breaking, and Continuing
+const adr_array = 
+[
+    "Adrianne",
+    "Gistinger",
+    2037 - 1991,
+    ["Mark", "Brian", "Jessica"],
+    true
+];
+
+const types = []; // empty array
+
+for(let i = 0; i < adr_array.length; i++)
+{
+    console.log(adr_array[i], typeof adr_array[i]);
+
+    // Filling types array
+    // types[i] = typeof adr_array[i];
+    types.push(typeof adr_array[i]);
+}
+
+console.log(types);
+
+const current_year = 2037;
+const years = [1991, 2007, 1969, 2020];
+const ages = [];
+
+for(let i = 0; i < years.length; i++)
+{
+    ages.push(current_year - years[i]);
+}
+console.log(ages);
+
+// Continue and Break
+// Continue is to exit the current iteration of the loop and continue to the next one
+// Break is to exit the whole loop
+console.log("----------ONLY STRINGS------------");
+for(let i = 0; i < adr_array.length; i++)
+{
+    if(typeof adr_array[i] !== "string") continue;
+    console.log(adr_array[i], typeof adr_array[i]);
+}
+
+console.log("----------BREAK WITH NUMBER------------");
+for(let i = 0; i < adr_array.length; i++)
+{
+    if(typeof adr_array[i] === "number") break;
+    console.log(adr_array[i], typeof adr_array[i]);
+}
+
+
+// Looping Backwards and Loops in Loops
+// Looping Backwards
+const adr_array = 
+[
+    "Adrianne",
+    "Gistinger",
+    2037 - 1991,
+    "Software Engineer",
+    ["Mark", "Brian", "Jessica"],
+    true
+];
+
+for(let i = adr_array.length-1; i >= 0; i--)
+{
+    console.log(i, adr_array[i]);
+}
+
+// Loop inside of a Loop
+for(let i = 1; i <= 3; i++)
+{
+    console.log(`--------Starting Exercise ${i}`);
+    for(let x = 1; x <= 5; x++)
+    {
+        console.log(`Exercise ${i}, Lifting Reptition ${x}`);
+    }
+}
+
+// While Loop
+// While loops only need a condition that will keep running if it is true
+let rep = 1;
+while(rep <= 10)
+{
+    console.log(`Lifting weights repitition ${rep}`);
+    rep++;
+}
+
+// While loop without a counter
+// roll a dice until you get a 6
+let dice = Math.trunc(Math.random() * 6) + 1;  // Math.random() creates a number between 0 and 1
+// Math.trunc(number) will round a number
+while(dice !== 6)
+{
+    dice = Math.trunc(Math.random() * 6) + 1;
+    console.log(`You rolled a ${dice}`);
+    if(dice === 6) console.log("Loop is about to end....");
+}
+
+// While loop should be used when you don't know how many iterations you need
+*/
+
+////////////////////////////////////////////////////////////////////
+// Coding Challenge #4
+
+/*
+Let's improve Steven's tip calculator even more, this time using loops!
+
+1. Create an array 'bills' containing all 10 test bill values
+2. Create empty arrays for the tips and the totals 'tips' and 'totals'
+3. Use the 'calc_tip' function we wrote before (no need to repeat) to
+calculate tips and total vluaes (bill + tip) for every bill value in the bills array.
+Use a loop to perform the 10 calculations!
+
+TEST DATA: 22, 295, 176, 440, 37, 105, 10, 1100, 86, and 52.
+
+HINT: Call calc_tip in the lop and use the push method to add values to the tips and total arrays
+
+4. BONUS: Write a function 'calc_average' which takes an array called 'arr' as an argument.
+This function calculates the average of all numbers in the given array.  This is a DIFFICULT challenge
+(we haven't done this before)! Here is how to solve it:
+4.1. First, you will need to add up all the values in the array.  To do the additon,
+start by creating a variable 'sum' that starts at 0.  The loop over array using a for loop.
+In each iteration, add the current value to the 'sum' variable.  This way by the end of the 
+loop, you will have all the values added together.
+4.2. To calculate the average, divide the sum you calculated before by the length of the array
+(because that's the number of elements)
+4.3. Call the function with the 'totals' array
+*/
+
+// If bill is between 50 and 300 the tip will be 15%, else the tip is 20%
+function calc_tip(x)
+{
+    return x >= 50 && x <= 300 ? x * .15 : x * .2;
+}
+
+function calc_average(arr)
+{
+    let sum = 0;
+    for(let i = 0; i < arr.length; i++)
+    {
+        sum += arr[i];
+    }
+    return sum / arr.length;
+}
+
+const bills = [22, 295, 176, 440, 37, 105, 10, 1100, 86, 52];
+const tips = [];
+const totals = [];
+
+for(let i = 0; i < bills.length; i++)
+{
+    const tip = calc_tip(bills[i]);
+    tips.push(tip);
+    totals.push(tip + bills[i]);
+}
+
+console.log(`Bills: ${bills}, 
+Tips: ${tips}, 
+Totals: ${totals},
+Average: ${calc_average(totals)}`);
