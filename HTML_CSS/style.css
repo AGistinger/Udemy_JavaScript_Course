@@ -1,0 +1,61 @@
+/* entering each type you want to edit will allow you to modify components separately*/
+/* the star* selector allows you to modify all the elements on the page */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* always use this to include padding into the w or h of an element */
+}
+
+body {
+  background-color: rgb(182, 115, 245);
+  font-family: Arial;
+  font-size: 20px;
+  padding: 50px;
+}
+
+h1 {
+  font-size: 35px;
+  margin-bottom: 25px;
+}
+
+h2 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+p {
+  margin-bottom: 20px;
+}
+
+.first {
+  color: blue;
+}
+
+#your-name {
+  background-color: orange;
+  border: 5px solid #444;
+  width: 400px;
+  padding: 25px;
+  margin-top: 30px;
+}
+
+/* You can apply the same rules to multiple components by putting a comma between them */
+input,
+button {
+  padding: 10px;
+  font-size: 16px;
+}
+
+a {
+  background-color: turquoise;
+}
+
+/* Important Selector for DOM manipulation / Child Selector */
+#your-name h2 {
+  color: magenta;
+}
+
+/* To change the size of an image so it isn't the same size as its source */
+#course-image {
+  width: 300px;
+}
