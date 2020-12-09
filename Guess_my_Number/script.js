@@ -24,11 +24,23 @@ console.log(document.querySelector(".message").textContent); // reads text prope
 // console.log(document.querySelector(".guess").value);
 
 // Secret Number Generator
-let secret_number = Math.trunc(Math.random() * 20) + 1;
+let secret_number = random_number();
 // document.querySelector(".number").textContent = secret_number;
 
 // Define a variable to update for score
 let score = 20;
+
+// Define variable for highscore
+let highscore = 0;
+
+// refactor functions
+function display_message(message) {
+  document.querySelector(".message").textContent = message;
+}
+
+function random_number() {
+  return Math.trunc(Math.random() * 20) + 1;
+}
 
 // Handling Click Events
 /*
@@ -43,40 +55,32 @@ document.querySelector(".check").addEventListener("click", function () {
 
   // No player input
   if (!guess) {
-    document.querySelector(".message").textContent = "⛔ No Number!";
+    display_message("⛔ No Number!");
 
     // When player wins
   } else if (guess === secret_number) {
-    document.querySelector(".message").textContent = "🎉 Correct Number!";
+    display_message("🎉 Correct Number!");
     document.querySelector(".number").textContent = secret_number;
     document.querySelector("body").style.backgroundColor = "#60b347";
     document.querySelector(".number").style.width = "30rem";
 
-    // When guess is too high
-  } else if (guess > secret_number) {
-    if (score > 1) {
-      document.querySelector(".message").textContent = "📈 Too High!";
-      score--;
-      document.querySelector(".score").textContent = score;
-    } else {
-      document.querySelector(".message").textContent = "💥 You Lost the Game!";
-      document.querySelector(".score").textContent = 0;
-      document.querySelector("body").style.backgroundColor = "red";
+    // Define functionality for highscore
+    if (score > highscore) {
+      highscore = score;
+      document.querySelector(".highscore").textContent = highscore;
     }
 
-    // When guess is too low
-  } else if (guess < secret_number) {
+    // When guess is wrong (refactored code)
+  } else if (guess !== secret_number) {
     if (score > 1) {
-      document.querySelector(".message").textContent = "📉 Too Low!";
       score--;
+      display_message(guess > secret_number ? "📈 Too High!" : "📉 Too Low!");
       document.querySelector(".score").textContent = score;
     } else {
-      document.querySelector(".message").textContent = "💥 You Lost the Game!";
+      display_message("💥 You Lost the Game!");
       document.querySelector(".score").textContent = 0;
       document.querySelector("body").style.backgroundColor = "#8b0000";
     }
-  } else {
-    document.querySelector(".message").textContent = "🐱‍👤 Invalid Entry";
   }
 });
 
@@ -97,11 +101,11 @@ variables
 
 document.querySelector(".again").addEventListener("click", function () {
   score = 20;
-  secret_number = Math.trunc(Math.random() * 20) + 1;
+  secret_number = random_number();
 
   document.querySelector(".number").textContent = "?";
   document.querySelector(".score").textContent = score;
-  document.querySelector(".message").textContent = "Start guessing...";
+  display_message("Start guessing...");
   document.querySelector(".guess").value = "";
 
   document.querySelector("body").style.backgroundColor = "#222";
