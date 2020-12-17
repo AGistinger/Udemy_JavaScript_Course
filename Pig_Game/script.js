@@ -12,7 +12,7 @@ const dice_el = document.querySelector(".dice");
 const btn_new = document.querySelector(".btn--new");
 const btn_roll = document.querySelector(".btn--roll");
 const btn_hold = document.querySelector(".btn--hold");
-const close_modal = document.querySelector(".close-modal");
+const close_modal_btn = document.querySelector(".close-modal"); // Why am I null?
 
 // Variables
 let scores, current_score, active_player, playing;
@@ -59,8 +59,16 @@ function init() {
   display_scores();
 }
 
+function close_modal() {
+  document.querySelector(".modal").classList.add("hidden");
+  document.querySelector(".overlay").classList.add("hidden");
+}
+
 // Start Game
 init();
+
+// Pop-up for instructions functionality
+close_modal_btn.addEventListener("click", close_modal);
 
 // Rolling dice functionality
 btn_roll.addEventListener("click", function () {

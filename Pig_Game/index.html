@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="style.css" />
     <title>Pig Game</title>
   </head>
+
   <body>
     <main>
       <section class="player player--0 player--active">
@@ -32,5 +33,19 @@
       <button class="btn btn--hold">📥 Hold</button>
     </main>
     <script src="script.js"></script>
+
+    <div class="modal hidden">
+      <button class="close-modal">&times;</button>
+      <h1>Pig Game Instructions</h1>
+      <p>
+        To play the pig game select the "Roll Dice" button. Each time that you
+        roll the dice your current score will update with the total amount you
+        have rolled. However if you roll a "1" you will lose all your points for
+        that round and it will be the next players turn. To keep your current
+        amount of points and pass lead to the next player select the "Hold"
+        button. The first player to get to "100" points wins!
+      </p>
+    </div>
+    <div class="overlay hidden"></div>
   </body>
 </html>
