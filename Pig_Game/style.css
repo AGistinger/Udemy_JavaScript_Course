@@ -208,3 +208,16 @@ main {
   border: none;
   background: none;
 }
+
+/*--Winning Player--*/
+#player-won {
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  left: 46%;
+  margin-left: -50px;
+  margin-top: -25px;
+  font-size: 24px;
+  color: rgb(255, 255, 255);
+  background-color: rgba(179, 0, 250, 0.575);
+}

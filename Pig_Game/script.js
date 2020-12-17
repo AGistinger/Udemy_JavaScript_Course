@@ -12,7 +12,9 @@ const dice_el = document.querySelector(".dice");
 const btn_new = document.querySelector(".btn--new");
 const btn_roll = document.querySelector(".btn--roll");
 const btn_hold = document.querySelector(".btn--hold");
-const close_modal_btn = document.querySelector(".close-modal"); // Why am I null?
+const close_modal_btn = document.querySelector(".close-modal");
+const overlay_el = document.querySelector(".overlay");
+const player_won_el = document.getElementById("player-won");
 
 // Variables
 let scores, current_score, active_player, playing;
@@ -54,6 +56,7 @@ function init() {
   player1_el.classList.remove("player--active");
   player0_el.classList.remove("player--winner");
   player1_el.classList.remove("player--winner");
+  player_won_el.classList.add("hidden");
   hide_dice();
   clear_score();
   display_scores();
@@ -61,7 +64,7 @@ function init() {
 
 function close_modal() {
   document.querySelector(".modal").classList.add("hidden");
-  document.querySelector(".overlay").classList.add("hidden");
+  overlay_el.classList.add("hidden");
 }
 
 // Start Game
@@ -111,6 +114,9 @@ btn_hold.addEventListener("click", function () {
       document
         .querySelector(`.player--${active_player}`)
         .classList.remove("player--active");
+
+      player_won_el.textContent = `🎉 Player ${active_player + 1} Won! 🎉`;
+      player_won_el.classList.remove("hidden");
 
       hide_dice();
     } else {
