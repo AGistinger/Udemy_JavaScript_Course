@@ -194,3 +194,67 @@ const func_arrow = (a, b) => {
   return a + b;
 }; // arrow functions do not get arguments keyword
 // add_arrow(2, 5, 8); // error
+
+/* 
+----------Primitives VS. Objects------------
+Primitives - primitive types
+Objects - reference types
+All reference types are stored in the heap
+All primitive types are stored in the call stack, that is where execution context runs
+*/
+let age = 30;
+let old_age = age;
+age = 31;
+console.log(age);
+console.log(old_age);
+
+const self = {
+  name: "Jonas",
+  age: 30,
+};
+
+const friend = self;
+friend.age = 27; // points to the same memory as me will also change me.age
+console.log(`Friend: `, friend);
+console.log(`Me: `, self); // age is now 27...
+
+/*
+----------Primitives Vs. Objects in Practice-------
+*/
+// Primitive types
+let last_name = "Williams";
+let old_last_name = last_name;
+last_name = "Davis";
+console.log(last_name, old_last_name);
+
+// Reference types
+const jessica = {
+  first_name: "Jessica",
+  last_name: "Williams",
+  age: 27,
+};
+
+const married_jessica = jessica; // will point to the same object
+married_jessica.last_name = "Davis"; // will change last name in both objects, doesn't create new object
+console.log(`Before marriage: `, jessica);
+console.log(`After marriage: `, married_jessica);
+
+// married_jessica = {}; // not allowed is const
+
+// Copying objects
+const jessica2 = {
+  first_name: "Jessica",
+  last_name: "Williams",
+  age: 27,
+  family: ["Alice", "Bob"],
+};
+
+// Shallow Copy
+const jessica_copy = Object.assign({}, jessica2); // new object copied from original object added to the heap
+jessica_copy.last_name = "Davis";
+jessica_copy.family.push("Mary");
+jessica_copy.family.push("John"); // both families get modified instead of just the copy
+console.log(`Before marriage: `, jessica2);
+console.log(`After marriage: `, jessica_copy);
+// object.assign only works on the first level, it will not work for objects of objects (shallow copy)
+// shallow copy will only copy things in the first level, deep clone will copy everything
