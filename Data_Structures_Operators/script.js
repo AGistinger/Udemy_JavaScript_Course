@@ -36,6 +36,12 @@ const restaurant = {
       `Order recieved! ${this.starterMenu[starter_index]} and ${this.mainMenu[main_index]}, Will be delivered to ${address}, at ${time}`
     );
   },
+
+  orderPasta: function (ing1, ing2, ing3) {
+    console.log(
+      `Here is your delicious pasta with ${ing1}, ${ing2}, and ${ing3}`
+    );
+  },
 };
 
 /*
@@ -102,11 +108,14 @@ console.log(menu, starters);
 let d = 111;
 let e = 999;
 const obj = { d: 23, e: 7, f: 14 };
-({ d, e } = obj); // syntax error, expects a code block, must wrap in parantheses
+// cannot use const/let because d and e are already declared and you are just mutating the variables
+({ d, e } = obj); // syntax error, expects a code block, must wrap in parantheses.
+console.log(d, e);
 
 // Nested objects
+// In order to access nested objections you enter the property name and then a colon then {nested_property}
 const {
-  fri: { open: op, close: cl },
+  fri: { open: op = 0, close: cl = 0 },
 } = openingHours;
 console.log(op, cl);
 
@@ -114,16 +123,67 @@ console.log(op, cl);
 // function allows you to pass in an object of options
 restaurant.order_delivery({
   time: "22:30",
-  address: "Vil del Sole, 21",
+  address: "Via del Sole, 21",
   main_index: 2,
   starter_index: 2,
 });
 
 restaurant.order_delivery({
-  address: "Vil del Sole, 21",
+  address: "Via del Sole, 21",
   starter_index: 1,
 });
 
 /*
 -------------------The Spread Operator (...)--------------------
+Used to expand an array as all its elements
+Takes all the individual values out of orginal array and puts them into the new array.
+
+Gets elements out of arrays, doesn't create new variables, you can only use the spread operator when 
+building an array or when passing values into a function.
+
+Spread operator works on all iterables.
+Iterables are: arrays, strings, maps, sets, NOT objects.
 */
+const spreadArr = [7, 8, 9];
+const badNewArr = [1, 2, arr[0], arr[1], arr[2]]; // don't do this
+console.log(badNewArr);
+
+const newArr = [1, 2, ...arr]; // expands the array into all elements
+console.log(newArr);
+console.log(...newArr); // will log the indivudual elements of the array instead of showing the whole array
+const newMenu = [...restaurant.mainMenu, "Gnocci"]; // creates a new array, does not manipulate the mainMenu array
+console.log(newMenu);
+
+// Copy array
+const mainMenuCopy = [...restaurant.mainMenu]; // shallow copy, similar to obj.assign
+
+// Join 2 arrays together
+const fullMenu = [...restaurant.starterMenu, ...restaurant.mainMenu];
+console.log(fullMenu);
+
+// iterable string
+const str = "Adrianne";
+const letters = [...str, " ", "G."];
+console.log(letters);
+console.log(...str);
+// console.log(`${...str} Gistinger`); // doesn't work
+
+// Function with spread operator / orderPasta function
+const ingredients = [
+  prompt("Let's make pasta! Ingredient 1?"),
+  prompt("ingredient 2?"),
+  prompt("ingredient 3?"),
+];
+console.log(ingredients);
+restaurant.orderPasta(...ingredients); // expands ingredients array with prompt values
+
+// Objects with spread operator
+const newRestaurant = { foundedIn: 1998, ...restaurant, founder: "Guiseppe" };
+console.log(newRestaurant);
+
+// Shallow copy objects (instead of obj.assign)
+const restaurantCopy = { ...restaurant };
+restaurantCopy.name = "Ristorante Roma";
+
+console.log(restaurantCopy.name);
+console.log(restaurant.name);
