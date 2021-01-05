@@ -42,6 +42,14 @@ const restaurant = {
       `Here is your delicious pasta with ${ing1}, ${ing2}, and ${ing3}`
     );
   },
+
+  orderPizza: function (mainIngredient, ...otherIngredients) {
+    let order = `Your Pizza from ${this.name} is on its way with the selected toppings of: ${mainIngredient}`;
+    for (let i = 0; i < otherIngredients.length; i++) {
+      order += ` ${otherIngredients[i]}`;
+    }
+    console.log(order);
+  },
 };
 
 /*
@@ -187,3 +195,101 @@ restaurantCopy.name = "Ristorante Roma";
 
 console.log(restaurantCopy.name);
 console.log(restaurant.name);
+
+/*
+-------------------- Rest Pattern and Parameters ---------------------------------
+The rest pattern has the same syntax as the spread operator (...), but it does the opposite
+of the spread operator.
+
+The rest pattern collects multiple elements and pack them into an array.
+
+It is called rest because it will take the rest of the elements and put them into an array that
+are not used in a destructuring assignment.  This will not include skipped elements.
+
+Must be the last in the destructuring element.  You cannot use rest pattern in the middle.
+
+There can only be one rest in any destructuring assignment.
+*/
+////////////// Destructuring
+// SPREAD, because on RIGHT side of =
+const arr2 = [1, 2, ...[3, 4]];
+
+// REST, because it is on the LEFT side of =
+const [a1, b1, ...others] = [1, 2, 3, 4, 5];
+console.log(a1, b1, others);
+
+const [pizza, , risotto, ...otherFood] = [
+  ...restaurant.mainMenu,
+  ...restaurant.starterMenu,
+];
+console.log(pizza, risotto, otherFood);
+
+// REST, objects destructuring assignment
+const { sat, ...weekdays } = restaurant.openingHours;
+console.log(weekdays); // will only have thu and friday
+
+//////////////// Functions with rest syntax as arguments/parameters (compress arguments)
+function add(...numbers) {
+  let sum = 0;
+  for (let i = 0; i < numbers.length; i++) {
+    sum += numbers[i];
+  }
+  console.log(sum);
+}
+
+add(2, 3);
+add(5, 3, 7, 2);
+add(8, 2, 5, 3, 2, 1, 5);
+
+// Use spread operator to pass them into the function
+const x1 = [23, 5, 7];
+add(...x1);
+
+// Example of function inside object using rest parameters
+restaurant.orderPizza("mushrooms", "onion", "olives", "spinach");
+restaurant.orderPizza("sausage");
+
+/*
+-------------------- Short Circuiting (&& and ||) -----------------------------
+(||)
+If the first value is a truth value, it will immediately return the first truth value and not
+evaluate the 2nd value.
+
+You can use the || to evaluate statements and set default values.
+
+(&&)
+The && operator works in the exact opposite way of the || operator.
+The && operator short circuits if the first value is false.
+The first false value will be returned.
+*/
+// Use ANY data type, return ANY data type, short-circuiting (||)
+console.log("--- Or ---");
+console.log(3 || "Jonas"); // Non-boullien values
+console.log("" || "Jonas"); // first operand is false so 2nd is returned
+console.log(true || 0); // first operand is true
+console.log(undefined || null); //  both are false but 2nd value is returned
+
+console.log(undefined || 0 || "" || "Hello" || 23 || null); // will be hello, first truth value
+
+// Ternary operator
+restaurant.numGuests = 23;
+const guests1 = restaurant.numGuests ? restaurant.numGuests : 10;
+console.log(guests1);
+
+// Short circuit ||
+const guests2 = restaurant.numGuests || 10;
+console.log(guests2);
+
+// short-circuiting (&&)
+console.log("---And---");
+console.log(0 && "Jonas"); // 0 false
+console.log(7 && "Jonas"); // "Jonas" true
+
+console.log("Hello" && 23 && null && "Jonas"); // null false
+
+// Practical example
+if (restaurant.orderPizza) {
+  restaurant.orderPizza("Sausage", "Mushroom");
+}
+
+restaurant.orderPizza && restaurant.orderPizza("Sausage", "Mushroom");
