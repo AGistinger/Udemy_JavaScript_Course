@@ -177,13 +177,13 @@ console.log(...str);
 // console.log(`${...str} Gistinger`); // doesn't work
 
 // Function with spread operator / orderPasta function
-const ingredients = [
-  prompt("Let's make pasta! Ingredient 1?"),
-  prompt("ingredient 2?"),
-  prompt("ingredient 3?"),
-];
-console.log(ingredients);
-restaurant.orderPasta(...ingredients); // expands ingredients array with prompt values
+// const ingredients = [
+//   prompt("Let's make pasta! Ingredient 1?"),
+//   prompt("ingredient 2?"),
+//   prompt("ingredient 3?"),
+// ];
+// console.log(ingredients);
+// restaurant.orderPasta(...ingredients); // expands ingredients array with prompt values
 
 // Objects with spread operator
 const newRestaurant = { foundedIn: 1998, ...restaurant, founder: "Guiseppe" };
@@ -215,6 +215,7 @@ There can only be one rest in any destructuring assignment.
 const arr2 = [1, 2, ...[3, 4]];
 
 // REST, because it is on the LEFT side of =
+console.log("Rest Example");
 const [a1, b1, ...others] = [1, 2, 3, 4, 5];
 console.log(a1, b1, others);
 
@@ -293,3 +294,116 @@ if (restaurant.orderPizza) {
 }
 
 restaurant.orderPizza && restaurant.orderPizza("Sausage", "Mushroom");
+
+/*
+---------------------- Nullish Coalescing Operator (??) ----------------------------
+works with null values instead of false values. (NOT 0 or "").
+It does not count 0 or "" as null values
+Only null values will short circuit
+*/
+restaurant.numGuests = 0;
+const guests3 = restaurant.numGuests ?? 10;
+console.log(guests3);
+
+/*
+--------------------------- Coding Challenge #1 ----------------------------------
+We're building a football betting app (soccer).
+
+Suppose we get data from a web service about a certain game (below).  In this challenge 
+we're going to work with the data.  So here are your tasks:
+
+1. Create one player array for each team (variables "players1" and "players2")
+2. The first player in any player array is the goalkeeper and the others are field players.
+For Bayern Munich (team 1) create one variable ("gk") with the goalkeepr's name, and one array
+("fieldPlayers") with all the remaining 10 field players.
+3. Create an array "allPLayers" containing all players of both teams (22 players).
+4. During the game Bayern Munich (team 1) used 3 substitute players.  So create a new array 
+("playersFinal") containing all the original team1 players plust "Thiago", "Coutinho", and "Persic".
+5. Based on the game.odds object, create one variable for each odd called ("team1", "draw", and "team 2")
+6. Write a function ("printGoals") that receives an arbitrary number of player names (NOT an array) and
+prints each of them to the console, along with the total number of goals who were scored 
+(number of player names passed in)
+7. The team with the lower odd is more likely to win.
+Print to the console which team is more likely to win, WITHOUT using an if/else statement or the ternary
+operator.
+
+TEST DATA FOR 6: Use players "Davies", "Muller", "Lewandowski", and "Kimmich".  Then call the function again
+with the players from game.scored.
+*/
+
+const game = {
+  team1: "Bayern Munich",
+  team2: "Borrusia Dorthmund",
+  players: [
+    [
+      "Neuer",
+      "Pavard",
+      "Martinez",
+      "Alaba",
+      "Davies",
+      "Kimmich",
+      "Goretzka",
+      "Coman",
+      "Muller",
+      "Gnarby",
+      "Lewandowski",
+    ],
+    [
+      "Burki",
+      "Schulz",
+      "Hummels",
+      "Akanji",
+      "Hakimi",
+      "Weigl",
+      "Witsel",
+      "Harvard",
+      "Brandt",
+      "Sancho",
+      "Gotze",
+    ],
+  ],
+  score: "4.0",
+  scored: ["Lewandowski", "Gnarby", "Lewdandowski", "Hummels"],
+  date: "Nov. 9th, 2037",
+  odds: {
+    team1: 1.33,
+    x: 3.25,
+    team2: 6.5,
+  },
+};
+
+// destructuring arrays of arrays
+const [players1, players2] = game.players;
+
+// rest syntax
+const [gk, ...fieldPlayers] = players1;
+
+// spread operator
+const allPlayers = [...players1, ...players2];
+
+// spread operator + adding elements
+const playersFinal = [...players1, "Thiago", "Coutinho", "Persic"];
+
+// nested destructuring objects
+const {
+  odds: { team1: team1, x: draw, team2: team2 },
+} = game;
+
+// condensing arguments using rest paramters (condenses arguments into an array)
+function printGoals(...playerNames) {
+  let players = "";
+  for (let i = 0; i < playerNames.length; i++) {
+    players += playerNames[i] + " ";
+  }
+  console.log(`Players: ${players} Goals: ${playerNames.length}`);
+}
+
+printGoals("Davies", "Muller", "Lewandowski", "Kimmich");
+printGoals(...game.scored);
+
+// printing without if/else or ternary statement using a logical operator
+team1 < team2 && console.log("Team 1 is more likely to win");
+/*
+|| or value will short circuit when the first value is true, but you want the evaluation to continune
+so you want to use a && operator because it will continue to evaluate.
+*/
