@@ -1,5 +1,20 @@
 "use strict";
-
+// Allows you to computer names instead of hardcoding them Enhanced object literal ES6
+const weekdays = ["mon", "tues", "wed", "thur", "fri", "sat", "sun"];
+const openingHours = {
+  [weekdays[3]]: {
+    open: 12,
+    close: 22,
+  },
+  fri: {
+    open: 11,
+    close: 23,
+  },
+  sat: {
+    open: 0, // Open 24 hours
+    close: 24,
+  },
+};
 const restaurant = {
   name: "Classico Italiano",
   location: "Via Angelo Tavanti 23, Firenze, Italy",
@@ -7,26 +22,15 @@ const restaurant = {
   starterMenu: ["Focaccia", "Bruschetta", "Garlic Bread", "Caprese Salad"],
   mainMenu: ["Pizza", "Pasta", "Risotto"],
 
-  openingHours: {
-    thu: {
-      open: 12,
-      close: 22,
-    },
-    fri: {
-      open: 11,
-      close: 23,
-    },
-    sat: {
-      open: 0, // Open 24 hours
-      close: 24,
-    },
-  },
+  // ES6 Enhanced Object LIteral, no longer need to set openingHours: openingHours,
+  openingHours,
 
-  order: function (starter_index, main_index) {
+  // ES6 Enhanced Object Literal, no longer need to set name: function(args)
+  order(starter_index, main_index) {
     return [this.starterMenu[starter_index], this.mainMenu[main_index]];
   },
 
-  order_delivery: function ({
+  order_delivery({
     starter_index = 1,
     main_index = 0,
     time = "20:00",
@@ -37,13 +41,13 @@ const restaurant = {
     );
   },
 
-  orderPasta: function (ing1, ing2, ing3) {
+  orderPasta(ing1, ing2, ing3) {
     console.log(
       `Here is your delicious pasta with ${ing1}, ${ing2}, and ${ing3}`
     );
   },
 
-  orderPizza: function (mainIngredient, ...otherIngredients) {
+  orderPizza(mainIngredient, ...otherIngredients) {
     let order = `Your Pizza from ${this.name} is on its way with the selected toppings of: ${mainIngredient}`;
     for (let i = 0; i < otherIngredients.length; i++) {
       order += ` ${otherIngredients[i]}`;
@@ -57,6 +61,7 @@ const restaurant = {
 Unpacking a array into separate variables
 Retrieve elements from the array and store them into variables
 */
+console.log("------------------ Deconstructing Arrays --------------------");
 const arr = [2, 3, 4];
 const a = arr[0];
 const b = arr[1];
@@ -94,8 +99,9 @@ To destructure objects you use curly braces instead of brackets.
 You have to provide the variable names that exactly match the property names that match the object.
 Order of elements does not matter.
 */
-const { name, openingHours, categories } = restaurant;
-console.log(name, openingHours, categories);
+console.log("------------------ Deconstructing Objects --------------------");
+const { name, opHours, categories } = restaurant;
+console.log(name, opHours, categories);
 
 // To specify new names for variables put a colon between a property name and a variable name
 const {
@@ -152,6 +158,7 @@ building an array or when passing values into a function.
 Spread operator works on all iterables.
 Iterables are: arrays, strings, maps, sets, NOT objects.
 */
+console.log("------------------ Spread Operator (...) --------------------");
 const spreadArr = [7, 8, 9];
 const badNewArr = [1, 2, arr[0], arr[1], arr[2]]; // don't do this
 console.log(badNewArr);
@@ -215,6 +222,7 @@ There can only be one rest in any destructuring assignment.
 const arr2 = [1, 2, ...[3, 4]];
 
 // REST, because it is on the LEFT side of =
+console.log("------------------ Rest Operator (...) --------------------");
 console.log("Rest Example");
 const [a1, b1, ...others] = [1, 2, 3, 4, 5];
 console.log(a1, b1, others);
@@ -226,8 +234,8 @@ const [pizza, , risotto, ...otherFood] = [
 console.log(pizza, risotto, otherFood);
 
 // REST, objects destructuring assignment
-const { sat, ...weekdays } = restaurant.openingHours;
-console.log(weekdays); // will only have thu and friday
+const { sat, ...workweek } = restaurant.openingHours;
+console.log(workweek); // will only have thu and friday
 
 //////////////// Functions with rest syntax as arguments/parameters (compress arguments)
 function add(...numbers) {
@@ -264,6 +272,9 @@ The && operator short circuits if the first value is false.
 The first false value will be returned.
 */
 // Use ANY data type, return ANY data type, short-circuiting (||)
+console.log(
+  "------------------ Short Circuiting (|| and &&) --------------------"
+);
 console.log("--- Or ---");
 console.log(3 || "Jonas"); // Non-boullien values
 console.log("" || "Jonas"); // first operand is false so 2nd is returned
@@ -301,6 +312,9 @@ works with null values instead of false values. (NOT 0 or "").
 It does not count 0 or "" as null values
 Only null values will short circuit
 */
+console.log(
+  "------------------ Nullish Coalescing Operator --------------------"
+);
 restaurant.numGuests = 0;
 const guests3 = restaurant.numGuests ?? 10;
 console.log(guests3);
@@ -330,7 +344,7 @@ operator.
 TEST DATA FOR 6: Use players "Davies", "Muller", "Lewandowski", and "Kimmich".  Then call the function again
 with the players from game.scored.
 */
-
+console.log("------------------ Coding Challenge #1 --------------------");
 const game = {
   team1: "Bayern Munich",
   team2: "Borrusia Dorthmund",
@@ -407,3 +421,31 @@ team1 < team2 && console.log("Team 1 is more likely to win");
 || or value will short circuit when the first value is true, but you want the evaluation to continune
 so you want to use a && operator because it will continue to evaluate.
 */
+
+/*
+------------------------- Looping Arrays: The for-of Loop ---------------------
+works like for(auto a : numbers) in C++, iterators.
+Does not require counters or conditions.
+Still allows for continue and break.
+It is much more difficult to get the index of the array.
+*/
+console.log("------------------ The for-of Loop --------------------");
+const menuLoop = [...restaurant.starterMenu, ...restaurant.mainMenu];
+
+for (const it of menuLoop) {
+  console.log(it);
+}
+
+// Get index by destructing the array of the two variables
+console.log([...menuLoop.entries()]);
+
+for (const [i, el] of menuLoop.entries()) {
+  console.log(`${i + 1}: ${el}`);
+}
+
+/*
+----------------------- Enhanced Object Literals ------------------------
+See object at the top of the JS file
+*/
+console.log("------------------ Enhanced Object Literals --------------------");
+console.log("see code for object at top of JS file");
