@@ -1,5 +1,5 @@
 "use strict";
-// Allows you to computer names instead of hardcoding them Enhanced object literal ES6
+// Allows you to compute names instead of hardcoding them Enhanced object literal ES6
 const weekdays = ["mon", "tues", "wed", "thur", "fri", "sat", "sun"];
 const openingHours = {
   [weekdays[3]]: {
@@ -446,6 +446,9 @@ for (const [i, el] of menuLoop.entries()) {
 /*
 ----------------------- Enhanced Object Literals ------------------------
 See object at the top of the JS file
+There were improvments in ES6 to allow for easier writing of functions and object literals
+Also allows for the computing of attribute names instead of hardcoding them, see all examples in the
+restaurant object at the top of the code.
 */
 console.log("------------------ Enhanced Object Literals --------------------");
 console.log("see code for object at top of JS file");
