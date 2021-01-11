@@ -1,5 +1,5 @@
 "use strict";
-// Allows you to compute names instead of hardcoding them Enhanced object literal ES6
+// Allows you to computer names instead of hardcoding them Enhanced object literal ES6
 const weekdays = ["mon", "tues", "wed", "thur", "fri", "sat", "sun"];
 const openingHours = {
   [weekdays[3]]: {
@@ -452,3 +452,73 @@ restaurant object at the top of the code.
 */
 console.log("------------------ Enhanced Object Literals --------------------");
 console.log("see code for object at top of JS file");
+
+/*
+------------------------- Optional Chaining (?.) ------------------------------
+Only if the propery that is before the ?. exists then only then the next property be read,
+otherwise it will return undefined.  A property exists if it is not null and not undefined.
+
+optional chaining is used to help do error checking to make sure that properties and content
+exist, this is used along with the (??) nullish coellesing operator
+*/
+console.log("------------------ Optional Chaining (?.) --------------------");
+// if (restaurant.openingHours && restaurant.openingHours.mon.open) {
+//   consolelog(restaurant.openingHours.mon.open);
+// }
+
+// With optional chaining
+console.log(restaurant.openingHours.mon?.open);
+console.log(restaurant.openingHours?.mon?.open);
+
+// Example
+const allDays = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
+
+for (const day of allDays) {
+  const open = restaurant.openingHours[day]?.open ?? "closed";
+  console.log(`On ${day}, we open at ${open}`);
+}
+
+// Methods
+console.log(restaurant.order?.(0, 1) ?? "Method does not exist");
+console.log(restaurant.orderRisotto?.(0, 1) ?? "Method does not exist");
+
+// Arrays
+const usersArr = [{ name: "Jonas", email: "hello@jonas.io" }];
+
+console.log(usersArr[0]?.name ?? "User array empty");
+
+/*
+------------------------- Looping Objects: Object Keys, Values, and Entries ------------------------------
+*/
+console.log(
+  "------------------ Looping Objects: Object Keys, Values, and Entries ---------------"
+);
+
+// Property names
+const properties = Object.keys(openingHours);
+console.log(properties);
+let openStr = `We are open on ${properties.length} days: `;
+
+for (const day of Object.keys(openingHours)) {
+  openStr += `${day}, `;
+}
+console.log(openStr);
+
+// Property values
+const values = Object.values(openingHours);
+console.log(values);
+
+// Objects
+const entries = Object.entries(openingHours);
+console.log(entries);
+
+// Destructure and specify properties to loop through and print
+for (const [key, { open, close }] of entries) {
+  console.log(x); // shows each key and each value
+  console.log(`On ${key} we open at ${open} and close at ${close}`);
+}
+
+/*
+------------------------- Coding Challenge #2 ------------------------------
+*/
+console.log("------------------ Coding Challenge #2 ---------------");
