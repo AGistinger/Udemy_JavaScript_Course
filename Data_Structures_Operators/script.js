@@ -582,3 +582,60 @@ for (const player of game.scored) {
   }
 }
 console.log(scorers);
+
+/*
+---------------------------- Sets ------------------------------
+Set - a collection of unique elements, cannot have any duplicates.
+In order to create a new set you need to "new Set()" and you need to pass in an iterable
+ex) an array.
+A set can hold mixed data types.
+A set will remove any duplicates.
+A set does not have key/value pairs.
+The order of elements in the set is irrelevent.
+The set has function for .size, which shows how many elements are in the set
+The set has a function for .has(ele), which shows true/false for if a value is in the set
+The set has a function for .add(ele), which will allow you to add new items to the set
+The set has a function for .delete(ele), which will allow you to remove elements from the set
+The set has a function for .clear(), which will delete all elements out of the set
+There is no way to get data out of a set.
+The main use of sets in the real world is to remove duplicate values of arrays.
+If you need to manipulate data you should use arrays
+*/
+console.log("------------------ Sets ---------------");
+
+const ordersSet = new Set([
+  "Pasta",
+  "Pizza",
+  "Pizza",
+  "Risotto",
+  "Pasta",
+  "Pizza",
+]);
+console.log(ordersSet);
+
+console.log(new Set("Adrainne")); // New set created of a string iterable
+console.log(ordersSet.size); // Set using the .size function
+console.log(ordersSet.has("Pizza")); // Set using the .has() function "true"
+console.log(ordersSet.has("Bread")); // Set using the .has() function "false"
+ordersSet.add("Garlic Bread"); // Set using the .add() function
+ordersSet.add("Garlic Bread"); // won't add duplicates must be unique
+ordersSet.delete("Risotto"); // Set using the .delete function to remove an element
+// ordersSet.clear(); // will remove all elements out of the set
+
+// Loop is possible in sets
+for (const order of ordersSet) {
+  console.log(order);
+}
+
+// Example Sets (removing duplicates)
+const staff = ["Waiter", "Chef", "Waiter", "Manager", "Chef", "Waiter"];
+
+// Converting a set to an array using the spread operator to take the elements out of the set
+// And put them into the array.  Will now not have duplicates
+const staffUnique = [...new Set(staff)]; // passing in an array
+console.log(staffUnique);
+console.log(
+  new Set(["Waiter", "Chef", "Waiter", "Manager", "Chef", "Waiter"]).size
+);
+
+console.log(new Set("AdrianneGistinger").size);
