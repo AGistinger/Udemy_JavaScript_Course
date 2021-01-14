@@ -639,3 +639,76 @@ console.log(
 );
 
 console.log(new Set("AdrianneGistinger").size);
+
+/*
+---------------------------- Maps ------------------------------
+Maps (Fundamentals)
+More useful than sets.
+Key/Value pairs
+The difference between objects and maps, is that in maps the keys can be any types.
+In objects the keys are strings.  In maps they can be objects, arrays, strings, etc.
+To create a new map you create a variable to equal "new Map();"
+To fill a map use the .set(key, value) method, set accepts the key / value, and will return the 
+map.
+You are able to chain .set() methods together by .set(key, value).set(key, value).set(key, value);
+You are able to read data from a map by using the .get(key) method, this will return the value.
+You are able to check if a map contains a certain key with the .has(key) method.
+You are able to delete elements from the map by using the .delete(key) method.
+You are able to check the size of a map using the .size method.
+You are able to remove all items from the map by using the .clear() method.
+
+*/
+console.log("------------------ Maps ---------------");
+
+// Create map new Map();
+const rest = new Map(); // create a new map
+
+// Set method ".set(key, value)"
+rest.set("Name", "Classico Italiano"); // add new key/value pair using .set() method
+rest.set(1, "Firenze, Italy");
+console.log(rest.set(2, "Lisbon, Portugal")); // calling the set method returns the new set
+
+// You are able to chain .set() methods to create multiple new sets of key/value pairs
+rest
+  .set("categories", ["Italian", "Pizzeria", "Vegetarial", "Organic"])
+  .set("Open", 11)
+  .set("Close", 23)
+  .set(true, "We are open :D")
+  .set(false, "We are closed :(");
+
+// Get method ".get(key)";
+console.log(rest.get("Name"));
+console.log(rest.get(true));
+
+const time = 21;
+// will return true or false which is set to one of the key/values
+rest.get(time > rest.get("Open") && time < rest.get("Close"));
+
+// Has method ".has(key)"
+console.log(rest.has("categories"));
+
+// Delete method ".delete(key)"
+rest.delete(2); // will delete Lisbon location
+console.log(rest);
+
+// Size method ".size"
+console.log(rest.size);
+
+// Clear method ".clear()"
+// rest.clear();
+// console.log(rest.size());
+
+// Using objects as map keys, this can be useful for DOM elements
+const arrMap = [1, 2];
+rest.set(arrMap, "Test");
+rest.set(document.querySelector("h1"), "Heading"); // key/value for DOM element
+console.log(rest);
+console.log(rest.size);
+
+console.log(rest.get(arrMap));
+
+/*
+---------------------------- Maps Iteration------------------------------
+
+*/
+console.log("------------------ Maps Iteration---------------");
