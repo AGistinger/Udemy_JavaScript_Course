@@ -709,6 +709,111 @@ console.log(rest.get(arrMap));
 
 /*
 ---------------------------- Maps Iteration------------------------------
+A new way of populating a map without using the set method.
+The set method is cumbersome when adding a lot of values.
 
+The structure that shows an array of arrays is similiar to the structure of the Objects.entries(obj)
+method.
 */
-console.log("------------------ Maps Iteration---------------");
+console.log("------------------ Maps Iteration ---------------");
+
+const question = new Map([
+  ["question", "What is the best programming langauge in the world?"],
+  [1, "C"],
+  [2, "Java"],
+  [3, "JavaScript"],
+  ["correct", 3],
+  [true, "Correct!"],
+  [false, "Try Again!"],
+]);
+
+console.log(question);
+
+// Convert Object to Map
+console.log(Object.entries(openingHours));
+const hoursMap = new Map(Object.entries(openingHours));
+console.log(hoursMap);
+
+// Iteration
+// destructuring each array into a key/value pair
+console.log(question.get("question"));
+for (const [key, value] of question) {
+  if (typeof key === "number") console.log(`Answer ${key}: ${value}`);
+}
+
+// const answer = Number(prompt("Your answer?"));
+const answer = 3;
+console.log(answer);
+
+// challenge/quiz
+if (answer === question.get("correct")) {
+  console.log(question.get(true));
+} else {
+  console.log(question.get(false));
+}
+
+// Teachers answer
+console.log(question.get(question.get("correct") === answer));
+
+// To convert a map back to an array
+console.log([...question]);
+console.log(...question.entries());
+console.log(...question.keys());
+console.log(...question.values());
+
+/*
+---------------------------- What Data Structure to Use? ------------------------------
+SOURCES OF DATA:
+1: From the program itself: Data written direction in source code
+2: From the UI: Data input from the user or data written in DOM
+3: From external sources: Data fetched for example from a web API (application programming interface)
+
+DATA STRUCTURE:
+Is the data a simple list? (array or set)
+If you need key/value pairs? (object or map) ex) allows you to describe values
+
+There are also weak sets and weak maps in JavaScript.
+There are many other different data structures that are built into other libraries.
+
+Use Arrays:
+-When you need ordered list of values (might contain duplicates)
+-When you need to manipulate data
+
+Use Sets:
+-When you need to work with unique values
+-When high-performance is really important
+-To remove duplicates from arrays
+
+Use Objects:
+-More "traditional" key/value store
+-Easier to write and acces values with .and[]
+-When you need to include functions(methods)
+-When working with JSON(can convert to map)
+
+Use Maps:
+-Better performance
+-Keys can have any data type
+-Easier to iterate
+-Easier to compute size
+-When you simply need to map key to values
+-When you need keys that are not strings
+*/
+console.log("------------------ What Data Structure to Use? ---------------");
+
+/*
+---------------------------- Coding Challenge #3 ------------------------------
+Let's continue working with our football betting app!  This time, we have a map
+with a log of the events that happened during the game.  The values are the events
+themselves, and the keys are the minutes in which each even happened (a football game
+has 90 minutes plus some extra time).
+
+1. Create an array 'events' of the different game events that happened (no duplicates)
+2. After the game has finished, it was found that the yellow card form minute 64 was unfair. 
+ so remove this event from the game events log.
+3. Print the following string to the console: "An event happened, on average, every 9 minutes" (keep
+  in mind that a game has 90 minutes)
+4. Loop over the events and log them to the console, marking weatherit's in the first half or second
+ half (after 45 min) of the game, like this:
+  [First Half] 17: GOAL
+*/
+console.log("------------------ Coding Challenge #3 ---------------");
