@@ -808,7 +808,7 @@ themselves, and the keys are the minutes in which each even happened (a football
 has 90 minutes plus some extra time).
 
 1. Create an array 'events' of the different game events that happened (no duplicates)
-2. After the game has finished, it was found that the yellow card form minute 64 was unfair. 
+2. After the game has finished, it was found that the yellow card from minute 64 was unfair. 
  so remove this event from the game events log.
 3. Print the following string to the console: "An event happened, on average, every 9 minutes" (keep
   in mind that a game has 90 minutes)
@@ -817,3 +817,43 @@ has 90 minutes plus some extra time).
   [First Half] 17: GOAL
 */
 console.log("------------------ Coding Challenge #3 ---------------");
+
+const gameEvents = new Map([
+  [17, "⚽ GOAL"],
+  [36, "🔁 Substitution"],
+  [47, "⚽ GOAL"],
+  [61, "🔁 Substitution"],
+  [64, "🟨 Yellow card"],
+  [69, "🟥 Red card"],
+  [70, "🔁 Substitution"],
+  [72, "🔁 Substitution"],
+  [76, "⚽ GOAL"],
+  [80, "⚽ GOAL"],
+  [92, "🟨 Yellow card"],
+]);
+
+// Create an array of the different events that happened (no duplicates)
+const events = [...new Set(gameEvents.values())];
+console.log(events);
+
+//  Remove the yellow card from minute 64
+gameEvents.delete(64);
+
+// Print a line to the console that states how often an event happened over 90 mins
+const clock = [...gameEvents.keys()].pop(); // pops of last element of the array and returns it
+console.log(
+  `An event happened, on average every ${clock / gameEvents.size} minutes.`
+);
+
+// Loop over the events and log whether each event happend on the first half or 2nd half
+for (const [key, val] of gameEvents) {
+  console.log(
+    `${key <= 45 ? "[First Half]" : "[Second Half]"} ${key} : ${val}`
+  );
+}
+
+/*
+---------------------------- Working with Strings ------------------------------
+
+*/
+console.log("------------------ Working with Strings ---------------");
