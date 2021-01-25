@@ -854,6 +854,70 @@ for (const [key, val] of gameEvents) {
 
 /*
 ---------------------------- Working with Strings ------------------------------
+Strings work similiar to arrays you are able to get characters from a string by putting str[0]
+which will return the character at the location in the string.  
 
+You are also able to work with strings directly without having to set it to a variable by "hello"[0], 
+which will return 'h' as it is at position 0.
+
+You can do the same behavior by using the str.length() method to return the length of a string
+in the same way as you would an array.
+
+STRING METHODS:
+str.indexOf('x');
+  will return the index number that the character is at.  Also works with words.
+str.lastIndexOf('x');
+  will return the last occurrence index that the character is at.  Also works with words.
+str.slice(num);
+  will return the string after the number/index entered.  In order to use the returned string you have
+  to save the string to a new variable.  You can specify both begin and end index parameters.  
+
+JavaScript will automatically convert a string primitive into a string object when you call methods on it.
+Called boxing.  Will turn the string into an Object.  All string methods return primitives, even when
+called on a string object.
 */
 console.log("------------------ Working with Strings ---------------");
+
+const airline = "TAP Air Portugal";
+const plane = "A320";
+
+console.log(plane[0]); // A, works like an array to get the characters from the string
+console.log("B737"[0]);
+
+console.log(airline.length);
+console.log("B737".length);
+
+// .indexOf()
+console.log(airline.indexOf("r")); // 6
+console.log(airline.indexOf("Portugal")); // 8
+
+// .lastIndexOf()
+console.log(airline.lastIndexOf("r")); // 10
+console.log(airline.lastIndexOf("Portugal")); // 8
+
+// .slice();
+console.log(airline.slice(4)); // Air Portugal
+console.log(airline.slice(4, 7)); // Air
+
+// Extract a string without knowning the value of the string
+console.log(airline.slice(0, airline.indexOf(" ")));
+
+// Extra last word without knowing the value of the string
+console.log(airline.slice(airline.lastIndexOf(" ") + 1)); // +1 will remove the extra space
+
+// Negative arguments
+console.log(airline.slice(-2));
+console.log(airline.slice(1, -1));
+
+// Write a function that receives an airline seat and logs to the console if its middle or not
+function checkMidSeat(seat) {
+  // B and E are middle seats
+  const s = seat.slice(-1);
+  if (s === "B" || s === "E") {
+    console.log("You got the middle seat 😭");
+  } else console.log("You got lucky 😎");
+}
+
+checkMidSeat("11B");
+checkMidSeat("23C");
+checkMidSeat("3E");
