@@ -853,7 +853,7 @@ for (const [key, val] of gameEvents) {
 }
 
 /*
----------------------------- Working with Strings ------------------------------
+---------------------------- Working with Strings (Part 1) ------------------------------
 Strings work similiar to arrays you are able to get characters from a string by putting str[0]
 which will return the character at the location in the string.  
 
@@ -876,7 +876,7 @@ JavaScript will automatically convert a string primitive into a string object wh
 Called boxing.  Will turn the string into an Object.  All string methods return primitives, even when
 called on a string object.
 */
-console.log("------------------ Working with Strings ---------------");
+console.log("------------------ Working with Strings (Part 1) ---------------");
 
 const airline = "TAP Air Portugal";
 const plane = "A320";
@@ -921,3 +921,110 @@ function checkMidSeat(seat) {
 checkMidSeat("11B");
 checkMidSeat("23C");
 checkMidSeat("3E");
+
+/*
+---------------------------- Working with Strings (Part 2) ------------------------------
+STRING METHODS CONTINUED
+str.toLowerCase();
+  Does not require any arguments, will change all letters to lower case.
+str.toUpperCase();
+  Does not require any arguments, will change all letters to upper case.
+str.trim();
+  Will remove white space from a string, no arguments required.
+str.replace("old", "new");
+  Will replace the first entered parameter with the second entered parameter.  This will only
+  replace the first occurence.
+str.replaceAll("old", "new")
+  Will replace the first entered parameter with the second entered paramter.  This will replace
+  all occurrences.
+str.includes("data");
+  Will return a true/false value based on the parameter entered.
+str.startsWith("data");
+  Will return a true/false value based on the parameter entered.
+str.endsWith("data");
+  Will return a true/false value based on the parameter entered.
+*/
+console.log("------------------ Working with Strings (Part 2) ---------------");
+
+console.log(airline.toLowerCase()); // all lower case
+console.log(airline.toUpperCase()); // all upper case
+
+// Fix capitalization in a name
+const passenger = "jOnAs"; // Jonas
+const passengerLower = passenger.toLowerCase();
+const passengerCorrect =
+  passengerLower[0].toUpperCase() + passengerLower.slice(1);
+console.log(passengerCorrect);
+
+// Function to fix case in a name
+function fixName(name) {
+  let fixedName = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+  return fixedName;
+}
+const myName = "aDrIaNnE";
+console.log(fixName(myName));
+
+// comparing a user input email
+const email = "hello@jonas.io";
+const loginEmail = "   Hello@Jonas.Io \n";
+
+const lowerEmail = loginEmail.toLocaleLowerCase();
+// Remove white space
+const trimmedEmail = lowerEmail.trim();
+console.log(trimmedEmail);
+
+// All in one step
+const normalizedEmail = loginEmail.toLowerCase().trim();
+console.log(normalizedEmail);
+
+console.log(email === normalizedEmail);
+
+// Function to compare two emails and return true/false that the email is correct
+function checkEmail(email) {
+  const savedEmail = "agistinger@gmail.com";
+  const loginEmail = email.toLowerCase().trim();
+  return savedEmail === loginEmail ? true : false;
+}
+
+const myEmail = "Agistinger@GMAIL.COM";
+console.log(checkEmail(myEmail));
+const myEmail2 = "Agggisstingger@google.com";
+console.log(checkEmail(myEmail2));
+
+// Replacing characters in string
+const priceGB = "288,97£";
+console.log(priceGB);
+const priceUS = priceGB.replace("£", "$").replace(",", ".");
+console.log(priceUS);
+
+const announcement =
+  "All passengers come to boarding door 23.  Boarding door 23!";
+console.log(announcement.replaceAll("door", "gate"));
+
+// Regular expression version (without replaceAll) to come later in the course
+console.log(announcement.replace(/door/g, "gate"));
+
+// Boolean methods (includes, startsWith, endsWith)
+const plane2 = "Airbus A320neo";
+console.log(plane2.includes("A320")); // true
+console.log(plane2.includes("Boeing")); // false
+console.log(plane2.startsWith("Air")); // true
+
+// used when you need to make a decision based on the contents of a string
+if (plane2.startsWith("Airbus") && plane2.endsWith("neo")) {
+  console.log("Part of the NEW Airbus family");
+}
+
+// Practice exercise
+function checkBaggage(items) {
+  const baggage = items.toLowerCase();
+  if (baggage.includes("knife") || baggage.includes("gun")) {
+    console.log("You are NOT allowed on board!");
+  } else {
+    console.log("Welcome aboard!");
+  }
+}
+
+checkBaggage("I have a laptop, some Food, and a pocket Knife");
+checkBaggage("Socks and camera");
+checkBaggage("Got some snacks and a gun for protection");
