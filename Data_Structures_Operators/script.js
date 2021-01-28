@@ -1028,3 +1028,180 @@ function checkBaggage(items) {
 checkBaggage("I have a laptop, some Food, and a pocket Knife");
 checkBaggage("Socks and camera");
 checkBaggage("Got some snacks and a gun for protection");
+
+/*
+---------------------------- Working with Strings (Part 3) ------------------------------
+STRING METHODS CONTINUED PT. 2
+str.split(arg);
+  Will split the string by the argument and put the split elements into a new array.
+str.join(arg);
+  Will join the strings together and put the argument between the strings ex) " ", "--".
+str.padStart(num, "char/str"");
+  Will pad a string at the start of the string to make it the length entered (num)
+  with the characters entered.
+str.padEnd(num, "char/str");
+  Will pad a string at the end of the string to make it the legnth entered (num)
+  with the characters entered.
+str.repeat(num);
+  Will repeat the same string mutiple times
+
+Search for other String methods on MDN, all the other string methods will show on the site.
+*/
+console.log("------------------ Working with Strings (Part 3) ---------------");
+
+// Split method
+console.log("a+very+nice+string".split("+"));
+console.log("Adrianne Gistinger".split(" "));
+
+const [firstName, lastName] = "Adrianne Gistinger".split(" ");
+
+const newName = ["Ms.", firstName, lastName.toUpperCase()].join(" ");
+console.log(newName);
+
+function capitalizeName(name) {
+  const names = name.split(" "); // split name into an array
+  const namesUpper = []; // create an empty array to put the modifed names
+  for (const n of names) {
+    // Loop through each name make the first letter uppercase, add it to the rest of the word and
+    // push it to the new names array
+    namesUpper.push(n[0].toUpperCase() + n.slice(1));
+  }
+  console.log(namesUpper.join(" ")); // join all the words in the name together separated by a space
+}
+
+capitalizeName("jessica ann smith davis");
+capitalizeName("adrianne gistinger");
+
+// alternate way of doing the above function
+function fixCapitalization(name) {
+  const names = name.split(" ");
+  const fixed = [];
+  for (const n of names) {
+    fixed.push(n.replace(n[0], n[0].toUpperCase()));
+  }
+  console.log(fixed.join(" "));
+}
+
+fixCapitalization("adrianne gistinger");
+
+// Padding a string
+const message = "Go to gate 23!";
+console.log(message.padStart(25, "+").padEnd(35, "+"));
+console.log("Adrianne".padStart(25, "+").padEnd(40, "+"));
+
+// masking a number so you don't see all of the text
+function maskCreditCard(number) {
+  const str = String(number);
+  const last = str.slice(-4); // get last 4 characters
+  return last.padStart(str.length, "*");
+}
+
+console.log(maskCreditCard(43332342342342522323));
+console.log(maskCreditCard("1212315413532323434"));
+
+// repeat method
+const weatherMessage = "Bad weather.... All Departures Delayed.... ";
+console.log(weatherMessage.repeat(5));
+
+function planesInLine(num) {
+  console.log(`There are ${num} planes in line ${"✈".repeat(num)}`);
+}
+
+planesInLine(5);
+planesInLine(3);
+planesInLine(12);
+
+/*
+---------------------------- Coding Challenge #4 ------------------------------
+Write a program that receives a list of variable names written in underscore_case 
+and convert them to camelCase.
+
+The input will come from a textarea inserted into the DOM (see code below), and conversion
+will happen when the button is pressed.
+
+THIS TEST DATA (pasted to textarea)
+underscore_case
+  first_name
+Some_Variable
+  calculate_AGE
+delayed_departure
+
+SHOULD PRODUCE THIS OUTPUT (5 separate console.log outputs)
+underscoreCase      ✅
+firstName           ✅✅
+someVariable        ✅✅✅
+calculateAge        ✅✅✅✅
+delayedDeparture    ✅✅✅✅✅
+
+HINT 1: remember which character defines a new line in the textarea.
+HINT 2: The solution only needs to work for a variable made out of 2 words (a_b).
+HINT 3: Start without worrying about the ✅.  Tackle that only after you have the 
+  variable name conversion working.
+HINT 4: This challenge is difficult on purpose, so stsart watching the solution in 
+  case you are stuck.
+*/
+console.log("------------------ Coding Challenge #4 ---------------");
+
+document.body.append(document.createElement("textarea"));
+document.body.append(document.createElement("button"));
+const button = document.querySelector("button");
+
+function camelCase(text) {
+  // fix text to remove "_", make first letter uppercase
+  const fixedText = formatString(removeSpace(makeLower(text.split("\n"))));
+
+  // print string
+  printFixedStrings(fixedText);
+}
+
+// Remove spaces from all strings in an array
+function removeSpace(arr) {
+  const cleanArray = [];
+  for (const str of arr) {
+    cleanArray.push(str.trim());
+  }
+  return cleanArray;
+}
+
+// take apart underscore strings and make camelCase and return fixed array
+function formatString(arr) {
+  const camelArr = [];
+
+  for (const str of arr) {
+    const wordArr = str.split("_");
+    const camelWord = [];
+    for (const s of wordArr) {
+      if (s === wordArr[0]) {
+        camelWord.push(s);
+      } else {
+        camelWord.push(s[0].toUpperCase() + s.slice(1));
+      }
+    }
+    camelArr.push(camelWord.join(""));
+  }
+  return camelArr;
+}
+
+// Make all strings in an array lowercase
+function makeLower(arr) {
+  const lowerCaseArray = [];
+  for (const str of arr) {
+    lowerCaseArray.push(str.toLowerCase());
+  }
+  return lowerCaseArray;
+}
+
+function printFixedStrings(arr) {
+  // formate the output so that the end of the string has a increasing amount of
+  // check marks for each string but they have to line up
+  let num = 1;
+  for (const str of arr) {
+    console.log(`${str.padEnd(20, " ")}${"✅".padEnd(num, "✅")}`);
+    num++;
+  }
+}
+
+button.addEventListener("click", function () {
+  const text = document.querySelector("textarea").value;
+  camelCase(text);
+});
