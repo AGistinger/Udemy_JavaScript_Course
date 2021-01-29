@@ -1147,20 +1147,10 @@ document.body.append(document.createElement("button"));
 const button = document.querySelector("button");
 
 function camelCase(text) {
-  // fix text to remove "_", make first letter uppercase
-  const fixedText = formatString(removeSpace(makeLower(text.split("\n"))));
-
+  // call functions to fix string
+  const fixedText = formatString(cleanString(text.split("\n")));
   // print string
   printFixedStrings(fixedText);
-}
-
-// Remove spaces from all strings in an array
-function removeSpace(arr) {
-  const cleanArray = [];
-  for (const str of arr) {
-    cleanArray.push(str.trim());
-  }
-  return cleanArray;
 }
 
 // take apart underscore strings and make camelCase and return fixed array
@@ -1182,13 +1172,13 @@ function formatString(arr) {
   return camelArr;
 }
 
-// Make all strings in an array lowercase
-function makeLower(arr) {
-  const lowerCaseArray = [];
+// Make all strings in an array lowercase and remove spaces
+function cleanString(arr) {
+  const cleanArray = [];
   for (const str of arr) {
-    lowerCaseArray.push(str.toLowerCase());
+    cleanArray.push(str.trim().toLowerCase());
   }
-  return lowerCaseArray;
+  return cleanArray;
 }
 
 function printFixedStrings(arr) {
