@@ -1186,7 +1186,7 @@ function printFixedStrings(arr) {
   // check marks for each string but they have to line up
   let num = 1;
   for (const str of arr) {
-    console.log(`${str.padEnd(20, " ")}${"✅".padEnd(num, "✅")}`);
+    console.log(`${str.padEnd(20, " ")}${"".padEnd(num, "✅")}`);
     num++;
   }
 }
