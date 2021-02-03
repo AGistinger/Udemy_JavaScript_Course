@@ -80,8 +80,60 @@ checkIn(flight, adrianne); // checkin won't work, wrong passport number
 
 /*
 ---------------------------- First-Class & Higher-Order Functions ------------------------------
+FIRST-CLASS FUNCTIONS
+- JavaScript treats functions as first-class citizens
+- Functions are simply values
+- Functions are just another type of object
+- There are function methods (methods you can call on functions)
+- You can return functions from functions
 
+HIGHER-ORDER FUNCTIONS
+- A function that recived another function as an argument, that returns a new function or both.
+- This is only possible because of first-class functions
 */
 console.log(
   "------------------ First-Class & Higher-Order Functions ---------------"
 );
+
+/*
+---------------------------- Functions Accepting Callback Functions ------------------------------
+How higher-order functions work:
+- You pass a function as an argument into the higher-order function and then user that function
+  inside the higher-order function.
+- This will allow you to pass different functions into a higher-order function and manipulate data
+  without having to create different functions to do so.
+- Makes it easier to make functionality into small reusable parts
+- Callback functions allow us to create abstraction (hide the detail of code implementation)
+- calling function.name will return the name of the function property
+*/
+console.log(
+  "------------------ Functions Accepting Callback Functions ---------------"
+);
+
+const oneWord = function (str) {
+  return str.replace(/ /g, "").toLowerCase(); // Uses regular expression instead of replaceAll
+};
+
+const upperFirstWord = function (str) {
+  const [first, ...others] = str.split(" ");
+  return [first.toUpperCase(), ...others].join(" ");
+};
+
+// higher-order function, accepts a function as an argument
+function transformer(str, fn) {
+  console.log(`Original string: ${str}`);
+  console.log(`Transformed string: ${fn(str)}`);
+
+  console.log(`Transformed by: ${fn.name}`); // Function ".name" property
+}
+
+transformer("JavaScript is the best!", upperFirstWord);
+transformer("Java is the best!", oneWord);
+
+function high5() {
+  console.log("✋");
+}
+// JS uses callbacks all the time
+document.body.addEventListener("click", high5);
+
+["Adrainne", "Jonas", "Martha"].forEach(high5); // forEach() method
