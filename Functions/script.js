@@ -137,3 +137,98 @@ function high5() {
 document.body.addEventListener("click", high5);
 
 ["Adrainne", "Jonas", "Martha"].forEach(high5); // forEach() method
+
+/*
+---------------------------- Functions Returning Functions ------------------------------
+When you are returning a function from a function, you have to store the function to a variable
+and then you can call that new function using that variable name along with any arguments.
+
+This is valuable when you are functional programming.
+*/
+console.log("------------------ Functions Returning Functions ---------------");
+
+function greet(greeting) {
+  return function (name) {
+    console.log(`${greeting} ${name}`);
+  };
+}
+
+const greeterHey = greet("Hey"); // save the returned function into a variable
+greeterHey("Adrianne"); // call the function
+greeterHey("Steven");
+
+greet("Hello")("Mark"); // you can call the returned function in one step
+
+// Challenge try to write the function above as arrow functions
+const greetArrow = greeting => myName => console.log(`${greeting} ${myName}`);
+const greeterArrow = greetArrow("Ciao");
+greeterArrow("Alexandrea");
+greetArrow("Buongiono")("Jessica");
+
+/*
+---------------------------- The Call and Apply Methods ------------------------------
+You can set the "this" keyword manually.
+
+func.call(this, args)
+- Using the .call() function will allow you to manually set what you want the this keyword 
+ to point to.
+
+ func.apply(this, arr)
+ - Using the .apply() function works similiar to the call functione except that instead of passing
+  in the arguments after specifying the this argument, you need to pass in an array with the
+  arguments.
+
+
+*/
+console.log("------------------ The Call and Apply Methods ---------------");
+
+const lufthansa = {
+  airline: "Lufthansa",
+  iataCode: "LH",
+  bookings: [],
+  book(flightNum, passName) {
+    console.log(
+      `${passName} booked a seat on ${this.airline} flight ${this.iataCode}:${flightNum}`
+    );
+    this.bookings.push({
+      flight: `${this.iataCode}${flightNum}`,
+      passName,
+    });
+  },
+};
+
+lufthansa.book(239, "Adrianne Gistinger");
+lufthansa.book(635, "John Smith");
+console.log(lufthansa);
+
+const eurowings = {
+  airline: "Eurowings",
+  iataCode: "EW",
+  bookings: [],
+};
+
+const book = lufthansa.book; // store a function into a new variable. (This will no longer work)
+
+// book(23, "Sarah Williams"); // Does not work this is now undefined and function will not work
+
+// Call Method
+book.call(eurowings, 23, "Sara Williams"); // the "this" keyword will be set to eurowings
+console.log(eurowings);
+book.call(lufthansa, 239, "Mary Cooper");
+console.log(lufthansa);
+
+const swiss = {
+  airline: "Swiss Air Lines",
+  iataCode: "LX",
+  bookings: [],
+};
+
+book.call(swiss, 585, "Mary Cooper");
+console.log(swiss);
+
+// Apply Method (not modern)
+const flightData = [583, "George Cooper"];
+book.apply(swiss, flightData);
+console.log(swiss);
+
+book.call(swiss, ...flightData); // works like apply but with spreading the arguments
