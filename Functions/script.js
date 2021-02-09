@@ -177,8 +177,6 @@ func.call(this, args)
  - Using the .apply() function works similiar to the call functione except that instead of passing
   in the arguments after specifying the this argument, you need to pass in an array with the
   arguments.
-
-
 */
 console.log("------------------ The Call and Apply Methods ---------------");
 
@@ -232,3 +230,58 @@ book.apply(swiss, flightData);
 console.log(swiss);
 
 book.call(swiss, ...flightData); // works like apply but with spreading the arguments
+
+/*
+---------------------------- The Bind Method ------------------------------
+func.bind(this, args);
+- Bind also allows you to manually set the "this" keyword for any function call.
+- Bind does not immediately call the function, it returns a new function that the
+ "this" keyword is bound.
+- In the bind method you can also set arguments, these arguments will remain the same
+  each time you call the method.
+*/
+console.log("------------------ The Bind Method ---------------");
+
+const bookEW = book.bind(eurowings); // will not call the book function, will return a new function
+const bookLH = book.bind(lufthansa);
+const bookLX = book.bind(swiss);
+
+bookEW(23, "Steven Williams"); // looks like the more normal function call, no longer need to specify "this"
+
+const bookEW23 = book.bind(eurowings, 23); // sets flight number to 23 and now you only need name arg
+bookEW23("Jessica Smith");
+
+// Objects with Event Listeners
+lufthansa.planes = 300;
+lufthansa.buyPlane = function () {
+  console.log(this);
+  this.planes++;
+  console.log(this.planes);
+};
+
+document
+  .querySelector(".buy")
+  .addEventListener("click", lufthansa.buyPlane.bind(lufthansa));
+
+// Partial Application (Pre set parameters)
+const addTax = (rate, value) => value + value * rate;
+console.log(addTax(0.1, 200));
+
+// Use null to set "this" keywaord as it isn't being used, order of args is important
+const addVAT = addTax.bind(null, 0.23);
+console.log(addVAT(100));
+
+// Mini-Challenge use technique of one function returning antoher function for above ex
+function taxRate(rate) {
+  return function (value) {
+    return value + value * rate;
+  };
+}
+const taxVAT = taxRate(0.23);
+console.log(taxVAT(100));
+
+/*
+---------------------------- Coding Challenge #1 ------------------------------
+
+*/
+console.log("------------------ Coding Challenge #1 ---------------");
