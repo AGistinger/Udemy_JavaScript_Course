@@ -57,9 +57,9 @@ function checkIn(flightNum, passenger) {
   passenger.myName = "Ms. " + passenger.myName;
 
   if (passenger.passport === 12345567778910) {
-    alert("Check in");
+    // alert("Check in");
   } else {
-    alert("Wrong Passport!");
+    // alert("Wrong Passport!");
   }
 }
 
@@ -282,6 +282,99 @@ console.log(taxVAT(100));
 
 /*
 ---------------------------- Coding Challenge #1 ------------------------------
+Let's build a simple poll app!
 
+A poll has a question, an array of options fromwhich people can choose, 
+and an array with the number of replies for each option.  This data is stored in
+the start object below.
+
+Here are your tasks:
+
+1. Create a method called 'registerNewAnswer" on the 'poll' object.
+The method does 2 things:
+  1.1. Display a prompt window for the user to input the number of the 
+  selected option.  The prompt should look like this:
+    What is your favorite programming language?
+    0: JavaScript
+    1: Python
+    2: Rust
+    3: C++
+    (Write option number)
+
+  1.2. Based on the input number, update the answers array.  For example,
+  if the option is 3, increase the value AT POSITION 3 of the array by 1.  
+  Make sure to checck if the input is a number and if the and if the number
+  makes sense (e.g anser 52 wouldn't make sense right?)
+
+2. Call this method whenever the user clicks the "Answer Poll" button.
+3. Create a method 'displayResults' which displays the poll results.
+The method takes a string as an input (called 'type'), which can be either 'string' or 'array'.
+If the type is 'array', simply display the results array as it is, using console.log().  
+This should be the default option.  If type is 'string' dsiplay a string like 
+"Poll results are 13, 2, 4, 1".
+4. Run the 'displayResults' method at the end of each 'registerNewAnswer' method call.
+
+Bonus: Use the 'displayResults' method to display the 2 arrays in the test data.
+Use both the 'array' and the 'string' option.  Do NOT put the arrays in the poll object!
+So what should this keyword look like in this situation?
+
+Bonus Test Data 1: [5, 2, 3]
+Bonus Test Data 2: [1, 5, 3, 9, 6, 1]
 */
 console.log("------------------ Coding Challenge #1 ---------------");
+
+const poll = {
+  question: "What is your favorite programming language?",
+  options: ["0: JavaScript", "1: Python", "2: Rust", "3: C++"],
+  // This generates [0, 0, 0, 0], more in the next section
+  answers: new Array(4).fill(0),
+};
+
+/*
+A function on the 'poll' object that will display a prompt window to the user,
+accepts an input.  The input will be checked if it is valid compared to the questions
+array.  If the input is valid then increment the correstponding location in the options
+array.  displayResults should be called each time 'registerNewAnswer' is called.
+*/
+poll.registerNewAnswer = function () {
+  // Makes the options array a string by using join with \n in between and getting response from user
+  const answer = Number(
+    prompt(
+      `${this.question}\n${this.options.join("\n")}\n(Write option number)`
+    )
+  );
+  // Check if input is valid
+  if (answer <= this.options.length) {
+    this.answers[answer]++;
+    // Display results
+    this.displayResults();
+    this.displayResults("string");
+  } else {
+    console.log(`${answer} is not a valid entry`);
+  }
+};
+
+/*
+Event handler for the 'Answer Poll' button that calls the 'registerNewAnswer' function.
+*/
+document
+  .querySelector(".poll")
+  .addEventListener("click", poll.registerNewAnswer.bind(poll));
+
+/*
+A function that displays the poll results that takes a string as an input 'type',
+which can be either 'string' or 'array'.  
+-If the type is array print the array to the console.
+-If the type is string display "Poll results are 13, 2, 4, 1".
+*/
+poll.displayResults = function (type = "array") {
+  if (type === "array") {
+    console.log(this.answers);
+  } else if (type === "string") {
+    console.log(`Poll results are ${this.answers.join(", ")}`);
+  }
+};
+
+// use displayResults on bonus data
+poll.displayResults.call({ answers: [5, 2, 3] }, "array");
+poll.displayResults.call({ answers: [1, 5, 3, 9, 6, 1] }, "string");
