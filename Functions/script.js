@@ -378,3 +378,131 @@ poll.displayResults = function (type = "array") {
 // use displayResults on bonus data
 poll.displayResults.call({ answers: [5, 2, 3] }, "array");
 poll.displayResults.call({ answers: [1, 5, 3, 9, 6, 1] }, "string");
+
+/*
+---------------------------- (IIFE) Immediately Invoked Function Expressions ------------------------------
+Functions that are only executed once and then never run again.
+
+Syntax for IIFE
+(function() { logic; })();
+*/
+console.log(
+  "------------------ (IIFE) Immediately Invoked Function Expressions ---------------"
+);
+
+// Normal function
+const runOnce = function () {
+  console.log("This will run again");
+};
+runOnce();
+
+// IIFE
+(function () {
+  console.log("This will never run again");
+  const isPrivate = 23;
+})();
+
+// Arrow function IIFE
+(() => console.log("This will ALSO never run again"))();
+
+// Scope
+{
+  const isPrivate = 23;
+}
+
+/*
+---------------------------- Closures ------------------------------
+A closure is not a feature that you explicitly use.
+A closure happens automatically in certain situations.
+
+The closure will remember the variables as part of where it was created.
+
+The secret of the closure:
+  * Any function always has access to the variable environment of the execution context
+  in which the function was created.  Even after the execution context is gone.
+  * Closure: VE attached to the function, exactly as it was at the time and place of the function
+  it was created.
+  * A function does not lose connection to the variables at the functions birthplace.
+  * Closure has priority over the scope chain.
+
+Summary:
+  * A closure is the closed-over variable environment of the execution context in which a function
+  was created, even after that execution context is gone.
+  * A closure gives a function access to all the variables of its parent function, even after that
+  parent function has returned.  The function keeps a reference to its outer scope, which preserves
+  the scope chain thoughout time.
+  * A closure makes sure that a function doesn't loose connection to variables that existed at the 
+  function's birth place.
+  * A closure is like a backpack that a function carries around wherever it goes.  This backpack has
+  all the variables that were present in the environment where the function was created.
+  * We do NOT have to manually create closures, this is a JavaScript feature that happens automatically.
+  We can't even access closed-over variables explicitly.  A closure is NOT a tangible JavaScript object.
+*/
+console.log("------------------ Closures ---------------");
+
+function secureBooking() {
+  let passengerCount = 0;
+
+  return function () {
+    passengerCount++;
+    console.log(`${passengerCount} passengers`);
+  };
+}
+
+const booker = secureBooking(); // will have access to passengerCount = 0
+
+// the closure can still access variables from a function that is no longer active
+booker(); // 1 passengers
+booker(); // 2 passengers
+booker(); // 3 passengers
+
+console.dir(booker); // shows directory/environment
+
+console.log("------------------ More Closures ---------------");
+
+// Example 1
+let f;
+const g = function () {
+  const a = 23;
+  f = function () {
+    console.log(a * 2);
+  };
+};
+
+const h = function () {
+  const b = 777;
+  f = function () {
+    console.log(b * 2);
+  };
+};
+
+g();
+f(); // has access to a
+console.dir(f);
+
+// Re-assigning f function
+h();
+f(); // has access to b
+console.dir(f);
+
+// Example 2
+const boardPassengers = function (n, wait) {
+  const perGroup = n / 3;
+
+  // Timer function accepts a function and a (ms) time increment, function is run after the time entered
+  setTimeout(function () {
+    console.log(`We are not boarindg all ${n} passengers`);
+    console.log(`There are 3 groups, each with ${perGroup} passengers`);
+  }, wait * 1000);
+
+  console.log(`Will start boarding in ${wait} seconds`); // will not wait for the timer to run
+};
+
+const perGroup = 1000; // closure has priority over scopechain this variable will not be used
+boardPassengers(180, 3); // the callback function (wait) will use the closure variables to execute
+
+/*
+---------------------------- Challenge #2 ------------------------------
+
+*/
+console.log("------------------ Challenge #2 ---------------");
