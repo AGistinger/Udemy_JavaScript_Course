@@ -129,8 +129,34 @@ console.log(letters.join(" - ")); // a - b - c - d - e - f - g - h - i - j
 
 /*
 Looping Arrays : forEach
+arr.forEach(function(el, it, arr) {});
 
+Will perform the function on each element in the array.  
+* To get the index of the element the forEach method has access to those.  You can access them
+by specifying them as arguments in order (element, index, array).
+
+The difference between a forEach loop and a forOf loop is that you cannot use "continue" or "break"
+in the forEach loop.  ForEach will always loop over the entire array and there no way to break out 
+of it.
 */
 console.log(
   "\n------------------- Looping Arrays : forEach -------------------"
 );
+
+// Using for of loop
+// for (const [i, movement] of movements.entries()) {
+//   if (movement > 0) {
+//     console.log(`Movement ${i + 1} - You depositied ${movement}`);
+//   } else {
+//     console.log(`Movement ${i + 1} - You withdrew ${Math.abs(movement)}`); // removes negative
+//   }
+// }
+
+// Using for each loop
+movements.forEach(function (mov, i, arr) {
+  if (mov > 0) {
+    console.log(`Movement ${i + 1}: You depositied ${mov}`);
+  } else {
+    console.log(`Movement ${i + 1}: You withdrew ${Math.abs(mov)}`); // removes negative
+  }
+});
