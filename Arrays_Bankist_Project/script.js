@@ -61,6 +61,22 @@ const inputLoanAmount = document.querySelector(".form__input--loan-amount");
 const inputCloseUsername = document.querySelector(".form__input--user");
 const inputClosePin = document.querySelector(".form__input--pin");
 
+function displayMovements(movements) {
+  movements.forEach(function (mov, i) {
+    const type = mov > 0 ? "deposit" : "withdrawal"; // determine the type of movement
+    // string that contains the new html code that will change forEach movement
+    const html = `
+    <div class="movements__row">
+      <div class="movements__type movements__type--${type}">${
+      i + 1
+    } ${type}</div>
+      <div class="movements__value">${mov}</div>
+    </div>`;
+    containerMovements.insertAdjacentHTML("afterbegin", html); // adds new html afterbegin
+  });
+}
+displayMovements(account1.movements);
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -159,4 +175,32 @@ movements.forEach(function (mov, i, arr) {
   } else {
     console.log(`Movement ${i + 1}: You withdrew ${Math.abs(mov)}`); // removes negative
   }
+});
+
+/*
+forEach with Maps and Sets
+
+MAPS
+map.forEach(function (value, key, map) {});
+-Works similiar to forEach with array, takes 3 arguments for (value, key, map).
+
+SETS
+set.forEach(function (value, key, set) {});
+-Works the same as maps except there sets do not have keys so will return the same as value.
+-Because there is no key it is common to use "_" instead of key to show a skipped value.
+*/
+console.log(
+  "\n------------------- ForEach with Maps and Sets -------------------"
+);
+
+// Map (forEach)
+currencies.forEach(function (value, key, map) {
+  console.log(`${key}: ${value}`);
+});
+
+// Sets (forEach)
+const currenciesUnique = new Set(["USD", "GBP", "USD", "EUR", "EUR"]);
+console.log(currenciesUnique);
+currenciesUnique.forEach(function (value, _, set) {
+  console.log(`${value}: ${_}`);
 });
