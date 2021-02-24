@@ -61,10 +61,22 @@ const inputLoanAmount = document.querySelector(".form__input--loan-amount");
 const inputCloseUsername = document.querySelector(".form__input--user");
 const inputClosePin = document.querySelector(".form__input--pin");
 
+/*
+This function will take the movements from an object and create
+a new row in the webpage that will display # of the movement and the type
+with the correct color along with the amount of money moved.
+*/
 function displayMovements(movements) {
+  // Empty pre-existing container items
+  // .innerHTML is similiar to textContent but includes all the html tags
+  containerMovements.innerHTML = "";
+
   movements.forEach(function (mov, i) {
-    const type = mov > 0 ? "deposit" : "withdrawal"; // determine the type of movement
-    // string that contains the new html code that will change forEach movement
+    // Determine whether the type of the movement is deposit or withdrawl
+    const type = mov > 0 ? "deposit" : "withdrawal";
+
+    // template string that contains the new html code that will construct the class name
+    // and string information
     const html = `
     <div class="movements__row">
       <div class="movements__type movements__type--${type}">${
@@ -72,10 +84,59 @@ function displayMovements(movements) {
     } ${type}</div>
       <div class="movements__value">${mov}</div>
     </div>`;
-    containerMovements.insertAdjacentHTML("afterbegin", html); // adds new html afterbegin
+
+    // calls the insertAdjucentHTML on the variable for the movements class/element and
+    // inserts the HTML afterbegin, which will place the new element after the beginning
+    // of the parent element
+    containerMovements.insertAdjacentHTML("afterbegin", html);
   });
 }
-displayMovements(account1.movements);
+displayMovements(account1.movements); // calls function
+
+/////////////////////////////////////////////////
+// Coding Challenge #1
+/*
+Julia and Kate are doing a study on dogs.  So each of them asked 5 dog owners
+about their dog's age, and stored the data into an array (one array for each).
+For now, they are just interested in knowing wether a dog is an adult or a puppy.
+A dog is an adult if it is at least 3 years old, and it's a puppy if it's less than
+3 years old.
+
+Create a function 'checkDogs', which accepts 2 arrays of dogs ages ('dogsJulia' and 'dogsKate'),
+and does the following things:
+
+1. Julia found out that the owners of the FIRST and LAST TWO dogs actually have cats, not dogs!
+So create a shallow copy of Julia's array, and remove the cat ages from that copied array
+(because its a bad practice to mutate function parameters)
+2. Create an array with both Julia's (corrected) and Kate's data
+3. For each remaining dog, log to the console whether it's an adult ("Dog number 1 is an adult,
+and is 5 years old") or a puppy ("Dog number 2 is still a puppy")
+4. Run the function for both test datasets
+
+Test Data 1: Julia's data [3, 5, 2, 12, 7], Kate's data [4, 1, 15, 8, 3]
+Test Data 2: Julias data [9, 16, 6, 8, 3], Kate's data [10, 5, 6, 1, 4]
+*/
+
+function checkDogs(arr1, arr2) {
+  const fixedArr = arr1.slice(1, -2); // returns  new array without the first or last 2 elements
+  const joinedArrs = fixedArr.concat(arr2); // join arrays
+
+  joinedArrs.forEach(function (age, i) {
+    if (age >= 3) {
+      console.log(`Dog number ${i + 1} is an adult, and is ${age} years old`);
+    } else {
+      console.log(`Dog number ${i + 1} is still a puppy 🐶`);
+    }
+  });
+}
+
+const julArr1 = [3, 5, 2, 12, 7];
+const katArr1 = [4, 1, 15, 8, 3];
+const julArr2 = [9, 16, 6, 8, 3];
+const katArr2 = [10, 5, 6, 1, 4];
+
+checkDogs(julArr1, katArr1);
+checkDogs(julArr2, katArr2);
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
