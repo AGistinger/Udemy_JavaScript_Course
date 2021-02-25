@@ -93,6 +93,25 @@ function displayMovements(movements) {
 }
 displayMovements(account1.movements); // calls function
 
+/*
+This function creates the usernames for each account
+for each account in the accounts array it takes the owner name 
+makes the name lowercase, splits each word into its own array,
+uses map function to take the first letter in each word into a new array,
+then join the letters together to create the username.
+*/
+function createUserNames(accs) {
+  accs.forEach(function (acc) {
+    acc.username = acc.owner
+      .toLocaleLowerCase()
+      .split(" ")
+      .map(word => word[0])
+      .join("");
+  });
+}
+createUserNames(accounts);
+console.log(accounts);
+
 /////////////////////////////////////////////////
 // Coding Challenge #1
 /*
@@ -265,3 +284,39 @@ console.log(currenciesUnique);
 currenciesUnique.forEach(function (value, _, set) {
   console.log(`${value}: ${_}`);
 });
+
+/*
+The Map Method
+- returns a brand new array of the results of the callback function on the
+original array elements.
+
+arr.map(function(ele, i, arr) {});
+
+This is more efficient than the forEach method as the whole array is created at one time
+instead of there being a side effect for each of the calculations one by one.
+*/
+console.log("\n------------------- The Map Method -------------------");
+
+const eurToUsd = 1.1;
+
+// The Map Method (functional programming)
+const movementsUSD = movements.map(mov => mov * eurToUsd);
+
+console.log(movements);
+console.log(movementsUSD);
+
+// For of loop
+const movementsUSDfor = [];
+for (const mov of movements) {
+  const updatedValue = mov * eurToUsd;
+  movementsUSDfor.push(updatedValue.toFixed(2));
+}
+console.log(movementsUSDfor);
+
+const movementsDescriptions = movements.map(
+  (mov, i) =>
+    `Movement ${i + 1}: you ${mov > 0 ? "deposited" : "withdrew"} ${Math.abs(
+      mov
+    )}`
+);
+console.log(movementsDescriptions);
