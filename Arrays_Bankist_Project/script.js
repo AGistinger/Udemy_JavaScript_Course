@@ -112,6 +112,13 @@ function createUserNames(accs) {
 createUserNames(accounts);
 console.log(accounts);
 
+// Function to calculate the balance of the account and set the text field for balance
+function calcDisplayBalance(movements) {
+  const balance = movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${balance} €`;
+}
+calcDisplayBalance(account1.movements);
+
 /////////////////////////////////////////////////
 // Coding Challenge #1
 /*
@@ -290,7 +297,7 @@ The Map Method
 - returns a brand new array of the results of the callback function on the
 original array elements.
 
-arr.map(function(ele, i, arr) {});
+arr.map(function(ele, i, arr) { code });
 
 This is more efficient than the forEach method as the whole array is created at one time
 instead of there being a side effect for each of the calculations one by one.
@@ -320,3 +327,65 @@ const movementsDescriptions = movements.map(
     )}`
 );
 console.log(movementsDescriptions);
+
+/*
+The Filter Method
+arr.filter(function(el, i, arr) { code });
+- returns an array based on the function passed in to filter out elements based 
+on the function.
+*/
+console.log("\n------------------- The Filter Method -------------------");
+
+// Creates an array of movements above 0
+const deposits = movements.filter(function (mov) {
+  return mov > 0;
+});
+console.log(deposits); // only gives positive values now
+
+// Using for loop to do the same as the filter method
+const depositsFor = [];
+for (const mov of movements) {
+  if (mov > 0) {
+    depositsFor.push(mov);
+  }
+}
+console.log(depositsFor);
+
+// Create an array of the withdrawls
+const withdrawls = movements.filter(mov => mov < 0);
+console.log(withdrawls);
+
+/*
+The Reduce Method
+arr.reduce(function(acc, ele, i, arr){ code }, inittialValueOfAccumulator);
+- Boil down all the elements in an array to a single value.
+- Returns 1 value and not an array.
+- Has 4 argumenets an accumulator, the current element, the index, and the array.
+- Each loop iteration returns the accumulator will be the sum of all the previous values.
+  * Return the updated accumulator + the current value so it can be used in the next iteration.
+*/
+console.log("\n------------------- The Reduce Method -------------------");
+
+// accumulator -> snowball
+// const balance = movements.reduce(function (acc, mov, i) {
+//   console.log(`Iteration ${i}: ${acc}`);
+//   return acc + mov;
+// }, 0);
+// console.log(balance);
+
+const balance = movements.reduce((acc, mov) => acc + mov, 0);
+console.log(balance);
+
+// Using for loop to do the above example
+let balance2 = 0;
+for (const mov of movements) {
+  balance2 += mov;
+}
+console.log(balance2);
+
+// Maxium value of movements, use first value of the array instead of 0 to avoid issues
+const maxValue = movements.reduce(
+  (acc, mov) => (acc < mov ? (acc = mov) : acc),
+  movements[0]
+);
+console.log(maxValue);
