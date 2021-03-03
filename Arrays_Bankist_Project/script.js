@@ -82,7 +82,7 @@ function displayMovements(movements) {
       <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
-      <div class="movements__value">${mov}</div>
+      <div class="movements__value">${mov}€</div>
     </div>`;
 
     // calls the insertAdjucentHTML on the variable for the movements class/element and
@@ -91,7 +91,7 @@ function displayMovements(movements) {
     containerMovements.insertAdjacentHTML("afterbegin", html);
   });
 }
-displayMovements(account1.movements); // calls function
+displayMovements(account1.movements);
 
 /*
 This function creates the usernames for each account
@@ -112,6 +112,27 @@ function createUserNames(accs) {
 createUserNames(accounts);
 console.log(accounts);
 
+// Function to display the summary at the bototm of the web page for money in, out and interest.
+function calcDisplaySummary(movements) {
+  const incomes = movements
+    .filter(mov => mov > 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumIn.textContent = `${incomes}€`;
+
+  const out = Math.abs(
+    movements.filter(mov => mov < 0).reduce((acc, mov) => acc + mov, 0)
+  );
+  labelSumOut.textContent = `${out}€`;
+
+  const interest = movements
+    .filter(mov => mov > 0)
+    .map(deposit => (deposit * 1.2) / 100)
+    .filter(int => int >= 1)
+    .reduce((acc, int) => acc + int, 0);
+  labelSumInterest.textContent = `${interest}€`;
+}
+calcDisplaySummary(account1.movements);
+
 // Function to calculate the balance of the account and set the text field for balance
 function calcDisplayBalance(movements) {
   const balance = movements.reduce((acc, mov) => acc + mov, 0);
@@ -119,7 +140,7 @@ function calcDisplayBalance(movements) {
 }
 calcDisplayBalance(account1.movements);
 
-/////////////////////////////////////////////////
+///////////////////////////////////////////////////////
 // Coding Challenge #1
 /*
 Julia and Kate are doing a study on dogs.  So each of them asked 5 dog owners
@@ -198,6 +219,26 @@ const dogAges2 = [16, 6, 10, 5, 6, 1, 4];
 
 console.log(calcAverageHumanAge(dogAges1));
 console.log(calcAverageHumanAge(dogAges2));
+
+///////////////////////////////////////////////////////
+// Coding Challenge #3
+/*
+Rewrite the previous `calcAverageHumanAge' functon from
+the previous challenge, but this time as an arrow function,
+and using chaining!
+
+TEST DATA 1: [5, 2, 4, 1, 15, 8, 3]
+TEST DATA 2: [15, 6, 10, 5, 6, 1, 4]
+*/
+console.log("------------------- Coding Challenge #3 -------------------");
+const calcAvgHumanAge = ages =>
+  ages
+    .map(age => (age <= 2 ? 2 * age : 16 + age * 4))
+    .filter(age => age >= 18)
+    .reduce((acc, age, i, arr) => (acc += age / arr.length), 0);
+
+console.log(calcAvgHumanAge(dogAges1));
+console.log(calcAvgHumanAge(dogAges2));
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -424,3 +465,23 @@ const maxValue = movements.reduce(
   movements[0]
 );
 console.log(maxValue);
+
+/*
+The Magic of Chaining Methods
+You can keep chaining the array methods as long as the method returns a new array 
+for the next method to use.
+
+It is bad practice to chain methods that modify the underlying array example 
+the .splice() method or .reverse() method.
+*/
+console.log(
+  "\n------------------- The Magic of Chaining Methods -------------------"
+);
+
+// Pipeline of chaining methods
+const totalDepositsUSD = movements
+  .filter(mov => mov > 0)
+  .map(mov => mov * eurToUsd)
+  .reduce((acc, mov) => acc + mov, 0);
+
+console.log(totalDepositsUSD);
