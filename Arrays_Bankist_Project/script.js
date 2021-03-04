@@ -91,7 +91,6 @@ function displayMovements(movements) {
     containerMovements.insertAdjacentHTML("afterbegin", html);
   });
 }
-displayMovements(account1.movements);
 
 /*
 This function creates the usernames for each account
@@ -112,33 +111,66 @@ function createUserNames(accs) {
 createUserNames(accounts);
 console.log(accounts);
 
-// Function to display the summary at the bototm of the web page for money in, out and interest.
-function calcDisplaySummary(movements) {
-  const incomes = movements
+// Function to display the summary at the bottom of the web page for money in, out and interest.
+function calcDisplaySummary(account) {
+  const incomes = account.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
   labelSumIn.textContent = `${incomes}€`;
 
   const out = Math.abs(
-    movements.filter(mov => mov < 0).reduce((acc, mov) => acc + mov, 0)
+    account.movements.filter(mov => mov < 0).reduce((acc, mov) => acc + mov, 0)
   );
   labelSumOut.textContent = `${out}€`;
 
-  const interest = movements
+  const interest = account.movements
     .filter(mov => mov > 0)
-    .map(deposit => (deposit * 1.2) / 100)
+    .map(deposit => (deposit * account.interestRate) / 100)
     .filter(int => int >= 1)
     .reduce((acc, int) => acc + int, 0);
-  labelSumInterest.textContent = `${interest}€`;
+  labelSumInterest.textContent = `${interest.toFixed(2)}€`;
 }
-calcDisplaySummary(account1.movements);
 
 // Function to calculate the balance of the account and set the text field for balance
 function calcDisplayBalance(movements) {
   const balance = movements.reduce((acc, mov) => acc + mov, 0);
   labelBalance.textContent = `${balance} €`;
 }
-calcDisplayBalance(account1.movements);
+
+// Event handlers for logging into the webpage
+let currentAccount;
+
+btnLogin.addEventListener("click", function (e) {
+  // Prevent form from submitting
+  e.preventDefault();
+
+  currentAccount = accounts.find(
+    acc => acc.username === inputLoginUsername.value
+  );
+
+  // Will only return the pin if the account exists (optional chaining)
+  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    // Display UI and welcome message
+    labelWelcome.textContent = `Welcome back, ${
+      currentAccount.owner.split(" ")[0]
+    }`;
+    containerApp.style.opacity = 100;
+
+    // Clear input fileds
+    inputLoginUsername.value = inputLoginPin.value = "";
+    inputLoginPin.blur(); // clears selection of field
+
+    // Display movements, balance and summary
+    displayMovements(currentAccount.movements);
+    calcDisplayBalance(currentAccount.movements);
+    calcDisplaySummary(currentAccount);
+  } else {
+    labelWelcome.textContent = "Log in to get started";
+    containerApp.style.opacity = 0;
+  }
+
+  console.log("LOGIN");
+});
 
 ///////////////////////////////////////////////////////
 // Coding Challenge #1
@@ -485,3 +517,33 @@ const totalDepositsUSD = movements
   .reduce((acc, mov) => acc + mov, 0);
 
 console.log(totalDepositsUSD);
+
+/*
+The Find Method (finds one element)
+
+arr.find(function(mov, i, arr) {});
+
+- Retrieves one element of an array based on a condition.
+- Will return the first element in the array that matches the condition.
+
+*/
+console.log("\n------------------- The Find Method -------------------");
+
+const first_withdrawl = movements.find(mov => mov < 0);
+console.log(first_withdrawl);
+
+console.log(accounts);
+
+const account = accounts.find(acc => acc.owner === "Jessica Davis");
+console.log(account);
+
+// Using  a for loop for the above code
+let foundAcc = "";
+for (const acc of accounts) {
+  if (acc.owner === "Jessica Davis") {
+    foundAcc = acc;
+  } else {
+    console.log("account not found...");
+  }
+}
+console.log(foundAcc);
