@@ -132,9 +132,16 @@ function calcDisplaySummary(account) {
 }
 
 // Function to calculate the balance of the account and set the text field for balance
-function calcDisplayBalance(movements) {
-  const balance = movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${balance} €`;
+function calcDisplayBalance(account) {
+  account.balance = account.movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${account.balance} €`;
+}
+
+// Refreshes the values displayed on the screen
+function refreshUI(account) {
+  displayMovements(account.movements);
+  calcDisplayBalance(account);
+  calcDisplaySummary(account);
 }
 
 // Event handlers for logging into the webpage
@@ -161,15 +168,45 @@ btnLogin.addEventListener("click", function (e) {
     inputLoginPin.blur(); // clears selection of field
 
     // Display movements, balance and summary
-    displayMovements(currentAccount.movements);
-    calcDisplayBalance(currentAccount.movements);
-    calcDisplaySummary(currentAccount);
+    refreshUI(currentAccount);
   } else {
     labelWelcome.textContent = "Log in to get started";
     containerApp.style.opacity = 0;
   }
 
   console.log("LOGIN");
+});
+
+// Event handler for transfering money to another account
+btnTransfer.addEventListener("click", function (e) {
+  // Prevent form from submitting (stop from refreshing page)
+  e.preventDefault();
+
+  const amount = Number(inputTransferAmount.value);
+
+  // returns the account that matches the username the user entered as input
+  const recieverAcc = accounts.find(
+    acc => acc.username === inputTransferTo.value
+  );
+
+  // Clear input fileds
+  inputTransferAmount.value = inputTransferTo.value = "";
+  inputTransferTo.blur(); // clears selection of field
+
+  // Check if valid amount and move money to receiver and from giver
+  // Also checks that money is not sent to self and if receiver account is valid
+  if (
+    amount > 0 &&
+    currentAccount.balance >= amount &&
+    recieverAcc &&
+    recieverAcc?.username !== currentAccount.username
+  ) {
+    recieverAcc.movements.push(amount);
+    currentAccount.movements.push(-Math.abs(amount));
+
+    refreshUI(currentAccount);
+    console.log(`Tranfer of ${amount}€ to ${recieverAcc.owner} Successful!`);
+  }
 });
 
 ///////////////////////////////////////////////////////
