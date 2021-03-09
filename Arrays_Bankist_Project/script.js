@@ -61,6 +61,7 @@ const inputLoanAmount = document.querySelector(".form__input--loan-amount");
 const inputCloseUsername = document.querySelector(".form__input--user");
 const inputClosePin = document.querySelector(".form__input--pin");
 
+////////////////////////////// FUNCTIONS ////////////////////////////////////
 /*
 This function will take the movements from an object and create
 a new row in the webpage that will display # of the movement and the type
@@ -144,6 +145,7 @@ function refreshUI(account) {
   calcDisplaySummary(account);
 }
 
+///////////////////////////////// EVENT HANLDERS ////////////////////////////
 // Event handlers for logging into the webpage
 let currentAccount;
 
@@ -206,6 +208,33 @@ btnTransfer.addEventListener("click", function (e) {
 
     refreshUI(currentAccount);
     console.log(`Tranfer of ${amount}€ to ${recieverAcc.owner} Successful!`);
+  }
+});
+
+// Event handler for closing account
+btnClose.addEventListener("click", function (e) {
+  e.preventDefault();
+
+  // Saving input variables
+  const user = inputCloseUsername.value;
+  const pin = Number(inputClosePin.value);
+
+  // Clear input fields
+  inputCloseUsername.value = inputClosePin.value = "";
+  inputClosePin.blur();
+
+  // Checking if current account data and input data match and then deleting account
+  if (currentAccount.username === user && currentAccount.pin === pin) {
+    accounts.splice(
+      accounts.findIndex(acc => acc.username === user),
+      1
+    );
+
+    // logs user out / clears screen
+    labelWelcome.textContent = "Log in to get started";
+    containerApp.style.opacity = 0;
+  } else {
+    console.log(`Unable to close account username and pin do not match`);
   }
 });
 
@@ -584,3 +613,11 @@ for (const acc of accounts) {
   }
 }
 console.log(foundAcc);
+
+/*
+The Find Index Method
+
+* Returns the index of the found element and NOT the element itself
+* See Close account function
+*/
+console.log("\n------------------- The Find Index Method -------------------");
