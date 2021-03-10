@@ -211,6 +211,29 @@ btnTransfer.addEventListener("click", function (e) {
   }
 });
 
+// Event handler for requesting loan
+btnLoan.addEventListener("click", function (e) {
+  e.preventDefault();
+
+  // Save input variable
+  const loanRequest = Number(inputLoanAmount.value);
+
+  // Clear input fields
+  inputLoanAmount.value = "";
+  inputLoanAmount.blur();
+
+  // Checks if the user has at least 1 deposit with 10% of the requested loan amount
+  if (
+    loanRequest > 0 &&
+    currentAccount.movements.some(mov => mov >= loanRequest * 0.1)
+  ) {
+    currentAccount.movements.push(loanRequest);
+    refreshUI(currentAccount);
+  } else {
+    console.log("You do not meet the requirements to request this loan");
+  }
+});
+
 // Event handler for closing account
 btnClose.addEventListener("click", function (e) {
   e.preventDefault();
@@ -621,3 +644,80 @@ The Find Index Method
 * See Close account function
 */
 console.log("\n------------------- The Find Index Method -------------------");
+
+/*
+The Some and Every Methods
+
+Some Method
+arr.some(condition);
+* The some method works similiar to the includes method
+* The difference is the some method checks against a condition instead of checking for
+  equality.
+* Returns a True False boolean
+* (If there is any value to which the condition is true the some method will return true)
+
+Every Method
+arr.every(condition);
+* The some method works similar to the some method, except that every element
+  must meet the condition to return true.
+*/
+console.log(
+  "\n------------------- The Some and Every Methods -------------------"
+);
+
+// Includes method (tests for equality)
+console.log(movements.includes(-130)); // True (is in the array)
+
+// Some Method (condition)
+const anyDeposits = movements.some(mov => mov > 5000);
+console.log(anyDeposits); // False no deposit greater than 5000
+
+// Every Method (condition)
+console.log(account4.movements.every(mov => mov > 0)); // true (all movements are deposits)
+
+// Separate callback
+const deposit = mov => mov > 0;
+console.log(movements.some(deposit)); // true
+console.log(movements.every(deposit)); // false
+console.log(movements.filter(deposit)); // returns an array with all deposits
+
+/*
+Flat and Flatmap
+(Working with Nested Arrays)
+
+Flat
+arr.flat(depth);
+* Return a array of all the nested arrays that have been merged together.
+* The flat method only goes 1 level deep when flattening arrays
+* If there are nested arrays in nested arrays  only the first level gets flattend
+* This can be adjusted by changing the depth in the flat method, default is 1.
+
+FlatMap
+arr.flatMap(condition)
+* Works like a map method and flat method combined
+* FlatMap takes a condition and then applies the flat method at the end of it
+* FlatMap only goes 1 level deep, so if you need to go more than one you will
+  have to do map and flat(depth) methods separately.
+*/
+console.log("\n------------------- Flat and Flatmap -------------------");
+
+//Flat
+const nestArr = [[1, 2, 3], [4, 5, 6], 7, 8];
+console.log(nestArr.flat());
+
+// Only first level gets flattened unless depth in the flat method is changed to 2
+const arrDeep = [[[1, 2], 3], [4, [5, 6]], 7, 8];
+console.log(arrDeep.flat(2));
+
+// Gets all movements from all accounts
+const overallBalance = accounts
+  .map(acc => acc.movements)
+  .flat()
+  .reduce((acc, mov) => (acc += mov), 0);
+console.log(overallBalance);
+
+// FlatMap
+const overallBalance2 = accounts
+  .flatMap(acc => acc.movements)
+  .reduce((acc, mov) => (acc += mov), 0);
+console.log(overallBalance2);
