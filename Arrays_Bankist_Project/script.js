@@ -67,12 +67,14 @@ This function will take the movements from an object and create
 a new row in the webpage that will display # of the movement and the type
 with the correct color along with the amount of money moved.
 */
-function displayMovements(movements) {
+function displayMovements(movements, sort = false) {
   // Empty pre-existing container items
   // .innerHTML is similiar to textContent but includes all the html tags
   containerMovements.innerHTML = "";
 
-  movements.forEach(function (mov, i) {
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
+  movs.forEach(function (mov, i) {
     // Determine whether the type of the movement is deposit or withdrawl
     const type = mov > 0 ? "deposit" : "withdrawal";
 
@@ -259,6 +261,14 @@ btnClose.addEventListener("click", function (e) {
   } else {
     console.log(`Unable to close account username and pin do not match`);
   }
+});
+
+// Event handler for sorting movements
+let sorted = false;
+btnSort.addEventListener("click", function (e) {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted); // does the opposite
+  sorted = !sorted; // changes the sorted variable to turn on and off sorting
 });
 
 ///////////////////////////////////////////////////////
@@ -721,3 +731,96 @@ const overallBalance2 = accounts
   .flatMap(acc => acc.movements)
   .reduce((acc, mov) => (acc += mov), 0);
 console.log(overallBalance2);
+
+/*
+Sorting Arrays
+arr.sort();
+arr.sort(function() {});
+
+- Will mutate the original array
+- When used with strings will sort alphabetically
+- When used with numbers will NOT sort smallest to largetst, instead will convert
+  the numbers to strings and then sorts alphabetically as if the numbers were strings
+  * This can be fixed by adding a callback function as an argument
+*/
+console.log("\n------------------- Sorting Arrays -------------------");
+
+// Strings - Sorts alphabetically (Mutates original array)
+const owners = ["Jonas", "Zach", "Adam", "Martha"];
+console.log(owners.sort());
+
+// Numbers
+// console.log(movements.sort());  // Does not work as expected
+
+// return < 0, A, B (a > b) (keep order)
+// return > 0, B, A (a < b) (switch order)
+movements.sort((a, b) => (a > b ? 1 : -1)); // Accending
+console.log(movements);
+
+// Another way
+movements.sort((a, b) => a - b); // Accending
+console.log(movements);
+
+movements.sort((a, b) => (a < b ? 1 : -1)); // Decending
+console.log(movements);
+
+// Another way
+movements.sort((a, b) => b - a);
+console.log(movements);
+
+/*
+More Ways of Creating and Filling Arrays
+- Problematically creating arrays
+
+Fill
+arr.fill(el, inx, end);
+- Will fill an array with the selected element (optional) starting at the selected index and
+   (optional) stopping at the end parameter.  
+  * Will not fill in the index at the end parameter.
+- The fill method will work on all arrays not just an empty array.
+
+From
+Array.from({length: num}, function(el, i) );
+- Will fill an array with the selected length with a function (works like a map);
+*/
+console.log(
+  "\n------------------- More Ways of Creating and Filling Arrays -------------------"
+);
+
+// Creates a new array with 7 empty elements
+const x = new Array(7);
+x.fill(1, 3, 5); // Fills the array with the value
+x.fill(1);
+console.log(x);
+
+// Array.from()
+const y = Array.from({ legnth: 7 }, () => 1);
+console.log(y);
+
+// Creating an array problematically
+const z = Array.from({ length: 7 }, (_, i) => i + 1);
+console.log(z);
+
+// Create an array with 100 random dice rolls
+const dice = Array.from({ length: 100 }, () =>
+  Math.floor(Math.random() * 32 + 1)
+);
+console.log(dice);
+
+// Converting a UI element into an array
+labelBalance.addEventListener("click", function () {
+  /* 
+   Creates an array from the .movements__value UI element (nodelist)
+   Then uses the callback function to convert the strings into
+   a number, and remove the dollar character.
+  */
+  const movementsUI = Array.from(
+    document.querySelectorAll(".movements__value"),
+    el => Number(el.textContent.replace("€", ""))
+  );
+
+  // Another way of converting the nodelist ui element to a array
+  const movementsUI2 = [...document.querySelectorAll(".movements__value")];
+
+  console.log(movementsUI); // displays to console
+});
