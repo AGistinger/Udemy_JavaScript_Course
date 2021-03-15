@@ -371,6 +371,65 @@ const calcAvgHumanAge = ages =>
 console.log(calcAvgHumanAge(dogAges1));
 console.log(calcAvgHumanAge(dogAges2));
 
+///////////////////////////////////////////////////////
+// Coding Challenge #4
+/*
+Julia and Kate are still studying dogs, and this time they are 
+studying if dogs are eating too much or too little.
+
+Eating too much means teh dog's current food portion is larger
+than the recommended portion, and eating too little is the
+opposite.
+
+Eating an okay amount means the dog's current food portion is within 
+a range of 10% above and 10% below the recommended portion (see hint).
+
+1. Loop over the array containing the dog objects, and for each dog,
+calculate the recommended food portion and add it to the object
+as a new porperty.  Do NOT create a new array, simply loop over
+the array.
+  Formula: recommendedFood = weight ** 0.75 * 28. (The result is in grams of food,
+  and the weight needs to be in kg)
+
+2. Find Sarah's dog and log to the console whether it's eating too much or
+too little.  HINT: Some dogs have multiple owners, so you first need to find 
+Sarah in the owners array, and so this one is a bit tricket (on purpose).
+
+3. Create an array containing all owners of dogs who eat too much ("ownersEatTooMuch")
+and an array with all owners of dogs who eat too little ("ownersEatTooLittle")
+
+4. Log a string to the console for each array created in #3.  Liek this: "Matilda
+and Alice and Bob's dogs eat too much!"  and "Sarah and Johns and Michael's dogs 
+eat too little!".
+
+5. Log to the console wether there is anyd og eating EXACTLY the amount of food
+that is recommended (just true or false).
+
+6. Log to the console whether there is any dog eating an OKAY amount of food (just true or false)
+
+7. Create an array containing the dogs are eating an OKAY amount of food (try and reuse
+  the condition used in #6)
+
+8. Create a shallow copy of the dogs array and sort it by recommended food portion in 
+an accending order (keep in mind the food portions inside the array's object)
+
+TEST DATA:
+const dogs = [
+  {weight: 22, curFood: 250, owners: ["Alice", "Bob"]},
+  {weight: 8, curFood: 200, owners: ["Matilda"]},
+  {weight: 13, curFood: 275, owners: ["Sarah", "John"]},
+  {weight: 32, curFood: 340, owners: ["Micheal"]}
+];
+*/
+console.log("------------------- Coding Challenge #4 -------------------");
+
+const dogs = [
+  { weight: 22, curFood: 250, owners: ["Alice", "Bob"] },
+  { weight: 8, curFood: 200, owners: ["Matilda"] },
+  { weight: 13, curFood: 275, owners: ["Sarah", "John"] },
+  { weight: 32, curFood: 340, owners: ["Micheal"] },
+];
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -824,3 +883,97 @@ labelBalance.addEventListener("click", function () {
 
   console.log(movementsUI); // displays to console
 });
+
+/*
+Which Array Method to Use?
+
+- What do I actually want from this method?
+ * Do I want to mutate the original array?
+    + .push(), add to the origianl (end)
+    + .unshift(), add to the original (start)
+    + .pop(), remove from the original (end)
+    + .shift(), remove from the original (start)
+    + .splice(), remove from the original (any)
+    + .reverse(), reverse the order
+    + .sort(), sort the array
+    + .fill(), fill the array
+ * Do I want a new array?
+    + .map(), loops
+    + .filter(), filer using a condition
+    + .slice(), portion of the array
+    + .concat(), adding to the other
+    + .flat(), flattening the original
+    + .flatMap(), flattening the original
+ * Do I want the array index?
+    + .indexOf(), find index based on value
+    + .findIndex(), find index based on location
+ * Do I want to know if the array includes? (returns boolean)
+    + .includes(), based on a value, single value
+    + .some(), returns based on a condition (a element is true)
+    + .every(), returns based on a condition (every element is true)
+ * Do I want an array element?
+    + .find(), find element based on test condition
+ * Do I want a new string?
+    + .join(), based on a separator string
+ * Do I want to transform a value?
+    + reduce(), boil down to a single value of any type
+ * Do I want to loop over the array?
+    + forEach(), does not create a new array or a new value, just loops over it
+*/
+
+////////////////////  Array Methods Practice ////////////////////
+
+console.log("\n------------------- Array Methods Practice -------------------");
+
+// Exercise 1
+// return the total deposits across all of the accounts movements
+const bankDepositSum = accounts
+  .flatMap(acc => acc.movements)
+  .filter(mov => mov > 0)
+  .reduce((acc, mov) => acc + mov, 0);
+console.log(bankDepositSum);
+
+// Exercise 2
+// Return the number of deposits over 1000
+const numDeposits1000 = accounts
+  .flatMap(acc => acc.movements)
+  .filter(mov => mov >= 1000).length;
+console.log(numDeposits1000);
+
+// Exercise 2 using reduce method
+const numDeposits1k = accounts
+  .flatMap(acc => acc.movements)
+  .reduce((acc, mov) => (mov >= 1000 ? ++acc : acc), 0);
+console.log(numDeposits1k);
+
+// Exercise 3
+// Create a new object which contains the sum of the deposits and withdrawls
+// using reduce method
+const sums = accounts
+  .flatMap(acc => acc.movements)
+  .reduce(
+    (acc, mov) => {
+      mov > 0 ? (acc.deposits += mov) : (acc.withdrawls += mov);
+      // sums[acc > 0 ? "deposits" : "withdrawls"] += mov; // Another way
+      return acc; // Must return if there is a funciton body
+    },
+    { deposits: 0, withdrawls: 0 }
+  );
+console.log(sums);
+
+// Exercise 4
+// Convert any string to a title case
+function convertTitleCase(title) {
+  const capitalize = string => string[0].toUpperCase() + string.slice(1);
+  const exceptions = ["a", "an", "and", "the", "but", "or", "on", "in", "with"];
+
+  const titleCase = title
+    .toLowerCase()
+    .split(" ")
+    .map(word => (exceptions.includes(word) ? word : capitalize(word)))
+    .join(" ");
+  return capitalize(titleCase);
+}
+console.log(convertTitleCase("this is a nice title"));
+console.log(convertTitleCase("this is a LONG title but not too long"));
+console.log(convertTitleCase("and here is another title with an EXAMPLE"));
