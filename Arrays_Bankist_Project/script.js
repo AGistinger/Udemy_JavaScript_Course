@@ -402,7 +402,7 @@ and an array with all owners of dogs who eat too little ("ownersEatTooLittle")
 and Alice and Bob's dogs eat too much!"  and "Sarah and Johns and Michael's dogs 
 eat too little!".
 
-5. Log to the console wether there is anyd og eating EXACTLY the amount of food
+5. Log to the console wether there is any dog eating EXACTLY the amount of food
 that is recommended (just true or false).
 
 6. Log to the console whether there is any dog eating an OKAY amount of food (just true or false)
@@ -412,6 +412,12 @@ that is recommended (just true or false).
 
 8. Create a shallow copy of the dogs array and sort it by recommended food portion in 
 an accending order (keep in mind the food portions inside the array's object)
+
+HINT 1: Use many different tools to solve the challenges
+HINT 2:  BEing within a range of 10% above and below the
+recommended portion means: current > (recommended * 0.90) && 
+currennt < (recommended * 1.10).  Basically, the current portion should
+be between 90% and 110% of the recommended portion.
 
 TEST DATA:
 const dogs = [
@@ -429,6 +435,65 @@ const dogs = [
   { weight: 13, curFood: 275, owners: ["Sarah", "John"] },
   { weight: 32, curFood: 340, owners: ["Micheal"] },
 ];
+
+// Calculate the recommended portion of food for each dog and add it to the dogs property
+function calcRecommendedFood(dogsArr) {
+  dogsArr.forEach(function (dog) {
+    dog.recommendedFood = (dog.weight ** 0.75 * 28).toFixed(2);
+  });
+}
+calcRecommendedFood(dogs);
+
+// write to the console if sarah's dog is eating too much or too little
+// instead of using .some(), .includes() also returns true/false value
+const sarahsDog = dogs.find(dog => dog.owners.some(owner => owner === "Sarah"));
+console.log(
+  `${sarahsDog.owners[0]}'s dog is eating ${(
+    sarahsDog.curFood - sarahsDog.recommendedFood
+  ).toFixed(2)}kg too much`
+);
+
+// Create an array of all the dogs that are eating too much
+const ownersEatTooMuch = dogs.filter(dog => dog.curFood > dog.recommendedFood);
+console.log(ownersEatTooMuch);
+
+// Create an array of all the dogs that are eating too little
+const ownersEatTooLittle = dogs.filter(
+  dog => dog.curFood < dog.recommendedFood
+);
+console.log(ownersEatTooLittle);
+
+// Getting the owners names of each of the arrays to print into a string
+const ownerOverEat = ownersEatTooMuch.flatMap(dog => dog.owners).join(" and ");
+console.log(`${ownerOverEat}'s dogs eat too much!`);
+
+const ownerUnderEat = ownersEatTooLittle
+  .flatMap(dog => dog.owners)
+  .join(" and ");
+console.log(`${ownerUnderEat}'s dogs eat too little!`);
+
+// log to the console if any dog is eating the exact correct amount of food
+console.log(dogs.some(dog => dog.curFood === dog.recommendedFood));
+
+// Log to the console if any dog is eating an okay amount of food
+// current > (recommended * 0.90) && currennt < (recommended * 1.10)
+const checkEatingOkay = dog =>
+  dog.curFood > dog.recommendedFood * 0.9 &&
+  dog.curFood < dog.recommendedFood * 1.1;
+
+console.log(dogs.some(checkEatingOkay));
+
+// Create an array of dogs eating an okay amount of food
+const ownersEatOkay = dogs.filter(checkEatingOkay);
+console.log(ownersEatOkay);
+
+// create a shallow copy of the dogs array and sort it by rec. food accending order
+const sortedDogs = dogs
+  .slice()
+  .sort((dogA, dogB) => dogA.recommendedFood - dogB.recommendedFood);
+console.log(sortedDogs);
+
+console.log(dogs);
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
