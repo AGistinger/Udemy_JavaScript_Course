@@ -339,3 +339,111 @@ console.log(Math.floor(-23.3)); // -24, rounds up in negative value
 console.log((2.7).toFixed(0)); // 3 (string), toFixed will return a string
 console.log((2.7).toFixed(3)); // 2.700 (string)
 console.log(+(2.345).toFixed(2)); // 2.35 (number)
+
+//////// The Remainder Operator /////////
+/*
+returns the remainder of a division
+*/
+console.log("------------ The Remainder Operator -------------");
+
+console.log(5 % 2); // 1
+console.log(5 / 2); // 2.5, 5 = 2 + 2 + 1
+console.log(8 % 3); // 2
+console.log(8 / 3); // 2.6666, 8 = 2 * 3 + 2
+console.log(8 % 2); // 0
+
+// Check if a number is even or odd
+const isEven = num => num % 2 === 0;
+console.log(isEven(10)); // true
+console.log(isEven(5)); // false
+
+// Example, to change every other row as orange red in the website and every 3rd blue
+labelBalance.addEventListener("click", function () {
+  [...document.querySelectorAll(".movements__row")].forEach(function (row, i) {
+    if (i % 2 === 0) {
+      row.style.backgroundColor = "orangered";
+    }
+    if (i % 3 === 0) {
+      row.style.backgroundColor = "blue";
+    }
+  });
+});
+
+//////// Working with BigInt /////////
+/*
+Special type of integer introduced in ES2020
+- You cannot mix BigInts with regular numbers
+*/
+console.log("------------ Working with BigInt -------------");
+
+console.log(2 ** 53 - 1); // The biggest number that JS can represent
+console.log(Number.MAX_SAFE_INTEGER);
+console.log(2 ** 53 + 1); // wrong, cannot update correctly
+
+// Big Int
+console.log(123125245394983498539849823984293482342n); // adding n transforms a normal number to a bigint
+console.log(BigInt(123125245394983498539849823984293482342));
+
+// Operations
+console.log(10000n + 10000n);
+console.log(298342398492834982398429834n * 10000000n);
+
+const huge = 2309280348902384092304982n;
+const num = 23;
+// console.log(huge * num); // error can't mix
+
+console.log(20n > 15); // still works
+console.log(20n === 20); // false types don't match
+console.log(typeof 20n);
+
+console.log(huge + " is REALLY big!!!!");
+
+// Divisions
+console.log(10n / 3n); // 3n cuts off decimal
+
+//////// Creating Dates /////////
+/*
+There are 4 ways of creating dates in JS:
+- const now = new Date();
+- const date = new Date("string");
+- const date = new Date(Y, M, D, Hr, Min, Sec, MS);
+- const date = new Date(ms);
+*/
+console.log("------------ Creating Dates -------------");
+
+// Create a date
+const now = new Date();
+console.log(now);
+
+console.log(new Date("Aug 02 2020 18:05:53"));
+console.log(new Date("December 24, 2015"));
+console.log(new Date(account1.movementsDates[0]));
+
+console.log(new Date(2037, 10, 19, 15, 23, 5));
+console.log(new Date(2037, 10, 31));
+
+console.log(new Date(0));
+console.log(new Date(3 * 24 * 60 * 60 * 1000)); // 3 days * 24 hours * 60 min * 60 sec * 1000 ms
+
+// Working with dates
+const future = new Date(2037, 10, 19, 15, 23);
+console.log(future);
+console.log(future.getFullYear()); // don't use getYear
+console.log(future.getMonth());
+console.log(future.getDate());
+console.log(future.getDay()); // gets day of the week
+
+console.log(future.getHours());
+console.log(future.getMinutes());
+console.log(future.getSeconds());
+
+console.log(future.toISOString());
+console.log(future.getTime()); // ms since 1970
+
+console.log(new Date(2142274980000));
+
+// Right now
+console.log(Date.now()); // Gets current time stamp
+
+future.setFullYear(2040);
+console.log(future);
