@@ -115,7 +115,7 @@ document
   });
 
 ///////////////////// Styles, Attributes and Classes /////////////////
-console.log("--------- STyles, Attributes and Classes -----------");
+console.log("--------- Styles, Attributes and Classes -----------");
 
 // Styles
 message.style.backgroundColor = "#37383d";
@@ -159,3 +159,80 @@ logo.classList.contains("c"); // not includes
 
 // Don't use
 // logo.className = "jonas";
+
+///////////////////// Types of Events and Event Handlers /////////////////
+console.log("--------- Type of Events and Event Handlers -----------");
+
+// Mouse Enter
+/*
+fires whenever the mouse enters a certain element, works kind of like
+hover in CSS.
+*/
+const h1 = document.querySelector("h1");
+function alertH1(e) {
+  alert("addEventListener: Great! You are reading the heading :D");
+
+  h1.removeEventListener("mouseenter", alertH1); // Removed event listen after it triggers
+}
+
+h1.addEventListener("mouseenter", alertH1);
+
+// old way
+// h1.onmouseenter = function (e) {
+//   alert("addEventListener: Great! You are reading the heading :D");
+// };
+
+// Removes a event listener after a certain period of time so it doesn't fire
+setTimeout(() => h1.removeEventListener("mouseenter", alertH1), 3000);
+
+///////////////////// Event Propagation: Bubbling and Capturing /////////////////
+console.log("--------- Event Propagation: Bubbling and Capturing -----------");
+/*
+Capturing phase - 
+* The event is generated at the root of the DOM tree from there the capturing phase happens
+the event travels all the way down from the document root to the target element.  
+* As the event travels down the tree it will pass through every single parent element of
+the target element (no siblings).
+
+Target Phase - 
+* Events can be handled at the target, (event listeners)
+
+Bubbling Phase - 
+* The event bubbles up from the target to the document root and the even passes through
+all the parent elements (no siblings)
+* The event happened in each of the parent elements
+* If the same event listener is attached to the section element will handle the same event
+
+*/
+
+// Random color rgb(255, 255, 255)
+const randomInt = (min, max) =>
+  Math.floor(Math.random() * (max - min + 1) + min);
+const randomColor = () =>
+  `rgb(${randomInt(0, 255)}, ${randomInt(0, 255)}, ${randomInt(0, 255)})`;
+
+// One click will activate all of these elements
+document.querySelector(".nav__link").addEventListener("click", function (e) {
+  this.style.backgroundColor = randomColor();
+  console.log("LINK", e.target, e.currentTarget);
+  console.log(e.currentTarget === this); // These are the same in an event handler
+
+  // Stop propagation
+  // e.stopPropagation(); // Will not trigger parent elements
+});
+
+document.querySelector(".nav__links").addEventListener("click", function (e) {
+  this.style.backgroundColor = randomColor();
+  console.log("CONTAINER", e.target, e.currentTarget);
+});
+
+// If a 3rd arg is added to an event listener (true/false) and set to True the event listener will
+// change to only listen to capturing events instead of bubbling events
+document.querySelector(".nav").addEventListener(
+  "click",
+  function (e) {
+    this.style.backgroundColor = randomColor();
+    console.log("NAV", e.target, e.currentTarget);
+  },
+  true
+);
