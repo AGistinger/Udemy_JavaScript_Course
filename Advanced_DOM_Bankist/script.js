@@ -31,6 +31,30 @@ function closeModal() {
 }
 
 /////////////////////////////////////////////////////////////////
+// Page Navigation
+/////////////////////////////////////////////////////////////////
+// Header Page Navigation (Inefficient way)
+// document.querySelectorAll(".nav__link").forEach(function (el) {
+//   el.addEventListener("click", function (e) {
+//     e.preventDefault();
+//     const id = this.getAttribute("href");
+//     document.querySelector(id).scrollIntoView({ behavior: "smooth" });
+//   });
+// });
+
+// (Efficient way)
+// 1. Add event listener to common parent element
+// 2. Determine what element originated the event
+document.querySelector(".nav__links").addEventListener("click", function (e) {
+  e.preventDefault();
+  // Matching strategy
+  if (e.target.classList.contains("nav__link")) {
+    const id = e.target.getAttribute("href");
+    document.querySelector(id).scrollIntoView({ behavior: "smooth" });
+  }
+});
+
+/////////////////////////////////////////////////////////////////
 // EVENT LISTENERS
 /////////////////////////////////////////////////////////////////
 // Event listener for opening account modal
@@ -49,6 +73,7 @@ document.addEventListener("keydown", function (e) {
   }
 });
 
+// Button Scrolling
 btnScrollTo.addEventListener("click", function (e) {
   const s1coords = section1.getBoundingClientRect();
 
@@ -205,34 +230,73 @@ all the parent elements (no siblings)
 
 */
 
-// Random color rgb(255, 255, 255)
-const randomInt = (min, max) =>
-  Math.floor(Math.random() * (max - min + 1) + min);
-const randomColor = () =>
-  `rgb(${randomInt(0, 255)}, ${randomInt(0, 255)}, ${randomInt(0, 255)})`;
+// // Random color rgb(255, 255, 255)
+// const randomInt = (min, max) =>
+//   Math.floor(Math.random() * (max - min + 1) + min);
+// const randomColor = () =>
+//   `rgb(${randomInt(0, 255)}, ${randomInt(0, 255)}, ${randomInt(0, 255)})`;
 
-// One click will activate all of these elements
-document.querySelector(".nav__link").addEventListener("click", function (e) {
-  this.style.backgroundColor = randomColor();
-  console.log("LINK", e.target, e.currentTarget);
-  console.log(e.currentTarget === this); // These are the same in an event handler
+// // One click will activate all of these elements
+// document.querySelector(".nav__link").addEventListener("click", function (e) {
+//   this.style.backgroundColor = randomColor();
+//   console.log("LINK", e.target, e.currentTarget);
+//   console.log(e.currentTarget === this); // These are the same in an event handler
 
-  // Stop propagation
-  // e.stopPropagation(); // Will not trigger parent elements
-});
+//   // Stop propagation
+//   // e.stopPropagation(); // Will not trigger parent elements
+// });
 
-document.querySelector(".nav__links").addEventListener("click", function (e) {
-  this.style.backgroundColor = randomColor();
-  console.log("CONTAINER", e.target, e.currentTarget);
-});
+// document.querySelector(".nav__links").addEventListener("click", function (e) {
+//   this.style.backgroundColor = randomColor();
+//   console.log("CONTAINER", e.target, e.currentTarget);
+// });
 
-// If a 3rd arg is added to an event listener (true/false) and set to True the event listener will
-// change to only listen to capturing events instead of bubbling events
-document.querySelector(".nav").addEventListener(
-  "click",
-  function (e) {
-    this.style.backgroundColor = randomColor();
-    console.log("NAV", e.target, e.currentTarget);
-  },
-  true
-);
+// // If a 3rd arg is added to an event listener (true/false) and set to True the event listener will
+// // change to only listen to capturing events instead of bubbling events
+// document.querySelector(".nav").addEventListener(
+//   "click",
+//   function (e) {
+//     this.style.backgroundColor = randomColor();
+//     console.log("NAV", e.target, e.currentTarget);
+//   },
+//   true
+// );
+
+///////////////////// DOM Traversing /////////////////
+console.log("--------- DOM Traversing -----------");
+/*
+- Calling querySelectorAll() on an element will return all child elements of the selected element
+- Other elements that have the same name but are not children of the selected element will not be
+selected.
+
+- Closest is the opposite of querySelector:
+  - querySelector finds children no matter how deep in the DOM tree
+  - closest finds parents no matter how high up in the DOM tree
+
+- In JavaScript you can only access directi siblings so the previous or the next one
+- 
+*/
+// Going downwards: child
+console.log(h1.querySelectorAll(".highlight"));
+console.log(h1.childNodes); // shows all direct children elements
+console.log(h1.children); // gives HTML collection (live) for direct children
+h1.firstElementChild.style.color = "white";
+h1.lastElementChild.style.color = "grey";
+
+// Going upwards: parents
+console.log(h1.parentNode);
+console.log(h1.parentElement);
+// h1.closest(".header").style.background = "var(--gradient-secondary)";
+// h1.closest("h1").style.background = "var(--gradient-primary)";
+
+// Going sideways: siblings
+console.log(h1.previousElementSibling);
+console.log(h1.nextElementSibling);
+console.log(h1.previousSibling);
+console.log(h1.nextSibling);
+
+// How to get all of the siblings
+// console.log(h1.parentElement.children);
+// [...h1.parentElement.children].forEach(function (el) {
+//   if (el != h1) el.style.transform = "scale(0.5)";
+// });
