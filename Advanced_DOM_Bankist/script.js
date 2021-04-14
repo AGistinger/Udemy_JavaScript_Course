@@ -5,6 +5,10 @@
 /////////////////////////////////////////////////////////////////
 const btnScrollTo = document.querySelector(".btn--scroll-to");
 const section1 = document.querySelector("#section--1");
+const tabs = document.querySelectorAll(".operations__tab");
+const tabsContainer = document.querySelector(".operations__tab-container");
+const tabsContent = document.querySelectorAll(".operations__content");
+const nav = document.querySelector(".nav");
 
 /////////////////////////////////////////////////////////////////
 // Modal window
@@ -28,6 +32,19 @@ function openModal(e) {
 function closeModal() {
   modal.classList.add("hidden");
   overlay.classList.add("hidden");
+}
+
+function handleHover(e) {
+  if (e.target.classList.contains("nav__link")) {
+    const link = e.target;
+    const siblings = link.closest(".nav").querySelectorAll(".nav__link");
+    const logo = link.closest(".nav").querySelector("img");
+
+    siblings.forEach(el => {
+      if (el !== link) el.style.opacity = this;
+    });
+    logo.style.opacity = this;
+  }
 }
 
 /////////////////////////////////////////////////////////////////
@@ -55,6 +72,28 @@ document.querySelector(".nav__links").addEventListener("click", function (e) {
 });
 
 /////////////////////////////////////////////////////////////////
+// Tabbed Component
+/////////////////////////////////////////////////////////////////
+tabsContainer.addEventListener("click", function (e) {
+  const clicked = e.target.closest(".operations__tab"); // Will get the closest tab element
+
+  // Guard clause
+  if (!clicked) return; // will exit for null clicks
+
+  // Remove active classes for tab and content area
+  tabs.forEach(t => t.classList.remove("operations__tab--active")); // clear active tab class
+  tabsContent.forEach(c => c.classList.remove("operations__content--active"));
+
+  // Activate tab
+  clicked.classList.add("operations__tab--active");
+
+  // Activate content area
+  document
+    .querySelector(`.operations__content--${clicked.dataset.tab}`)
+    .classList.add("operations__content--active");
+});
+
+/////////////////////////////////////////////////////////////////
 // EVENT LISTENERS
 /////////////////////////////////////////////////////////////////
 // Event listener for opening account modal
@@ -72,6 +111,11 @@ document.addEventListener("keydown", function (e) {
     closeModal();
   }
 });
+
+// Menu Fade Animation
+// Passing "argument" into a handler
+nav.addEventListener("mouseover", handleHover.bind(0.5));
+nav.addEventListener("mouseout", handleHover.bind(1));
 
 // Button Scrolling
 btnScrollTo.addEventListener("click", function (e) {
