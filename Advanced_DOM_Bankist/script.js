@@ -9,6 +9,7 @@ const tabs = document.querySelectorAll(".operations__tab");
 const tabsContainer = document.querySelector(".operations__tab-container");
 const tabsContent = document.querySelectorAll(".operations__content");
 const nav = document.querySelector(".nav");
+const header = document.querySelector(".header");
 
 /////////////////////////////////////////////////////////////////
 // Modal window
@@ -94,6 +95,38 @@ tabsContainer.addEventListener("click", function (e) {
 });
 
 /////////////////////////////////////////////////////////////////
+// Sticky Navigation
+/////////////////////////////////////////////////////////////////
+// const initialCoords = section1.getBoundingClientRect();
+
+// Not Efficient
+// window.addEventListener("scroll", function () {
+//   if (window.scrollY > initialCoords.top) {
+//     nav.classList.add("sticky");
+//   } else {
+//     nav.classList.remove("sticky");
+//   }
+// });
+
+// Intersection Observer API (Efficient)
+const navHeight = nav.getBoundingClientRect().height;
+function stickyNav(entries) {
+  const [entry] = entries;
+  if (!entry.isIntersecting) {
+    nav.classList.add("sticky");
+  } else {
+    nav.classList.remove("sticky");
+  }
+}
+
+const headerObserver = new IntersectionObserver(stickyNav, {
+  root: null,
+  threshold: 0,
+  rootMargin: `-${navHeight}px`, // 90 pixels before threshold was reached (visual margin)
+});
+headerObserver.observe(header);
+
+/////////////////////////////////////////////////////////////////
 // EVENT LISTENERS
 /////////////////////////////////////////////////////////////////
 // Event listener for opening account modal
@@ -150,7 +183,7 @@ console.log(document.documentElement); // Select the whole document
 console.log(document.head); // Select the header
 console.log(document.body); // Select the body
 
-const header = document.querySelector(".header"); // returns first element that matches the selector
+const headerTest = document.querySelector(".header"); // returns first element that matches the selector
 const allSections = document.querySelectorAll(".section"); // returns a nodelist of all elements of the selector
 console.log(allSections);
 
@@ -344,3 +377,36 @@ console.log(h1.nextSibling);
 // [...h1.parentElement.children].forEach(function (el) {
 //   if (el != h1) el.style.transform = "scale(0.5)";
 // });
+
+///////////////////// Intersection Observer API /////////////////
+console.log("--------- Intersection Observer API -----------");
+/*
+Create
+
+new IntersectionObserver(function, options);
+
+The options object needs to have:
+root: target element
+threashold: percentage of intersection of which the observer callback will be called, can have multiple []
+
+The callback function has two arguments, entries and the observer object itself.
+
+The entries argument has various properties.
+*/
+// function obsCallback(entries, observer) {
+//   entries.forEach(entry => {
+//     console.log(entry);
+//     if (entry.isIntersecting) {
+//       nav.classList.add("sticky");
+//     } else {
+//       nav.classList.remove("sticky");
+//     }
+//   });
+// }
+
+// const obsOptions = {
+//   root: null, // target element
+//   threshold: [0, 0.2], // percentage of intersection of which the observer callback will be called
+// };
+// const observer = new IntersectionObserver(obsCallback, obsOptions);
+// observer.observe(section1);
