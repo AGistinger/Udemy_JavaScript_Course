@@ -127,6 +127,53 @@ const headerObserver = new IntersectionObserver(stickyNav, {
 headerObserver.observe(header);
 
 /////////////////////////////////////////////////////////////////
+// Reveal Sections on Scroll
+/////////////////////////////////////////////////////////////////
+const allSections = document.querySelectorAll(".section");
+function revealSection(entries, observer) {
+  const [entry] = entries;
+
+  if (entry.isIntersecting) {
+    entry.target.classList.remove("section--hidden");
+    observer.unobserve(entry.target); // helps performance by stopping observer
+  }
+}
+
+const sectionObserver = new IntersectionObserver(revealSection, {
+  root: null,
+  threshold: 0.2,
+});
+allSections.forEach(function (section) {
+  sectionObserver.observe(section);
+  section.classList.add("section--hidden");
+});
+
+/////////////////////////////////////////////////////////////////
+// Lazy Loading Images
+/////////////////////////////////////////////////////////////////
+const imgTargets = document.querySelectorAll("img[data-src]");
+function loadImg(entries, observer) {
+  const [entry] = entries;
+
+  if (entry.isIntersecting) {
+    // Replace placeholder image
+    entry.target.src = entry.target.dataset.src;
+    // Wait for image to be loaded to remove blur
+    entry.target.addEventListener("load", function () {
+      entry.target.classList.remove("lazy-img");
+    });
+    imgObserver.unobserve(entry.target);
+  }
+}
+const imgObserver = new IntersectionObserver(loadImg, {
+  root: null,
+  threshold: 0,
+  rootMargin: "200px", // makes loading occur before threshold
+});
+
+imgTargets.forEach(img => imgObserver.observe(img));
+
+/////////////////////////////////////////////////////////////////
 // EVENT LISTENERS
 /////////////////////////////////////////////////////////////////
 // Event listener for opening account modal
@@ -184,7 +231,7 @@ console.log(document.head); // Select the header
 console.log(document.body); // Select the body
 
 const headerTest = document.querySelector(".header"); // returns first element that matches the selector
-const allSections = document.querySelectorAll(".section"); // returns a nodelist of all elements of the selector
+// const allSections = document.querySelectorAll(".section"); // returns a nodelist of all elements of the selector
 console.log(allSections);
 
 document.getElementById("section--1"); // returns the element with the ID
