@@ -174,6 +174,99 @@ const imgObserver = new IntersectionObserver(loadImg, {
 imgTargets.forEach(img => imgObserver.observe(img));
 
 /////////////////////////////////////////////////////////////////
+// Slider Component
+/////////////////////////////////////////////////////////////////
+////////// Elements //////////////
+function slider() {
+  const slides = document.querySelectorAll(".slide");
+  const btnLeft = document.querySelector(".slider__btn--left");
+  const btnRight = document.querySelector(".slider__btn--right");
+  const dotContainer = document.querySelector(".dots");
+
+  let curSlide = 0;
+  const maxSlide = slides.length - 1;
+
+  ///////////// Functions ////////////
+  // Function to change translate values of slide
+  function goToSlide(slide) {
+    slides.forEach(
+      (s, i) => (s.style.transform = `translateX(${100 * (i - slide)}%)`)
+    );
+  }
+
+  // Function to go to Next Slide
+  function nextSlide() {
+    if (curSlide === maxSlide) {
+      curSlide = 0;
+    } else {
+      curSlide++;
+    }
+    goToSlide(curSlide);
+    activateDot(curSlide);
+  }
+
+  // Function to go to Previous slide
+  function prevSlide() {
+    if (curSlide === 0) {
+      curSlide = maxSlide;
+    } else {
+      curSlide--;
+    }
+    goToSlide(curSlide);
+    activateDot(curSlide);
+  }
+
+  // Function to create dots
+  function createDots() {
+    slides.forEach(function (s, i) {
+      dotContainer.insertAdjacentHTML(
+        "beforeend",
+        `<button class="dots__dot" data-slide="${i}"></button>`
+      );
+    });
+  }
+
+  // Function to change active slide dot
+  function activateDot(slide) {
+    document
+      .querySelectorAll(".dots__dot")
+      .forEach(dot => dot.classList.remove("dots__dot--active"));
+    document
+      .querySelector(`.dots__dot[data-slide="${slide}"]`)
+      .classList.add("dots__dot--active");
+  }
+
+  // Initialize function
+  function init() {
+    goToSlide(0);
+    createDots();
+    activateDot(curSlide);
+  }
+  init();
+
+  /////////// Event Listeners /////////
+  btnRight.addEventListener("click", nextSlide);
+  btnLeft.addEventListener("click", prevSlide);
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowLeft") {
+      prevSlide();
+    } else if (e.key === "ArrowRight") {
+      nextSlide();
+    }
+  });
+
+  dotContainer.addEventListener("click", function (e) {
+    if (e.target.classList.contains("dots__dot")) {
+      const { slide } = e.target.dataset;
+      goToSlide(slide);
+      activateDot(slide);
+    }
+  });
+}
+slider();
+
+/////////////////////////////////////////////////////////////////
 // EVENT LISTENERS
 /////////////////////////////////////////////////////////////////
 // Event listener for opening account modal
