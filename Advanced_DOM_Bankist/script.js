@@ -550,3 +550,85 @@ The entries argument has various properties.
 // };
 // const observer = new IntersectionObserver(obsCallback, obsOptions);
 // observer.observe(section1);
+
+///////////////////// LIfecycle DOM Events /////////////////
+console.log("--------- Lifecycle DOM Events -----------");
+/*
+DOM content loaded (DOMContentLoaded)
+- fired by the document as soon as the HTML is completely parsed
+- HTML has been downloaded and converted by the DOM tree
+- All scripts must be downloaded and executed
+- does not wait for images and other external resources
+- only HTML and JavaScript need to be loaded.
+
+Load event (load)
+- fired by the window when the HTML and images and external resources are loaded
+- when complete page has finished loaded.
+
+Before unload event (beforeunload)
+- created immediately before a user is about to leave a page
+- clicking the close button
+- can be used to ask the user if they want to leave the page
+- only use if information is going to be lost by leaving
+*/
+
+document.addEventListener("DOMContentLoaded", function (e) {
+  console.log("HTML parsed and DOM tree built!", e);
+});
+
+document.addEventListener("load", function (e) {
+  console.log("Page fully loaded!", e);
+});
+
+// window.addEventListener("beforeunload", function (e) {
+//   e.preventDefault();
+//   console.log(e);
+//   e.returnValue = ""; // sends popup for user to leave the site
+// });
+
+///////////////////// Efficient Script Loading: Defer and Async /////////////////
+console.log("--------- Efficient Script Loading: Defer and Async -----------");
+/*
+Regular way-
+<script src="script.js">
+* Head
+ - parsing HTML
+ - Fetch script (waiting)
+ - Execute (waiting)
+ - Finish parsing HTML
+ - script is executed before the DOM is ready
+* Body
+ - parsing HTML
+ - Fetch script
+ - Execute
+* Scripts are fetched and executed after the HTML is completely parsed
+* Use if you need to support old browsers
+
+Async-
+<script async src="script.js">
+* Head
+ - parsing HTML and fetch script
+ - execute (waiting)
+ - finish parsing HTML
+* Body
+ - Don't make sense
+* Scripts are fetched asynchronously and executed immediately
+* Usually the DOMContentLoad event waits for all scripts to
+  execute, execpt for async scripts.  So DOMContentLoaded does not wait 
+  for async scripts.
+* Scripts not guranteed to execute in order
+* Use for 3rd-party scripts where order doesn't matter (Google Analytics)
+
+Defer-
+<script defer src="script.js">
+* Head
+ - parsing HTML and fetch script
+ - execute is called after the HTML parsing
+* Body
+ - Don't make sense
+* Scripts are fetched asynchronously and executed after the HTML
+ is compeltely parsed.
+* DOMContentLoaded event fires after defer script is executed.
+* Scripts are executed in order
+* This is overall the best solution
+*/
