@@ -141,5 +141,91 @@ console.log(
   "--------------- Prototypal Inheritance and the Prototype Chain --------------"
 );
 /*
+ * The object will inherit functions from its prototype. (.__proto__)
+ * The instance of the object and the prototype object create a prototype chain
+ * If a object annot find a function in the object it will loop up in the prototypes chain.
+ * Method inheritance
+ */
+
+////////////////////// Prototypal Inheritance on Built-In Objects //////////////////////
+console.log(
+  "--------------- Prototypal Inheritance on Built-In Objects --------------"
+);
+/*
+ * Arrays have their own prototype  which is why all functions for arrays work on
+  all arrays.
+ * A mechinism for re-using code
+ */
+
+console.log(jonas.__proto__); // person prototype property
+console.log(jonas.__proto__.__proto__); // object prototype property
+console.log(jonas.__proto__.__proto__.__proto__); // Null
+
+console.dir(Person.prototype.constructor); // person function constructor
+
+const arr = [1, 4, 5, 6, 7, 3, 4, 6, 7];
+console.log(arr.__proto); // array prototype property
+console.log(arr.__proto__ === Array.prototype);
+
+console.log(arr.__proto__.__proto__); // object prototype property
+
+Array.prototype.unique = function () {
+  return [...new Set(this)]; // returns new array of unique items by turning a set back into an array
+};
+
+console.log(arr.unique());
+
+const h1 = document.querySelector("h1");
+console.dir(h1);
+
+////////////////////// Coding Challenge #1 //////////////////////
+console.log("--------------- Coding Challenge #1 --------------");
+/*
+1. Use a constructor function to implement a Car.  A car has a make and a speed
+   property.  The speed property is the currens peed of the car in km/h;
+2. Implement an "accelerate" method that will increase the car's speed by 10, 
+   and log the new speed to the console.
+3. Implement a "brake" method that will decrease the car's speed by 5, and log 
+   the new speed to the console.
+4. Create 2 car objects and experiment with calling "accelerate" and "brake" multiple 
+   times on each of them.
+
+Data Car 1: "BMW" going at 120 km/h
+Data Car2: "Mercedes" going at 95 km/h
+
+// Good Luck 
+*/
+
+function Car(make, speed) {
+  this.make = make;
+  this.speed = speed;
+}
+
+Car.prototype.accelerate = function () {
+  this.speed += 10;
+  console.log(`${this.make} is now doing ${this.speed} km/h`);
+};
+
+Car.prototype.brake = function () {
+  this.speed -= 5;
+  console.log(`${this.make} is now doing ${this.speed} km/h`);
+};
+
+const bmw = new Car("BMW", 120);
+const merc = new Car("Mercedes", 95);
+
+bmw.accelerate();
+bmw.brake();
+bmw.accelerate();
+bmw.brake();
+
+merc.accelerate();
+merc.brake();
+merc.accelerate();
+merc.brake();
+
+////////////////////// ES6 Classes //////////////////////
+console.log("--------------- ES6 Classes --------------");
+/*
 
 */
