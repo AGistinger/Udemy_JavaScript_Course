@@ -227,5 +227,139 @@ merc.brake();
 ////////////////////// ES6 Classes //////////////////////
 console.log("--------------- ES6 Classes --------------");
 /*
+* This is syntatic sugar over the constructor functions used in JavaScript to make
+  the classes more like those used in Java and C++.
+
+* Classes are just a special kind of functions.
+
+* Classes need a constructor function which is a member of the "Class".  Must be called
+  "constructor()".
+  - Pass in properties that you want the object to have.
+
+* Methods are added inside the classes.  All of the methods written inside of the class
+  that are outside of the constructor will be added to the objects prototype and not on
+  the object itself (prototypal inheritance).
+
+* With this layout you do not need to directly add to the prototype property like in the
+  previous example.
+
+* Classes are not hoisted, cannot be used before they are declared in the code.
+* Function declarations are hoised, can be used before they are declared.
+* Classes are first-class citizens, you can pass them into functions and return them 
+  from functions.
+* The body of a class is alwasy executed in strict mode.
+* Classes visually put all related code into a nice code block.
+*/
+
+// Class expression
+// const PersonCl = class {}
+
+// Class declaration
+class PersonCl {
+  // Constructs the object with the properties you want it to have
+  constructor(fullName, birthYear) {
+    this.firstName = fullName;
+    this.birthYear = birthYear;
+  }
+
+  // Instance methods
+  // Methods will be added to the .prototype property
+  calcAge() {
+    console.log(2037 - this.birthYear);
+  }
+
+  get age() {
+    return 2037 - this.birthYear;
+  }
+
+  // Set a property that already exists
+  set fullName(name) {
+    if (name.includes(" ")) {
+      this._fullName = name;
+    } else {
+      alert(`${name} is not a full name!`);
+    }
+  }
+
+  get fullName() {
+    return this._fullName;
+  }
+
+  // Static method
+  static hey() {
+    console.log("Hey There");
+  }
+}
+
+const jessica = new PersonCl("Jessica Davis", 1987);
+console.log(jessica);
+jessica.calcAge();
+
+console.log(jessica.__proto__ === PersonCl.prototype);
+
+// Works the same as inside the class
+PersonCl.prototype.greet = function () {
+  console.log(`Hey ${this.firstName}`);
+};
+
+jessica.greet();
+
+////////////////////// Getters and Setters //////////////////////
+console.log("--------------- Getters and Setters --------------");
+/*
+ * Assesor properties instead of data properties
+ * In order to set a getter you pre-pend "get" in front of the function.
+ * They are used like a property and not a normal method. ex) account.latest
+ * This is useful when you want to read something as property but you need to complete
+   some things before.
+
+  * Setter methods need to have exactly 1 paramter
+  * Setter methods are set to a value instead of the argument being passed in ex) account.latest = 50
+  
+  * Classes have getters and setters that work in the exact same way.
+ */
+
+const account = {
+  owner: "Jonas",
+  movements: [200, 530, 120, 300],
+
+  get latest() {
+    return this.movements.slice(-1).pop();
+  },
+
+  set latest(mov) {
+    this.movements.push(mov);
+  },
+};
+
+console.log(account.latest);
+account.latest = 50;
+console.log(account.movements);
+
+console.log(jessica.age);
+
+const walter = new PersonCl("Walter White", 1965);
+
+////////////////////// Static Methods //////////////////////
+console.log("--------------- Static Methods --------------");
+/*
+* A method that is attached to the constructor and not to the prototype property.
+  This means that the child objects do not have access to this method.
+* ex) Array.from(document.querySelectorAll("h1"));
+      Number.parseFloat(12);
+*/
+
+// Static method
+Person.hey = function () {
+  console.log("Hey There");
+};
+
+Person.hey();
+// jonas.hey(); // not in the prototype of the jonas object
+PersonCl.hey();
+
+////////////////////// Object.Create //////////////////////
+console.log("--------------- Object.Create --------------");
+/*
 
 */
