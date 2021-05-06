@@ -361,5 +361,174 @@ PersonCl.hey();
 ////////////////////// Object.Create //////////////////////
 console.log("--------------- Object.Create --------------");
 /*
+ * Works differently than constructor functions and classes.
+ * Still uses prototypal inheritence and no constructor functions or new operator.
+ * Instead object.create manually sets the prototype of an object to any other object.
+ * First you need to have an object to be used as a prototype.
+ * You create a new variable and then use Object.create(prototype); to create the new object.
+ */
+
+const PersonProto = {
+  calcAge() {
+    console.log(2037 - this.birthYear);
+  },
+
+  // Manually initializing object
+  init(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  },
+};
+
+// Object.create
+const steven = Object.create(PersonProto);
+console.log(steven);
+
+steven.name = "Steven";
+steven.birthYear = 2002;
+steven.calcAge(); // prototypal inheritance
+
+console.log(steven.__proto__ === PersonProto);
+
+const sarah = Object.create(PersonProto);
+sarah.init("Sarah", 1979);
+sarah.calcAge();
+
+////////////////////// Coding Challenge #2 //////////////////////
+console.log("--------------- Coding Challenge #2 --------------");
+/*
+1. Re-create challenge 1, but this time using an ES6 class.
+2. Add a getter called "speedUS" which returns the current speed in
+  mi/h (divid by 1.6);
+3. Add a setter called "speedUS" which sets the current speed in mi/h
+  (but converts it to km/h before storing the value, by multipying the input by 1.6).
+4. Create a new car and experiment with the accelerate and brake methods, and with the
+  getter and setter.
+
+DATA CAR 1: "Ford" going at 120 km/h
+*/
+
+class Vehicle {
+  constructor(make, speed) {
+    this.make = make;
+    this.speed = speed;
+  }
+
+  accelerate() {
+    this.speed += 10;
+    console.log(`${this.make} is now doing ${this.speed} km/h`);
+  }
+
+  brake() {
+    this.speed -= 5;
+    console.log(`${this.make} is now doing ${this.speed} km/h`);
+  }
+
+  get speedUS() {
+    return this.speed / 1.6;
+  }
+
+  set speedUS(speed) {
+    this.speed = speed * 1.6;
+  }
+}
+
+const ford = new Vehicle("Ford", 120);
+console.log(`Speed in miles per hour is ${ford.speedUS}`);
+ford.speedUS = 50;
+console.log(`Speed set from US to EU ${ford.speed}`);
+ford.accelerate();
+ford.brake();
+
+////////////////////// Inheritance Between Classes:Constructor Functions //////////////////////
+console.log(
+  "--------------- Inheritance Between Classes:Constructor Functions --------------"
+);
+/*
+ * You want the child class to share behavior from the parent class
+ * In order to connect parent classes to child classes, the connecction must be
+    created manually.
+ * Object.create is used to create prototypes manually
+ * Object.create must be done before any functions are created on the prototype object because
+    assigning the child classes prototype to the parent returns an empty objecct which would 
+    overwrite any functions created before this occurred.
+ */
+
+function Student(firstName, birthYear, course) {
+  Person.call(this, firstName, birthYear); // uses the .call function to manually set the this keyword
+  this.course = course;
+}
+
+Student.prototype = Object.create(Person.prototype); // Links the object types together (Inheritance)
+
+Student.prototype.introduce = function () {
+  console.log(`My name is ${this.firstName} and I study ${this.course}`);
+};
+
+const mike = new Student("Mike", 2020, "Computer Science");
+console.log(mike);
+mike.introduce();
+mike.calcAge();
+console.log(mike.__proto__ === Student.prototype);
+console.log(mike.__proto__.__proto__ === Person.prototype);
+
+console.log(mike instanceof Student);
+console.log(mike instanceof Person);
+console.log(mike instanceof Object);
+
+Student.prototype.constructor = Student;
+console.dir(Student.prototype.constructor);
+
+////////////////////// Coding Challenge #3 //////////////////////
+console.log("--------------- Coding Challenge #3 --------------");
+/*
+1. Use a constructor function to implement an Electric Car (called EV) as a CHILd
+   "class" of Car.  Besides a make and current speed, the EV also has the current
+   battery chare in % ("charge") property).
+2.  Implement a "chargeBattery" method which takes an arguement "chargeTo" and sets
+   the battery charge to "chargeTo".
+3. Implement an "accelerate" method that will increase the car's speed by 20, and
+   decrease the charge by 1%.  Then log a message like this: "Teslate going at 140 km/h, 
+   with a current charge of of 22%".
+4. Create an electric car object and experiment with calling "accelerate", "brake", and
+   charge battery (charge to 90%).  Notice what happens when you "accelerate". (polymorphism)
+
+DATA CAR 1: Tesla going at 120 km/h with a charge of 23%.
+*/
+
+function EV(make, speed, charge) {
+  Car.call(this, make, speed);
+  this.charge = charge;
+}
+
+// Link prototypes for inheritance
+EV.prototype = Object.create(Car.prototype); // Creates the inheritance
+EV.prototype.constructor = EV; // Sets the correct prototype constructor
+
+EV.prototype.chargeTo = function (chargeVal) {
+  this.charge = chargeVal;
+};
+
+EV.prototype.accelerate = function () {
+  this.speed += 20;
+  this.charge -= 1;
+  console.log(
+    `${this.make} going at ${this.speed} km/h, with a current charge of ${this.charge}%.`
+  );
+};
+
+const tesla = new EV("Tesla", 120, 23);
+console.log(tesla);
+console.log(tesla.__proto__ === EV.prototype);
+tesla.chargeTo(90);
+tesla.brake();
+tesla.accelerate();
+tesla.accelerate();
+
+////////////////////// Inheritance between Classes: ES6 Classes //////////////////////
+console.log(
+  "--------------- Inheritance between Classes: ES6 Classes --------------"
+);
+/*
 
 */
