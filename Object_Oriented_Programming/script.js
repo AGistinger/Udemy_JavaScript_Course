@@ -258,7 +258,7 @@ console.log("--------------- ES6 Classes --------------");
 class PersonCl {
   // Constructs the object with the properties you want it to have
   constructor(fullName, birthYear) {
-    this.firstName = fullName;
+    this.fullName = fullName;
     this.birthYear = birthYear;
   }
 
@@ -496,6 +496,7 @@ console.log("--------------- Coding Challenge #3 --------------");
 DATA CAR 1: Tesla going at 120 km/h with a charge of 23%.
 */
 
+// Constructor function for Child Class EV
 function EV(make, speed, charge) {
   Car.call(this, make, speed);
   this.charge = charge;
@@ -511,12 +512,13 @@ EV.prototype.chargeTo = function (chargeVal) {
 
 EV.prototype.accelerate = function () {
   this.speed += 20;
-  this.charge -= 1;
+  this.charge--;
   console.log(
     `${this.make} going at ${this.speed} km/h, with a current charge of ${this.charge}%.`
   );
 };
 
+// Test Data
 const tesla = new EV("Tesla", 120, 23);
 console.log(tesla);
 console.log(tesla.__proto__ === EV.prototype);
@@ -529,6 +531,230 @@ tesla.accelerate();
 console.log(
   "--------------- Inheritance between Classes: ES6 Classes --------------"
 );
+/*
+* Abstraction over constructor functions
+* To implement inheritence in ES6 classes you need two things:
+  - extends keyword (link prototypes behind the scenes)
+  - super function (constructor function of parent class, needs to happen first)
+    * allows access of "this" keyword
+    * If there are no additional values for the constructor then a constroctor function is not needed
+      and you can just call the super function instead.
+* This method can be problematic in the future (talked about in functional programming)
+*/
+
+class StudentCl extends PersonCl {
+  // constructor
+  constructor(fullName, birthYear, course) {
+    super(fullName, birthYear); // pass in arg of parent class constructor
+    this.course = course;
+  }
+
+  introduce() {
+    console.log(`My name is ${this.fullName} and I study ${this.course}`);
+  }
+
+  calcAge() {
+    console.log(
+      `I'm ${
+        2037 - this.birthYear
+      } years old, but as a student I feel more like ${
+        2037 - this.birthYear + 10
+      }`
+    );
+  }
+}
+
+const martha = new StudentCl("Martha Jones", 2012, "Computer Science");
+console.log(martha);
+martha.introduce();
+martha.calcAge();
+
+////////////////////// Inheritance between Classes: Object.create //////////////////////
+console.log(
+  "--------------- Inheritance between Classes: Object.create --------------"
+);
+/*
+* In order to create inheritance in Object.create you create a Object.create object
+  using the parent object.
+  - Student inherites from person
+  - Then you can use Object.create again to create a new student object
+*/
+
+const StudentProto = Object.create(PersonProto); // creates inheritance between student and person
+
+StudentProto.init = function (firstName, birthYear, course) {
+  // sets the this keyword to the this keyword inside the student
+  PersonProto.init.call(this, firstName, birthYear);
+  this.course = course;
+};
+
+StudentProto.introduce = function () {
+  console.log(`My name is ${this.firstName} and I study ${this.course}`);
+};
+
+const jay = Object.create(StudentProto);
+jay.init("Jay", 2010, "Computer Science");
+jay.introduce();
+jay.calcAge();
+
+////////////////////// Another Class Example //////////////////////
+console.log("--------------- Another Class Example --------------");
+/*
+ * The methods/api are the interface for the object
+ */
+
+class Account {
+  constructor(owner, currency, pin) {
+    this.owner = owner;
+    this.currency = currency;
+
+    // Private properties
+    this._movements = [];
+    this._pin = pin;
+    this._locale = navigator.language;
+
+    console.log(`Thanks for opening an account, ${owner}`);
+  }
+
+  // Private Methods
+  _approveLoan(val) {
+    return true;
+  }
+
+  // Public Methods
+  getMovements() {
+    return this._movements;
+  }
+
+  deposit(val) {
+    this._movements.push(val);
+  }
+
+  withdraw(val) {
+    this.deposit(-val);
+  }
+
+  requestLoan(val) {
+    if (this._approveLoan(val)) {
+      this.deposit(val);
+      console.log(`Loan approved`);
+    }
+  }
+}
+
+const acc1 = new Account("Jonas", "EUR", 1111);
+acc1.deposit(250);
+acc1.withdraw(140);
+acc1.requestLoan(1000);
+console.log(acc1.getMovements());
+
+console.log(acc1);
+
+////////////////////// Encapsulation: Protected Properties and Methods //////////////////////
+console.log(
+  "--------------- Encapsulation: Protected Properties and Methods --------------"
+);
+/*
+ * Keeps some objects and properties private within the class so that they cannot change
+   outside of the class.
+ * To prevent code from outside the class from manipulating code inside the class
+ * If you expose only a small API, then you can change the other interal methods with
+   more confidence because then you can know external code does not rely on these private methods
+   therefore the code will not break when you do internal changes.
+ * JavaScript does not current support true data privacy and encapsoluation
+    - There is a proposal to add truly private class fields and methods to the language
+      but it is not ready
+  * Current functionality fakes ecapsolation.
+      * add a underscore in front of the variable or method ._deposit
+ */
+// See above class example
+
+////////////////////// Encapsulation: Private Class Fields and Methods //////////////////////
+console.log(
+  "--------------- Encapsulation: Private Class Fields and Methods --------------"
+);
+/*
+ * Not yet ready currently in stage 3, not part of JavaScript language
+ * Classes will start to have abilities that they did not have with constructor functions
+ * 4 different kinds of fields and methods:
+   - Public fields
+   - Private fields
+   - Public methods
+   - Private methods
+
+  * Fields
+    - properties that are going to be on all objects that are created for all instances
+    - referenceable by the "this" keyword
+    - putting a "#" in front of a variable makes it private
+
+  * Methods
+     - private methods hide implementation from the outside
+     - putting a "#" in front of a method will make it private (currently doesn't work)
+
+    
+  * There is also static fields and classes for private and public
+  * "static" is used for helper functions and will not be available on all instsances
+    but only the class itself.
+ */
+
+class Account2 {
+  // Public fields (instances)
+  locale = navigator.language;
+
+  // Private fields (instances)
+  #movements = [];
+  #pin;
+
+  constructor(owner, currency, pin) {
+    this.owner = owner;
+    this.currency = currency;
+
+    // Private properties
+    this.#pin = pin;
+
+    console.log(`Thanks for opening an account, ${owner}`);
+  }
+
+  // Private Methods
+  #approveLoan(val) {
+    return true;
+  }
+
+  // Public Methods
+  getMovements() {
+    return this.#movements;
+  }
+
+  deposit(val) {
+    this.#movements.push(val);
+  }
+
+  withdraw(val) {
+    this.deposit(-val);
+  }
+
+  requestLoan(val) {
+    if (this.#approveLoan(val)) {
+      this.deposit(val);
+      console.log(`Loan approved`);
+    }
+  }
+
+  // Static Methods
+  static helper() {
+    console.log("Helper");
+  }
+}
+
+const acc2 = new Account2("Jonas", "EUR", 1111);
+acc2.deposit(250);
+acc2.withdraw(140);
+acc2.requestLoan(1000);
+console.log(acc2.getMovements());
+Account2.helper();
+
+////////////////////// Chaining Methods //////////////////////
+console.log("--------------- Chaining Methods --------------");
 /*
 
 */
