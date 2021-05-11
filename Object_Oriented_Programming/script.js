@@ -756,5 +756,144 @@ Account2.helper();
 ////////////////////// Chaining Methods //////////////////////
 console.log("--------------- Chaining Methods --------------");
 /*
+ * In order to get methods to chain for a class you need to return the object "this",
+   which will allow you to chain the method on the returned object.
+ */
+class AccountChain {
+  constructor(owner, currency, pin) {
+    this.owner = owner;
+    this.currency = currency;
 
+    // Private properties
+    this._movements = [];
+    this._pin = pin;
+    this._locale = navigator.language;
+
+    console.log(`Thanks for opening an account, ${owner}`);
+  }
+
+  // Private Methods
+  _approveLoan(val) {
+    return true;
+  }
+
+  // Public Methods
+  getMovements() {
+    return this._movements;
+  }
+
+  deposit(val) {
+    this._movements.push(val);
+    return this;
+  }
+
+  withdraw(val) {
+    this.deposit(-val);
+    return this;
+  }
+
+  requestLoan(val) {
+    if (this._approveLoan(val)) {
+      this.deposit(val);
+      console.log(`Loan approved`);
+    }
+    return this;
+  }
+}
+const acc3 = new AccountChain("Alex", "USA", 5555);
+acc3.deposit(300).deposit(500).withdraw(35).requestLoan(25000).withdraw(4000);
+console.log(acc3);
+
+////////////////////// ES6 Classes Summary //////////////////////
+console.log("--------------- ES6 Classes Summary --------------");
+/*
+ * Child class extends Parent class ex) class Student extends Person
+ * Public field, ex) university = "University of Lisbon"
+ * Private fields not accessible outside of the class, ex) #studyHours = 0;
+ * Static fields (available only on the class) ex) static numSubjects = 10;
+ * Constructor method, called by the new operator constructor(fullName, course)
+ * Super method used to call parents constructor and set this keyword, ex) super(fullName, birthYear)
+ * Public methods
+ * Private methods only accessible inside the class
+ * Static methods (available only on the class), can only access static properties (helper methods)
+ * Get methods, get values out of an object by writing a property instead of a method
+ * Set methods, defines a value by setting the value instead of setting a method
+    - If there are get/set methods that use the same property names, new property names with
+      an underscore in front of them are needed (convention).
+  * Create new object ex) const student = new Student("Jonas", 2020, "Medicine");
+  * Syntatic sugar over constructor functions
+  * Classes are not hoisted 
+  * Classes are first-class citizens
+  * Class body is always executed in strict mode
+ */
+
+////////////////////// Coding Challenge #4 //////////////////////
+console.log("--------------- Coding Challenge #4 --------------");
+/*
+1. Re-create challenge #3, but this time using ES6 classes:
+   create an "EVCl" child of the class "CarCl" class
+2. Make the "charge" property private:
+3. Implement the ability to chain the "accelerate" and "chargeBattery"
+   methods of this class, and also update the "brake" method in the Car
+   class.  Then experiment with chaining.
+
+DATA CAR 1: "Rivian" going at 120km/h, with a charge of 23%
 */
+
+class CarCl {
+  constructor(make, speed) {
+    this.make = make;
+    this.speed = speed;
+  }
+
+  accelerate() {
+    this.speed += 10;
+    console.log(`${this.make} is now doing ${this.speed} km/h`);
+  }
+
+  brake() {
+    this.speed -= 5;
+    console.log(`${this.make} is now doing ${this.speed} km/h`);
+    return this;
+  }
+
+  get speedUS() {
+    return this.speed / 1.6;
+  }
+
+  set speedUS(speed) {
+    this.speed = speed * 1.6;
+  }
+}
+
+class EVCl extends CarCl {
+  // Private properties
+  #charge = 0;
+
+  // Constructor
+  constructor(make, speed, charge) {
+    super(make, speed);
+    this.#charge = charge;
+  }
+
+  // Public methods
+  chargeBattery(chargeVal) {
+    this.#charge = chargeVal;
+    return this;
+  }
+
+  accelerate() {
+    this.speed += 20;
+    this.#charge--;
+    console.log(
+      `${this.make} going at ${this.speed} km/h, with a current charge of ${
+        this.#charge
+      }%.`
+    );
+    return this;
+  }
+}
+
+const rivian = new EVCl("Rivian", 120, 23);
+rivian.brake().accelerate().brake().chargeBattery(100).accelerate();
+console.log(rivian);
