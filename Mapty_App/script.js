@@ -331,6 +331,13 @@ class App {
       this._renderWorkout(work);
     });
   }
+
+  /////// Public Functions //////
+  // Clear local storage
+  reset() {
+    localStorage.removeItem("workouts");
+    location.reload();
+  }
 }
 
 /////////////////// WORKOUT CLASS ///////////////////////
