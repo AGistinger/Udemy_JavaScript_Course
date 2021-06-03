@@ -68,8 +68,13 @@ class App {
 
   /////// Constructor ///////
   constructor() {
+    // Get users position //
     this._getPosition();
 
+    // Get data from local storage //
+    this._getLocalStorage();
+
+    // Attach Event Handlers //
     // Display the marker
     form.addEventListener("submit", this._newWorkout.bind(this));
 
@@ -109,6 +114,12 @@ class App {
 
     // handling clicks on map
     this.#map.on("click", this._showForm.bind(this));
+
+    // Render local storage markers (needs to be in load map and not getStorage because
+    // map needs to be loaded before the markers can be displayed)
+    this.#workouts.forEach(work => {
+      this._renderWorkoutMarker(work);
+    });
 
     // Creates link on google maps
     console.log(`https://www.google.com/maps/@${latitude},${longitude}`);
@@ -156,9 +167,6 @@ class App {
       animate: true,
       pan: { duration: 1 },
     });
-
-    // using public interface
-    workout.click();
   }
 
   // Function to create new workout
@@ -217,6 +225,9 @@ class App {
 
     // Hide form + clear input fields
     this._hideForm();
+
+    // Set local storage to all workouts
+    this._setLocalStorage();
   }
 
   // Puts a marker on the map at the coords the user clicked
@@ -297,6 +308,29 @@ class App {
     // Add the element as a new element after the "form"
     form.insertAdjacentHTML("afterend", html);
   }
+
+  // Set local storage, save data from workouts (only use for small amounts of data)
+  _setLocalStorage() {
+    // using local storage API, (key, value) store, which takes two strings
+    // JSON.stringify() will convert any object into a string
+    localStorage.setItem("workouts", JSON.stringify(this.#workouts));
+  }
+
+  // Get local storage and add the workouts into the website
+  _getLocalStorage() {
+    // JSON.parse will take a string and parse it back to an object
+    const data = JSON.parse(localStorage.getItem("workouts"));
+
+    if (!data) return; // guard clause
+
+    // Add the data back into the workouts array
+    this.#workouts = data;
+
+    // Render the workouts back into the side bar
+    this.#workouts.forEach(work => {
+      this._renderWorkout(work);
+    });
+  }
 }
 
 /////////////////// WORKOUT CLASS ///////////////////////
@@ -304,7 +338,6 @@ class Workout {
   /////// Public Variables ///////
   date = new Date();
   id = String(Date.now()).slice(-10);
-  clicks = 0;
 
   /////// Constructor ///////
   constructor(coords, distance, duration) {
@@ -321,11 +354,6 @@ class Workout {
     this.description = `${this.type[0].toUpperCase()}${this.type.slice(1)} on ${
       months[this.date.getMonth()]
     } ${this.date.getDate()}`;
-  }
-
-  // public function (doesn't do anything just a test)
-  click() {
-    this.clicks++;
   }
 }
 
