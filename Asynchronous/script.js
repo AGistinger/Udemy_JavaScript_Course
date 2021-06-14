@@ -106,7 +106,7 @@ function renderCountry(data, className = "") {
         `;
 
   countriesContainer.insertAdjacentHTML("beforeend", html);
-  countriesContainer.style.opacity = 1;
+  // countriesContainer.style.opacity = 1;
 }
 
 // function getCountryAndNeighbor(country) {
@@ -222,10 +222,64 @@ const request = fetch(`https://restcountries.eu/rest/v2/name/portugal`); // prom
 
 ////////////////////////////////////////////////////////////////////
 //// Chaining Promises ///////
-function getCountryData(country) {
-  fetch(`https://restcountries.eu/rest/v2/name/${country}`)
-    .then((response) => response.json())
-    .then((data) => renderCountry(data[0]));
+// function getCountryData(country) {
+//   // Country
+//   fetch(`https://restcountries.eu/rest/v2/name/${country}`)
+//     .then((response) => response.json())
+//     .then((data) => {
+//       renderCountry(data[0]);
+//       const neighbor = data[0].borders[0];
+//       if (!neighbor) return;
+
+//       // Countries neighbor (returns promise)
+//       return fetch(`https://restcountries.eu/rest/v2/alpha/${neighbor}`);
+//     })
+//     .then((response) => response.json())
+//     .then((data) => renderCountry(data, "neighbour"));
+// }
+
+// getCountryData("portugal");
+
+////////////////////////////////////////////////////////////////////
+//// Handling Rejected Promises ///////
+/*
+  Adding a catch method at the end of the chain will have the error
+  propagage through the chain.
+
+  Besides then and catch there is a finally() method, used for something
+  that always needs to happen, no matter what the result of the promise.
+  ex) hide a loading spinner.
+*/
+function renderError(msg) {
+  countriesContainer.insertAdjacentText("beforeend", msg);
+  // countriesContainer.style.opacity = 1;
 }
 
-getCountryData("portugal");
+function getCountryData(country) {
+  // Country
+  fetch(`https://restcountries.eu/rest/v2/name/${country}`)
+    .then((response) => response.json())
+    .then((data) => {
+      renderCountry(data[0]);
+      const neighbor = data[0].borders[0];
+      if (!neighbor) return;
+
+      // Countries neighbor (returns promise)
+      return fetch(`https://restcountries.eu/rest/v2/alpha/${neighbor}`);
+    })
+    .then((response) => response.json())
+    .then((data) => renderCountry(data, "neighbour"))
+    .catch((err) => {
+      console.error(`${err} 🔥🔥🔥🔥🔥`);
+      renderError(`Something went wrong 🔥🔥🔥 ${err.message}. Try again!`);
+    })
+    .finally(() => {
+      countriesContainer.style.opacity = 1;
+    });
+}
+
+btn.addEventListener("click", function () {
+  getCountryData("portugal");
+});
+
+getCountryData("asldkjfas");
