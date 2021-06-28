@@ -394,3 +394,84 @@ function whereAmI(lat, lng) {
 
 // btn.addEventListener("click", whereAmI(lat, lng));
 btn.addEventListener("click", getLocation);
+
+////////////////////////////////////////////////////////////////////
+//// The Event Loop in Practice ///////
+/*
+The lines of code created outside of any callback loops will execute first,
+then the timeout call back and promise will execute at the same time.
+
+However since the promise callback is a microtask it will execute before, 
+any normal callback functions.
+
+Microtasks queue has priority of Callback queue.
+
+setTimeout() method is not a garentee that the timer will run at the time set,
+it will only not run before the time, but may run later, due to other tasks.
+*/
+
+console.log("Test start");
+setTimeout(() => console.log(`0 sec timer`), 0); // Calls timer function after 0 seconds
+
+// Create a promise that is immediately resolved
+Promise.resolve("Resolved promise 1").then((res) => console.log(res));
+
+Promise.resolve("Resolved promise 2").then((res) => {
+  for (let i = 0; i < 1000000000; i++) {} // Similate long task
+  console.log(res);
+});
+
+console.log("Test end");
+
+////////////////////////////////////////////////////////////////////
+//// Building a Simple Promise ///////
+/*
+Promises are a special kind of object in JavaScript.
+
+Promises have one argument which is the executer function.  The executer
+function has 2 arguments for "resolve" and "reject".
+
+The resolve() function passes the fulfilled valued of the promise, so it can
+later be consumed with the then() method.
+
+The reject() function passes the rejected value of the promise, so it can 
+later be caught with the catch handler.
+*/
+console.log("----- Building a Simple Promise -----");
+
+const lotteryPromise = new Promise(function (resolve, reject) {
+  console.log("Lottery draw is happening 🔮");
+
+  setTimeout(function () {
+    if (Math.random() >= 0.5) {
+      // Scenario where resolve function from executer functon
+      resolve("You WIN! 🤑");
+    } else {
+      // Scenario where promise is rejected from executer function
+      reject(new Error("You lost your money 💩")); // Creating a new error object (shows more info.)
+    }
+  }, 2000);
+});
+
+lotteryPromise
+  .then((res) => console.log(res))
+  .catch((err) => console.error(err)); // consume promise
+
+// Promisifying - convert callback based asynchronous behavior to promise based
+function wait(seconds) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve, seconds * 1000);
+  });
+}
+
+// Create a promise that will wait for 2 seconds then resolve
+wait(2)
+  .then(() => {
+    console.log("I waited for 2 seconds");
+    return wait(1); // wait another second
+  })
+  .then(() => console.log("I waited for 1 second")); // chain async behavior
+
+// Reject promise immediately
+Promise.resolve("abc").then((x) => console.log(x)); // static method on promise constructor
+Promise.reject(new Error("Problem!")).catch((x) => console.error(x));
