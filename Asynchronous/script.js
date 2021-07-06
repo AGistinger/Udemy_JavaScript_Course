@@ -357,11 +357,8 @@ TEST COORDINATES 2: 19.037, 72.873
 TEST COORDINATES 3: -33.933, 18.474
 */
 function getLocation() {
-  const position = navigator.geolocation.getCurrentPosition((position) => {
-    const lat = position.coords.latitude.toFixed(3);
-    const lng = position.coords.longitude.toFixed(3);
-
-    whereAmI(lat, lng);
+  return new Promise(function (resolve, reject) {
+    navigator.geolocation.getCurrentPosition(resolve, reject);
   });
 }
 
@@ -380,20 +377,24 @@ function getAPIdata(url, errmsg = "Failed to obtain API data") {
   });
 }
 
-function whereAmI(lat, lng) {
-  getAPIdata(`https://geocode.xyz/${lat}, ${lng}?geoit=json`)
-    .then((data) => {
-      console.log(`You are in ${data.city}, ${data.country}`);
-      getCountryData(data.country); // use restcountries api to change coords into country
-    })
-    .catch((err) => {
-      console.error(err);
-      renderFailure(`${err.message}`);
-    });
+function whereAmI() {
+  getLocation().then((pos) => {
+    const { latitude: lat, longitude: lng } = pos.coords;
+
+    getAPIdata(`https://geocode.xyz/${lat}, ${lng}?geoit=json`)
+      .then((data) => {
+        console.log(`You are in ${data.city}, ${data.country}`);
+        getCountryData(data.country); // use restcountries api to change coords into country
+      })
+      .catch((err) => {
+        console.error(err);
+        renderFailure(`${err.message}`);
+      });
+  });
 }
 
 // btn.addEventListener("click", whereAmI(lat, lng));
-btn.addEventListener("click", getLocation);
+btn.addEventListener("click", whereAmI);
 
 ////////////////////////////////////////////////////////////////////
 //// The Event Loop in Practice ///////
@@ -475,3 +476,101 @@ wait(2)
 // Reject promise immediately
 Promise.resolve("abc").then((x) => console.log(x)); // static method on promise constructor
 Promise.reject(new Error("Problem!")).catch((x) => console.error(x));
+
+////////////////////////////////////////////////////////////////////
+//// Promisfying the GeoLocation API ///////
+/*
+A new function is created to obtain the postion by using a promise.
+
+The function returns a new promise with a resolved and rejected arguments.
+If the navigator.geolocation.getCurrentPosition function is sucessful the 
+position is returned and the promise is resolved.  If the getCurrentPosition
+fails then the reject error will be returned.
+
+See additional changes made in Challenge 1 code to the whereAmI function and getLocation.
+*/
+function getPosition() {
+  return new Promise(function (resolve, reject) {
+    // Simplified version of belows code
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+    // navigator.geolocation.getCurrentPosition(
+    //   (position) => resolve(position),
+    //   (err) => reject(err)
+    // );
+  });
+}
+
+// Get promise value
+getPosition().then((pos) => console.log(pos));
+
+////////////////////////////////////////////////////////////////////
+//// Coding Challenge #2 ///////
+/*
+Build the image loading functionality that I just showed you on the screen.
+
+Tasks are not super-descriptive this time, so that you can figure out some 
+stuff on your own.  Pretend you're workong on your own.
+
+PART 1-
+1. Create a function "createImage" which recieves imgPath as an input.
+This function returns a promise which creates a new image (use document.CreateElement("img")),
+and sets the .src attribute to the provided image path.  When the image is done loading,
+append it to the DOM element with the "images" class, and resolve the promise.  The
+fullfilled value should be the image element itself.  In case there is an error loading the image
+("error" event), reject the promise.
+
+If this part is too tricky for you, just watch the first part of the solution.
+
+PART 2-
+2. Consume the promise using the .then and also add an error handler.
+3. After the image has loaded, pause the execution for 2 seconds using the wait function
+we created earlier.
+4. After the 2 seconds have passed, hide the current image (set display to "none"), and load 
+a second image (HINT: use the image element returned by the createImage promise to hide
+  the current image.  You will need a global variable for that).
+5. After the second image has loaded, pause the execution for 2 seconds again.
+6. After the 2 seconds have passed, hide the current image.
+
+TEST DATA: Images in the img, folder.  Test the error handler by passing a wrong image path.
+Set the network speed to "Fast 3G" in the dev tools Network tab, otherwise the images load
+too fast.
+*/
+const hold = 10;
+const imgContainer = document.querySelector(".images");
+let background; // global image element so hiding img element works
+
+function hideImage(img) {
+  background = img;
+  background.style.display = "none";
+}
+
+function createImage(imgPath) {
+  return new Promise(function (resolve, reject) {
+    const image = document.createElement("img");
+    image.src = imgPath;
+
+    // Listen for successful load
+    image.addEventListener("load", function () {
+      imgContainer.append(image);
+      resolve(image);
+    });
+
+    // Listen for load error
+    image.addEventListener("error", function () {
+      reject(new Error(`Unable to load image ${imgPath}`));
+    });
+  });
+}
+
+createImage("img/img-1.jpg")
+  .then((img) => {
+    wait(hold).then(() => {
+      hideImage(img);
+      createImage("img/img-2.jpg").then((img) => {
+        wait(hold).then(() => {
+          hideImage(img);
+        });
+      });
+    });
+  })
+  .catch((err) => console.error(err));
