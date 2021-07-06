@@ -535,15 +535,18 @@ TEST DATA: Images in the img, folder.  Test the error handler by passing a wrong
 Set the network speed to "Fast 3G" in the dev tools Network tab, otherwise the images load
 too fast.
 */
-const hold = 10;
-const imgContainer = document.querySelector(".images");
+const hold = 10; // const wait time for image loading
+const imgContainer = document.querySelector(".images"); // image container
 let background; // global image element so hiding img element works
 
+// Sets the global background variable and then sets the image to hidden
 function hideImage(img) {
   background = img;
   background.style.display = "none";
 }
 
+// Creates a image element and sets the image path, waits for a load or error
+// event and returns the resolved promise or error
 function createImage(imgPath) {
   return new Promise(function (resolve, reject) {
     const image = document.createElement("img");
@@ -562,6 +565,7 @@ function createImage(imgPath) {
   });
 }
 
+// Execution
 createImage("img/img-1.jpg")
   .then((img) => {
     wait(hold).then(() => {
