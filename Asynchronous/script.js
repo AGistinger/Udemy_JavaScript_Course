@@ -259,7 +259,7 @@ const request = fetch(`https://restcountries.eu/rest/v2/name/portugal`); // prom
 */
 function renderError(msg) {
   countriesContainer.insertAdjacentText("beforeend", msg);
-  // countriesContainer.style.opacity = 1;
+  countriesContainer.style.opacity = 1;
 }
 
 function getJSON(url, errorMsg = "Something went wrong") {
@@ -364,6 +364,7 @@ function getLocation() {
 
 function renderFailure(msg) {
   countriesContainer.insertAdjacentHTML("beforeend", msg);
+  countriesContainer.style.opacity = 1;
 }
 
 function getAPIdata(url, errmsg = "Failed to obtain API data") {
@@ -393,8 +394,7 @@ function whereAmI() {
   });
 }
 
-// btn.addEventListener("click", whereAmI(lat, lng));
-btn.addEventListener("click", whereAmI);
+// btn.addEventListener("click", whereAmI);
 
 ////////////////////////////////////////////////////////////////////
 //// The Event Loop in Practice ///////
@@ -578,3 +578,61 @@ createImage("img/img-1.jpg")
     });
   })
   .catch((err) => console.error(err));
+
+////////////////////////////////////////////////////////////////////
+//// Consuming Promises with Async/Await ///////
+/*
+Easier way to consume promises (Async/Await)
+-Async will have a function run in the background while performing the code
+that is inside of it, then returning a promise.
+- Can have 1 or more await statements, that return a promise.
+  * Await for the result of the promise
+  * Will stop the code until the promise is fullfilled/fetched
+  * Does not block main thread of execution
+  * Assigns values to a variable
+
+ Syntatic sugar over the .then() method.
+  - Is a different method of consuming promises then fetch().then().then().
+*/
+async function whereAmI2() {
+  try {
+    // GeoLocation
+    const pos = await getPosition();
+    const { latitude: lat, longitude: lng } = pos.coords;
+
+    // Reverse GeoCoding
+    const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+    if (!resGeo.ok) throw new Error("Problem getting location data");
+    const dataGeo = await resGeo.json();
+
+    // Country Data
+    const res = await fetch(
+      `https://restcountries.eu/rest/v2/name/${dataGeo.country}`
+    ); // returns a promise
+    if (!res.ok) throw new Error("Problem getting country");
+    const data = await res.json(); // returns a promise to get json
+
+    renderCountry(data[0]);
+    countriesContainer.style.opacity = 1; // make render correctly
+  } catch (err) {
+    console.error(`💔 ${err.message}`);
+    renderError(`💥 ${err.message}`);
+  }
+}
+
+btn.addEventListener("click", whereAmI2);
+
+////////////////////////////////////////////////////////////////////
+//// Error Handler with Try...Catch ///////
+/*
+Used to catch errors in Async functions.
+- All code is wrapped in a try block, JS will then try to execute the code as normal code.
+- See updated example above
+*/
+try {
+  let y = 1;
+  const x = 2;
+  y = 3; // can't do
+} catch (err) {
+  alert(err.message); // do something with the error
+}
