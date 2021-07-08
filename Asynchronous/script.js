@@ -614,9 +614,14 @@ async function whereAmI2() {
 
     renderCountry(data[0]);
     countriesContainer.style.opacity = 1; // make render correctly
+
+    return `You are in ${dataGeo.city}, ${dataGeo.country}`;
   } catch (err) {
     console.error(`💔 ${err.message}`);
     renderError(`💥 ${err.message}`);
+
+    // Reject promise returned from async function
+    throw err;
   }
 }
 
@@ -636,3 +641,67 @@ try {
 } catch (err) {
   alert(err.message); // do something with the error
 }
+
+////////////////////////////////////////////////////////////////////
+//// Returning Values from Async Functions ///////
+/*
+ You can return data by adding "return (value)"; into the function 
+*/
+// const city = whereAmI2();
+
+// Using then/catch
+// whereAmI2()
+//   .then((city) => console.log(city))
+//   .catch((err) => console.error(`Function Return: ${err.message}`)); // successfully return a value from a function
+
+// Immediately invoked function expressions (iffy)
+// (async function () {
+//   try {
+//     const city = await whereAmI2();
+//     console.log(city);
+//     if (!city) throw new Error(`Unable to get location message`);
+//     return locMessage;
+//   } catch (err) {
+//     console.error(err);
+//   }
+// })();
+
+////////////////////////////////////////////////////////////////////
+//// Running Promises in Parallel ///////
+/*
+  - All async functions need to be wrapped in a try/catch block
+
+  Promise.all([]);
+  - Promise.all() takes an array of promises and returns a new promise, 
+    which will then run all the promises in the array at one time.
+
+  Used to run multiple asynchronous actions at once time that do not rely on
+  one another.
+*/
+
+async function get3Countries(c1, c2, c3) {
+  try {
+    // const [data1] = await getJSON(`http://restcountries.eu/rest/v2/name/${c1}`);
+    // const [data2] = await getJSON(`http://restcountries.eu/rest/v2/name/${c2}`);
+    // const [data3] = await getJSON(`http://restcountries.eu/rest/v2/name/${c3}`);
+
+    // Takes an array of promises and returns a new promise
+    // which will then run all the promises in the array at one time
+    const data = await Promise.all([
+      getJSON(`http://restcountries.eu/rest/v2/name/${c1}`),
+      getJSON(`http://restcountries.eu/rest/v2/name/${c2}`),
+      getJSON(`http://restcountries.eu/rest/v2/name/${c3}`),
+    ]);
+
+    console.log(data.map((d) => d[0].capital));
+  } catch (err) {
+    console.error(err);
+  }
+}
+get3Countries("portugal", "canada", "tanzania");
+
+////////////////////////////////////////////////////////////////////
+//// Other Promise Combinators: race, allSettled, and any ///////
+/*
+
+*/
