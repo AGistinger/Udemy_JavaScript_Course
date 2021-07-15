@@ -107,7 +107,7 @@ function createUserNames(accs) {
     acc.username = acc.owner
       .toLocaleLowerCase()
       .split(" ")
-      .map(word => word[0])
+      .map((word) => word[0])
       .join("");
   });
 }
@@ -117,19 +117,21 @@ console.log(accounts);
 // Function to display the summary at the bottom of the web page for money in, out and interest.
 function calcDisplaySummary(account) {
   const incomes = account.movements
-    .filter(mov => mov > 0)
+    .filter((mov) => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
   labelSumIn.textContent = `${incomes}€`;
 
   const out = Math.abs(
-    account.movements.filter(mov => mov < 0).reduce((acc, mov) => acc + mov, 0)
+    account.movements
+      .filter((mov) => mov < 0)
+      .reduce((acc, mov) => acc + mov, 0)
   );
   labelSumOut.textContent = `${out}€`;
 
   const interest = account.movements
-    .filter(mov => mov > 0)
-    .map(deposit => (deposit * account.interestRate) / 100)
-    .filter(int => int >= 1)
+    .filter((mov) => mov > 0)
+    .map((deposit) => (deposit * account.interestRate) / 100)
+    .filter((int) => int >= 1)
     .reduce((acc, int) => acc + int, 0);
   labelSumInterest.textContent = `${interest.toFixed(2)}€`;
 }
@@ -156,7 +158,7 @@ btnLogin.addEventListener("click", function (e) {
   e.preventDefault();
 
   currentAccount = accounts.find(
-    acc => acc.username === inputLoginUsername.value
+    (acc) => acc.username === inputLoginUsername.value
   );
 
   // Will only return the pin if the account exists (optional chaining)
@@ -190,7 +192,7 @@ btnTransfer.addEventListener("click", function (e) {
 
   // returns the account that matches the username the user entered as input
   const recieverAcc = accounts.find(
-    acc => acc.username === inputTransferTo.value
+    (acc) => acc.username === inputTransferTo.value
   );
 
   // Clear input fileds
@@ -227,7 +229,7 @@ btnLoan.addEventListener("click", function (e) {
   // Checks if the user has at least 1 deposit with 10% of the requested loan amount
   if (
     loanRequest > 0 &&
-    currentAccount.movements.some(mov => mov >= loanRequest * 0.1)
+    currentAccount.movements.some((mov) => mov >= loanRequest * 0.1)
   ) {
     currentAccount.movements.push(loanRequest);
     refreshUI(currentAccount);
@@ -251,7 +253,7 @@ btnClose.addEventListener("click", function (e) {
   // Checking if current account data and input data match and then deleting account
   if (currentAccount.username === user && currentAccount.pin === pin) {
     accounts.splice(
-      accounts.findIndex(acc => acc.username === user),
+      accounts.findIndex((acc) => acc.username === user),
       1
     );
 
@@ -340,8 +342,8 @@ TEST DATA 2: [16, 6, 10, 5, 6, 1, 4]
 */
 console.log("------------------- Coding Challenge #2 -------------------");
 function calcAverageHumanAge(ages) {
-  const humanYears = ages.map(age => (age <= 2 ? 2 * age : 16 + age * 4));
-  const adults = humanYears.filter(age => age >= 18);
+  const humanYears = ages.map((age) => (age <= 2 ? 2 * age : 16 + age * 4));
+  const adults = humanYears.filter((age) => age >= 18);
   return adults.reduce((acc, age) => (acc += age), 0) / adults.length;
 }
 
@@ -362,10 +364,10 @@ TEST DATA 1: [5, 2, 4, 1, 15, 8, 3]
 TEST DATA 2: [15, 6, 10, 5, 6, 1, 4]
 */
 console.log("------------------- Coding Challenge #3 -------------------");
-const calcAvgHumanAge = ages =>
+const calcAvgHumanAge = (ages) =>
   ages
-    .map(age => (age <= 2 ? 2 * age : 16 + age * 4))
-    .filter(age => age >= 18)
+    .map((age) => (age <= 2 ? 2 * age : 16 + age * 4))
+    .filter((age) => age >= 18)
     .reduce((acc, age, i, arr) => (acc += age / arr.length), 0);
 
 console.log(calcAvgHumanAge(dogAges1));
@@ -446,7 +448,9 @@ calcRecommendedFood(dogs);
 
 // write to the console if sarah's dog is eating too much or too little
 // instead of using .some(), .includes() also returns true/false value
-const sarahsDog = dogs.find(dog => dog.owners.some(owner => owner === "Sarah"));
+const sarahsDog = dogs.find((dog) =>
+  dog.owners.some((owner) => owner === "Sarah")
+);
 console.log(
   `${sarahsDog.owners[0]}'s dog is eating ${(
     sarahsDog.curFood - sarahsDog.recommendedFood
@@ -454,30 +458,34 @@ console.log(
 );
 
 // Create an array of all the dogs that are eating too much
-const ownersEatTooMuch = dogs.filter(dog => dog.curFood > dog.recommendedFood);
+const ownersEatTooMuch = dogs.filter(
+  (dog) => dog.curFood > dog.recommendedFood
+);
 console.log(ownersEatTooMuch);
 
 // Create an array of all the dogs that are eating too little
 const ownersEatTooLittle = dogs.filter(
-  dog => dog.curFood < dog.recommendedFood
+  (dog) => dog.curFood < dog.recommendedFood
 );
 console.log(ownersEatTooLittle);
 
 // Getting the owners names of each of the arrays to print into a string
-const ownerOverEat = ownersEatTooMuch.flatMap(dog => dog.owners).join(" and ");
+const ownerOverEat = ownersEatTooMuch
+  .flatMap((dog) => dog.owners)
+  .join(" and ");
 console.log(`${ownerOverEat}'s dogs eat too much!`);
 
 const ownerUnderEat = ownersEatTooLittle
-  .flatMap(dog => dog.owners)
+  .flatMap((dog) => dog.owners)
   .join(" and ");
 console.log(`${ownerUnderEat}'s dogs eat too little!`);
 
 // log to the console if any dog is eating the exact correct amount of food
-console.log(dogs.some(dog => dog.curFood === dog.recommendedFood));
+console.log(dogs.some((dog) => dog.curFood === dog.recommendedFood));
 
 // Log to the console if any dog is eating an okay amount of food
 // current > (recommended * 0.90) && currennt < (recommended * 1.10)
-const checkEatingOkay = dog =>
+const checkEatingOkay = (dog) =>
   dog.curFood > dog.recommendedFood * 0.9 &&
   dog.curFood < dog.recommendedFood * 1.1;
 
@@ -638,7 +646,7 @@ console.log("\n------------------- The Map Method -------------------");
 const eurToUsd = 1.1;
 
 // The Map Method (functional programming)
-const movementsUSD = movements.map(mov => mov * eurToUsd);
+const movementsUSD = movements.map((mov) => mov * eurToUsd);
 
 console.log(movements);
 console.log(movementsUSD);
@@ -683,7 +691,7 @@ for (const mov of movements) {
 console.log(depositsFor);
 
 // Create an array of the withdrawls
-const withdrawls = movements.filter(mov => mov < 0);
+const withdrawls = movements.filter((mov) => mov < 0);
 console.log(withdrawls);
 
 /*
@@ -735,8 +743,8 @@ console.log(
 
 // Pipeline of chaining methods
 const totalDepositsUSD = movements
-  .filter(mov => mov > 0)
-  .map(mov => mov * eurToUsd)
+  .filter((mov) => mov > 0)
+  .map((mov) => mov * eurToUsd)
   .reduce((acc, mov) => acc + mov, 0);
 
 console.log(totalDepositsUSD);
@@ -752,12 +760,12 @@ arr.find(function(mov, i, arr) {});
 */
 console.log("\n------------------- The Find Method -------------------");
 
-const first_withdrawl = movements.find(mov => mov < 0);
+const first_withdrawl = movements.find((mov) => mov < 0);
 console.log(first_withdrawl);
 
 console.log(accounts);
 
-const account = accounts.find(acc => acc.owner === "Jessica Davis");
+const account = accounts.find((acc) => acc.owner === "Jessica Davis");
 console.log(account);
 
 // Using  a for loop for the above code
@@ -792,7 +800,7 @@ arr.some(condition);
 
 Every Method
 arr.every(condition);
-* The some method works similar to the some method, except that every element
+* The every method works similar to the some method, except that every element
   must meet the condition to return true.
 */
 console.log(
@@ -803,14 +811,14 @@ console.log(
 console.log(movements.includes(-130)); // True (is in the array)
 
 // Some Method (condition)
-const anyDeposits = movements.some(mov => mov > 5000);
+const anyDeposits = movements.some((mov) => mov > 5000);
 console.log(anyDeposits); // False no deposit greater than 5000
 
 // Every Method (condition)
-console.log(account4.movements.every(mov => mov > 0)); // true (all movements are deposits)
+console.log(account4.movements.every((mov) => mov > 0)); // true (all movements are deposits)
 
 // Separate callback
-const deposit = mov => mov > 0;
+const deposit = (mov) => mov > 0;
 console.log(movements.some(deposit)); // true
 console.log(movements.every(deposit)); // false
 console.log(movements.filter(deposit)); // returns an array with all deposits
@@ -845,14 +853,14 @@ console.log(arrDeep.flat(2));
 
 // Gets all movements from all accounts
 const overallBalance = accounts
-  .map(acc => acc.movements)
+  .map((acc) => acc.movements)
   .flat()
   .reduce((acc, mov) => (acc += mov), 0);
 console.log(overallBalance);
 
 // FlatMap
 const overallBalance2 = accounts
-  .flatMap(acc => acc.movements)
+  .flatMap((acc) => acc.movements)
   .reduce((acc, mov) => (acc += mov), 0);
 console.log(overallBalance2);
 
@@ -918,7 +926,7 @@ x.fill(1);
 console.log(x);
 
 // Array.from()
-const y = Array.from({ legnth: 7 }, () => 1);
+const y = Array.from({ length: 7 }, () => 1);
 console.log(y);
 
 // Creating an array problematically
@@ -940,7 +948,7 @@ labelBalance.addEventListener("click", function () {
   */
   const movementsUI = Array.from(
     document.querySelectorAll(".movements__value"),
-    el => Number(el.textContent.replace("€", ""))
+    (el) => Number(el.textContent.replace("€", ""))
   );
 
   // Another way of converting the nodelist ui element to a array
@@ -954,7 +962,7 @@ Which Array Method to Use?
 
 - What do I actually want from this method?
  * Do I want to mutate the original array?
-    + .push(), add to the origianl (end)
+    + .push(), add to the original (end)
     + .unshift(), add to the original (start)
     + .pop(), remove from the original (end)
     + .shift(), remove from the original (start)
@@ -993,21 +1001,21 @@ console.log("\n------------------- Array Methods Practice -------------------");
 // Exercise 1
 // return the total deposits across all of the accounts movements
 const bankDepositSum = accounts
-  .flatMap(acc => acc.movements)
-  .filter(mov => mov > 0)
+  .flatMap((acc) => acc.movements)
+  .filter((mov) => mov > 0)
   .reduce((acc, mov) => acc + mov, 0);
 console.log(bankDepositSum);
 
 // Exercise 2
 // Return the number of deposits over 1000
 const numDeposits1000 = accounts
-  .flatMap(acc => acc.movements)
-  .filter(mov => mov >= 1000).length;
+  .flatMap((acc) => acc.movements)
+  .filter((mov) => mov >= 1000).length;
 console.log(numDeposits1000);
 
 // Exercise 2 using reduce method
 const numDeposits1k = accounts
-  .flatMap(acc => acc.movements)
+  .flatMap((acc) => acc.movements)
   .reduce((acc, mov) => (mov >= 1000 ? ++acc : acc), 0);
 console.log(numDeposits1k);
 
@@ -1015,7 +1023,7 @@ console.log(numDeposits1k);
 // Create a new object which contains the sum of the deposits and withdrawls
 // using reduce method
 const sums = accounts
-  .flatMap(acc => acc.movements)
+  .flatMap((acc) => acc.movements)
   .reduce(
     (acc, mov) => {
       mov > 0 ? (acc.deposits += mov) : (acc.withdrawls += mov);
@@ -1029,13 +1037,13 @@ console.log(sums);
 // Exercise 4
 // Convert any string to a title case
 function convertTitleCase(title) {
-  const capitalize = string => string[0].toUpperCase() + string.slice(1);
+  const capitalize = (string) => string[0].toUpperCase() + string.slice(1);
   const exceptions = ["a", "an", "and", "the", "but", "or", "on", "in", "with"];
 
   const titleCase = title
     .toLowerCase()
     .split(" ")
-    .map(word => (exceptions.includes(word) ? word : capitalize(word)))
+    .map((word) => (exceptions.includes(word) ? word : capitalize(word)))
     .join(" ");
   return capitalize(titleCase);
 }
