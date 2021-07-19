@@ -566,18 +566,18 @@ function createImage(imgPath) {
 }
 
 // Execution
-createImage("img/img-1.jpg")
-  .then((img) => {
-    wait(hold).then(() => {
-      hideImage(img);
-      createImage("img/img-2.jpg").then((img) => {
-        wait(hold).then(() => {
-          hideImage(img);
-        });
-      });
-    });
-  })
-  .catch((err) => console.error(err));
+// createImage("img/img-1.jpg")
+//   .then((img) => {
+//     wait(hold).then(() => {
+//       hideImage(img);
+//       createImage("img/img-2.jpg").then((img) => {
+//         wait(hold).then(() => {
+//           hideImage(img);
+//         });
+//       });
+//     });
+//   })
+//   .catch((err) => console.error(err));
 
 ////////////////////////////////////////////////////////////////////
 //// Consuming Promises with Async/Await ///////
@@ -669,14 +669,17 @@ try {
 ////////////////////////////////////////////////////////////////////
 //// Running Promises in Parallel ///////
 /*
-  - All async functions need to be wrapped in a try/catch block
+  - All async functions need to be wrapped in a try/catch block.
+   * Real world situations would use real error handling instead of console logs
 
   Promise.all([]);
+  - Combinator function
   - Promise.all() takes an array of promises and returns a new promise, 
     which will then run all the promises in the array at one time.
+  - Promise.all will "short circuit" as soon as one promise rejects
 
   Used to run multiple asynchronous actions at once time that do not rely on
-  one another.
+  one another, always run them in parelle with Promise.all(arr[promises]);
 */
 
 async function get3Countries(c1, c2, c3) {
@@ -693,6 +696,7 @@ async function get3Countries(c1, c2, c3) {
       getJSON(`http://restcountries.eu/rest/v2/name/${c3}`),
     ]);
 
+    // display the capital from each of the data objects
     console.log(data.map((d) => d[0].capital));
   } catch (err) {
     console.error(err);
@@ -703,5 +707,135 @@ get3Countries("portugal", "canada", "tanzania");
 ////////////////////////////////////////////////////////////////////
 //// Other Promise Combinators: race, allSettled, and any ///////
 /*
+ Promise.race(arr[promises]);
+ - Promise.race will receive a array of promises and return a promise.
+ - The promise from Promise.race will be settled as soon as one of the input
+   promises settles.
+   * Settle means a value is available, doesn't matter if rejected or fulfilled.
+ - You will only get one result and not the results of all three
+ - There can also be a rejected promise that wins the race
+ - Promise.race "short circuits" every time one of the promises gets settled
+ - Promise.race is useful to prevent never ending promises or long running promises
+ 
+ Promise.allSetteled(arr[promises]);
+ - Takes a array of promises and returns a array of all setlled promises.
+ - Doesn't matter if the promises were rejected or not.
+ - Promise.allSettled is similiar to Promise.all but will return all the results 
+   whether they fullfil or reject.
 
+  Promise.any(arr[promises]);
+  - ES2021
+  - Takes a array of promises and return the first fullfilled promise and ignore rejected promises
+  - Similar to Promise.race except that rejected are ignored unless they all reject
 */
+// Promise.race
+// The three promises below will race against each other to get fullfilled
+// if the winning promise is fulfilled the fullfillment value of the whole
+// arrays promise will be the fullfillment value of the winning promise
+(async function () {
+  const response = await Promise.race([
+    getJSON(`https://restcountries.eu/rest/v2/name/italy`),
+    getJSON(`https://restcountries.eu/rest/v2/name/egypt`),
+    getJSON(`https://restcountries.eu/rest/v2/name/mexico`),
+  ]);
+  console.log(response[0]); // ex Italy, or egypt, or mexico
+})();
+
+// Function that takes a seconds for timeout and only has a reject function
+// No resolve.  After a certain amount of a seconds reject the promise.
+function timeout(sec) {
+  return new Promise(function (_, reject) {
+    setTimeout(function () {
+      reject(new Error(`Request took too long!`));
+    }, sec * 1000);
+  });
+}
+
+// Creating a Promise.race that takes the AJAX/JSON call and races it against
+// The timeout function.  If timeout happens first then everything will be rejected.
+// Will display tanzania or request took too long
+Promise.race([
+  getJSON(`https://restcountries.eu/rest/v2/name/tanzania`),
+  timeout(1),
+])
+  .then((res) => console.log(res[0]))
+  .catch((err) => console.log(err));
+
+// Promise.allSettled
+Promise.allSettled([
+  Promise.resolve("Success"),
+  Promise.reject("Error"),
+  Promise.resolve("Another success"),
+]).then((res) => console.log(res));
+
+// Promise.all - Will error out if there is one rejected promise
+Promise.all([
+  Promise.resolve("Success"),
+  Promise.reject("Error"),
+  Promise.resolve("Another success"),
+])
+  .then((res) => console.log(res))
+  .catch((err) => console.log(err));
+
+// Promise.any
+Promise.any([
+  Promise.resolve("Success"),
+  Promise.reject("Error"),
+  Promise.resolve("Another success"),
+])
+  .then((res) => console.log(res))
+  .catch((err) => console.log(err));
+
+////////////////////////////////////////////////////////////////////
+//// Coding Challenge #3 ///////
+/*
+PART 1
+Write a async function "loadNPause" that recreates Coding Challenge #2,
+this time using async/await (only the part where the promise is consumed).
+Compare the two versions, think about the big differences, and see which one
+you like more.
+Don't forget to test the error handler, and to set the network speed to "Fast 3G"
+in the dev tools Network tab.
+
+PART 2
+1. Create an async function "loadAll" that receives an array of image paths "imgArr";
+2. Use .map to loop over the array, to load all the images with the "createImage" function
+(call the resulting array "imgs")
+3. Check the "imgs" array in the console! Is it like you expected?
+4. Use a promise combinator function to actually get the images from the array
+5. Add the "parallel" class to all the images (it has some CSS sstyles).
+
+TEST DATA: [`img/img-1.jpg`, `img/img-2.jpg`, `img/img-3.jpg`], to test, turn off
+the "loadNPause" function.
+*/
+
+// PART 1
+async function loadNPause() {
+  try {
+    // display image 1
+    let image = await createImage("img/img-1.jpg");
+    await wait(hold).then(() => hideImage(image));
+    // display image 2
+    image = await createImage("img/img-2.jpg");
+    await wait(hold).then(() => hideImage(image));
+    // display image 3
+    image = await createImage("img/img-3.jpg");
+    await wait(hold).then(() => hideImage(image));
+  } catch (err) {
+    console.error(err);
+  }
+}
+// loadNPause();
+
+// PART 2
+async function loadAll(imgArr) {
+  try {
+    const imgs = imgArr.map((img) => createImage(img));
+    await Promise.all(imgs).then((imgs) =>
+      imgs.map((img) => img.classList.add("parallel"))
+    );
+  } catch (err) {
+    console.log(err);
+  }
+}
+loadAll([`img/img-1.jpg`, `img/img-2.jpg`, `img/img-3.jpg`]);
