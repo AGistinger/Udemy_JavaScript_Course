@@ -809,18 +809,23 @@ TEST DATA: [`img/img-1.jpg`, `img/img-2.jpg`, `img/img-3.jpg`], to test, turn of
 the "loadNPause" function.
 */
 
+// Modified hide image function to remove global variable
+function hideImages(img) {
+  img.style.display = "none";
+}
+
 // PART 1
 async function loadNPause() {
   try {
     // display image 1
     let image = await createImage("img/img-1.jpg");
-    await wait(hold).then(() => hideImage(image));
+    await wait(hold).then(() => hideImages(image));
     // display image 2
     image = await createImage("img/img-2.jpg");
-    await wait(hold).then(() => hideImage(image));
+    await wait(hold).then(() => hideImages(image));
     // display image 3
     image = await createImage("img/img-3.jpg");
-    await wait(hold).then(() => hideImage(image));
+    await wait(hold).then(() => hideImages(image));
   } catch (err) {
     console.error(err);
   }
