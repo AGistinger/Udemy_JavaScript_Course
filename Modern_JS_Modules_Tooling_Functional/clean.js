@@ -1,8 +1,8 @@
 var sc = [
-  { product: 'bread', quantity: 6 },
-  { product: 'pizza', quantity: 2 },
-  { product: 'milk', quantity: 4 },
-  { product: 'water', quantity: 10 },
+  { product: "bread", quantity: 6 },
+  { product: "pizza", quantity: 2 },
+  { product: "milk", quantity: 4 },
+  { product: "water", quantity: 10 },
 ];
 
 var allow = {
@@ -10,12 +10,12 @@ var allow = {
   others: 7,
 };
 
-var description = '';
+var description = "";
 
 var check = function (city) {
   if (sc.length > 0) {
     var allowed;
-    if (city == 'lisbon') {
+    if (city == "lisbon") {
       allowed = allow.lisbon;
     } else {
       allowed = allow.others;
@@ -26,7 +26,7 @@ var check = function (city) {
     }
   }
 };
-check('lisbon');
+check("lisbon");
 console.log(sc);
 
 var createDescription = function () {
@@ -35,9 +35,9 @@ var createDescription = function () {
   var q = first.quantity;
 
   if (sc.length > 1) {
-    description = 'Order with ' + q + ' ' + p + ', etc...';
+    description = "Order with " + q + " " + p + ", etc...";
   } else {
-    description = 'Order with ' + q + ' ' + p + '.';
+    description = "Order with " + q + " " + p + ".";
   }
 };
 createDescription();
