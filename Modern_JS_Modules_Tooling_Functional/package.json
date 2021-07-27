@@ -2,7 +2,7 @@
   "name": "modern_js_modules_tooling_functional",
   "version": "1.0.0",
   "description": "",
-  "main": "clean.js",
+  "main": "script.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
