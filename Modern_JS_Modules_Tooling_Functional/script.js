@@ -38,7 +38,7 @@ console.log("Importing module");
 
 // Import all the exports of a module at the same time
 // This makes the code in the module act like an Class object
-import * as ShoppingCart from "./shoppingCart.js";
+import shoppingCart, * as ShoppingCart from "./shoppingCart.js";
 
 ShoppingCart.addToCart("bread", 5);
 console.log(ShoppingCart.totalPrice);
@@ -163,7 +163,9 @@ Lodash - A collection of useful functions that should be included in JS but
   aren't.
   npm install lodash-es (to install es6 modules)
 */
-import cloneDeep from "./node_modules/lodash-es/cloneDeep.js";
+// import cloneDeep from "./node_modules/lodash-es/cloneDeep.js";
+// importing with a bundler
+import { cloneDeep } from "lodash-es";
 
 const state = {
   cart: [
@@ -183,5 +185,93 @@ state.user.loggedIn = false; // changes both the real object and copy
 //////////////////////////////////////////////////////
 // Bundling with Parcel and NPM Scripts
 /*
+ Parcel
+ - fast and easy to use
+ - Works out of the box without any configuration
+ - Webpack is more popular but complex
+ 
+ To Install
+ npm install parcel --save-dev
+ - A tool needed to build the application, but not included in code
 
+ How to Use Parcel
+ - You can use npx or npm scripts
+ - npx parcel index.html (entry point)
+ - Used to bundle the modules together
+ - Starts a new server (works like liveserver)
+ - If there are errors while installing or running parcel, how to fix?
+   * You can try to install with "sudo npm install parcel" (allows more permissions)
+   * Try to install version 1.12.4 "npm install parcel@1.12.4"
+   * Try to uninstall "npm uninstall parcel"
+   * Try to remove "type=module" from html as may not be needed
+   * NPM scripts for locally installed packages in command line (automate repeatitive tasks)
+     - Under "scripts" in the package.json file
+       * "start": "parcel index.html"
+       * Then to run script in command line "npm run start"
+  - You can kill a server process by selecting <Ctrl + c>
+
+ Build final bundle
+ - When done developing project, build final bundle
+ - Has code compressed and code elimination
+ - Under "scripts" in the package.json file
+   * "build": "parcel build index.html"
+   * "npm run build"
+   
+ Packages can be installed globally
+ - "npm install parcel --g"
+ - Allows packages to work everywhere
+ - Tools normally should be installed locally so they can be on the latest version
 */
+
+// Hot module replacement
+// Only Parcel understands, when you change a module it will not reload the page during rebuild
+if (module.hot) {
+  module.hot.accept();
+}
+
+//////////////////////////////////////////////////////
+// Configuring Babel and Polyfilling
+/*
+ Transpile modern code to ES5 code
+ - There are still many people stuck on older computers and cannot upgrade
+ - Parcel automatically uses Babel
+   * Define what browsers should be supported
+
+ Babel
+ - Bablejs.io
+ - Plug-ins
+ - Works with plug-ins and presets that can be configured
+ - Plug-ins are specific features that you want to convert
+ - More normal to use presets, bunch of plugins bundled together
+ - Preset-env
+ 
+ Polyfilling
+  - uses a different library
+  - "import "core-js/stable"
+  - manual install "npm install core.js"
+  - Will polyfill everything even if you don't need it
+  - "npm install regenerator-runtime" // polyfil for async functions
+*/
+
+// Code that is not part of the preset for Babel (now included by default)
+class Person {
+  #greeting = "Hey";
+  constructor(name) {
+    this.name = name;
+    console.log(`${this.#greeting}, ${this.name}}`);
+  }
+}
+const jonas = new Person("Jonas");
+
+console.log("Jonas" ?? null);
+
+console.log(state.cart.find((el) => el.quantity >= 2)); // Not converted to ES5
+Promise.resolve("Test").then((x) => console.log(x)); // Not converted to ES5
+
+// Polyfilling
+// import "core-js/stable"; // everything
+import "core-js/stable/array/find"; // specific
+import "core-js/stable/promise"; // specific
+
+// Polyfilling async functions
+import "regenerator-runtime/runtime";
