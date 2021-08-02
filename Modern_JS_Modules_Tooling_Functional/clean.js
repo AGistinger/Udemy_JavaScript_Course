@@ -1,45 +1,53 @@
-var sc = [
-  { product: "bread", quantity: 6 },
-  { product: "pizza", quantity: 2 },
-  { product: "milk", quantity: 4 },
-  { product: "water", quantity: 10 },
+// Code below is for a simple budget application
+"use strict;";
+
+const budget = [
+  { value: 250, description: "Sold old TV 📺", user: "jonas" },
+  { value: -45, description: "Groceries 🥑", user: "jonas" },
+  { value: 3500, description: "Monthly salary 👩‍💻", user: "jonas" },
+  { value: 300, description: "Freelancing 👩‍💻", user: "jonas" },
+  { value: -1100, description: "New iPhone 📱", user: "jonas" },
+  { value: -20, description: "Candy 🍭", user: "matilda" },
+  { value: -125, description: "Toys 🚂", user: "matilda" },
+  { value: -1800, description: "New Laptop 💻", user: "jonas" },
 ];
 
-var allow = {
-  lisbon: 5,
-  others: 7,
+const spendingLimits = {
+  jonas: 1500,
+  matilda: 100,
 };
 
-var description = "";
+// Using optional chaining and nullish collaesing operator
+const getLimit = (user) => spendingLimits?.[user] ?? 0;
 
-var check = function (city) {
-  if (sc.length > 0) {
-    var allowed;
-    if (city == "lisbon") {
-      allowed = allow.lisbon;
-    } else {
-      allowed = allow.others;
-    }
+const addExpense = function (value, description, user = "jonas") {
+  user = user.toLowerCase(user);
 
-    for (item of sc) {
-      if (item.quantity > allowed) item.quantity = allowed;
+  if (value <= getLimit(user)) {
+    budget.push({ value: -value, description, user });
+  }
+};
+addExpense(10, "Pizza 🍕");
+addExpense(100, "Going to movies 🍿", "Matilda");
+addExpense(200, "Stuff", "Jay");
+
+const checkExpenses = function () {
+  for (const entry of budget) {
+    if (entry.value < -getLimit(entry.user)) {
+      entry.flag = "limit";
     }
   }
 };
-check("lisbon");
-console.log(sc);
+checkExpenses();
 
-var createDescription = function () {
-  var first = sc[0];
-  var p = first.product;
-  var q = first.quantity;
-
-  if (sc.length > 1) {
-    description = "Order with " + q + " " + p + ", etc...";
-  } else {
-    description = "Order with " + q + " " + p + ".";
+const logBigExpenses = function (bigLimit) {
+  let output = "";
+  for (const entry of budget) {
+    output +=
+      entry.value <= -bigLimit ? `${entry.description.slice(-2)} / ` : "";
   }
+  output = output.slice(0, -2); // Remove last '/ '
+  console.log(output);
 };
-createDescription();
-
-console.log(description);
+console.log(budget);
+logBigExpenses(1000);
