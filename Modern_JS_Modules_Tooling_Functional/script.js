@@ -275,3 +275,9 @@ import "core-js/stable/promise"; // specific
 
 // Polyfilling async functions
 import "regenerator-runtime/runtime";
+
+//////////////////////////////////////////////////////
+// Writing Clean and Modern JavaScript Code
+/*
+
+*/
