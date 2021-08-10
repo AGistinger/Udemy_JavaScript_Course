@@ -28,3 +28,43 @@ Common format: As a [type of user], I want [an action] so that [a benefit]
  5) Store bookmark data in the browser using local storage
    * On page load, read saved bookmarks from local storage and display
 
+// Why Worry About Architecture? //
+The perfect archetecture gives a project Structure, Maintanability, and Expandability
+ - Like a house, software needs a structure: the way we organize the code.
+ - A project is never done!  We need to be able to easily change it in the future.
+ - We also need to be able to easily add new features.
+ - We can use a well-established archetecture pattern like MVC (model view controller) MVC, 
+   MVP, Flux, etc.  (this project).
+ - We can use a framework like React, Angular, Vue, Svelte, etc.
+
+Components of Any Architecture
+ - Business Logic:
+   * Code that solves the actual business problem.
+   * Directly related to what business does and what it needs.
+   * Example: sending messages, storing transactions, calculating taxes, etc.
+ - State:
+   * Essentially stores all the data about the application.
+   * Should be the "single source of truth".
+   * UI should be kept in sync with the state.
+   * State libraries exist, ex) redux, mobx
+ - Http Library:
+   * Responsible for making and receiving AJAX requests.
+   * Optional but almost always necessary in real-world apps.
+ - Applicaiton Logic (Router):
+   * Code that is only concerned abou tthe implementation of application itself.
+   * Handles navigation and UI events.
+ - Presentation Logic (UI Layer):
+   * Code that concerned about the visible part of the application.
+   * Essentially displays the application state.
+
+The Model-View-Controller (MVC) Architecture
+ - Model
+   * Business logic
+   * State
+   * HTTP library
+ - Controller
+   * Application logic
+   * Bridge between the model adn the views (which don't know about one another).
+ - View
+   * Presentation logic
+
