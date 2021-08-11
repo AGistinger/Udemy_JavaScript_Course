@@ -5,6 +5,8 @@ class RecipeView {
   // Variables
   #parentElement = document.querySelector(".recipe");
   #data;
+  #errorMessage = "We couldn't find that recipe.  Please try another one!";
+  #message = "";
 
   // Methods
   render(data) {
@@ -28,6 +30,44 @@ class RecipeView {
       `;
     this.#clear();
     this.#parentElement.insertAdjacentHTML("afterbegin", markupSpin);
+  }
+
+  renderError(message = this.#errorMessage) {
+    const errorMarkup = `
+      <div class="error">
+            <div>
+              <svg>
+                <use href="${icons}#icon-alert-triangle"></use>
+              </svg>
+            </div>
+            <p>${message}</p>
+          </div>
+    `;
+    this.#clear();
+    this.#parentElement.insertAdjacentHTML("afterbegin", errorMarkup);
+  }
+
+  renderMessage(message = this.#message) {
+    const messageMarkup = `
+    <div class="recipe">
+    <div class="message">
+      <div>
+        <svg>
+          <use href="${icons}#icon-smile"></use>
+        </svg>
+      </div>
+      <p>Start by searching for a recipe or an ingredient. Have fun!</p>
+    </div>
+    `;
+    this.#clear();
+    this.#parentElement.insertAdjacentHTML("afterbegin", messageMarkup);
+  }
+
+  addHandlerRender(handler) {
+    // Listen for when the selected recipe changes or page load and show the recipe in the main window
+    ["hashchange", "load"].forEach((event) =>
+      window.addEventListener(event, handler)
+    );
   }
 
   #generateMarkup() {
@@ -123,7 +163,7 @@ class RecipeView {
         <use href="${icons}#icon-check"></use>
       </svg>
       <div class="recipe__quantity">${
-        ingredient.quanity ? new Fraction(ingredient.quantity).toString() : ""
+        ingredient.quantity ? new Fraction(ingredient.quantity).toString() : ""
       }</div>
       <div class="recipe__description">
         <span class="recipe__unit">${ingredient.unit}</span>
