@@ -2,6 +2,7 @@ import icons from "url:../../img/icons.svg";
 
 export default class View {
   _data;
+  _message = "Start by searching for a recipe or an ingredient. Have fun!";
 
   // Methods
   render(data) {
@@ -19,7 +20,7 @@ export default class View {
     const markupSpin = `
             <div class="spinner">
                 <svg>
-                  <use href="${icons}_icon-loader"></use>
+                  <use href="${icons}#icon-loader"></use>
                 </svg>
              </div>
         `;
@@ -32,7 +33,7 @@ export default class View {
         <div class="error">
               <div>
                 <svg>
-                  <use href="${icons}_icon-alert-triangle"></use>
+                  <use href="${icons}#icon-alert-triangle"></use>
                 </svg>
               </div>
               <p>${message}</p>
@@ -48,10 +49,10 @@ export default class View {
       <div class="message">
         <div>
           <svg>
-            <use href="${icons}_icon-smile"></use>
+            <use href="${icons}#icon-smile"></use>
           </svg>
         </div>
-        <p>Start by searching for a recipe or an ingredient. Have fun!</p>
+        <p>${message}</p>
       </div>
       `;
     this._clear();

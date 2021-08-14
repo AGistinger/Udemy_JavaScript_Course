@@ -28,7 +28,6 @@ async function controlRecipes() {
 async function controlSearchResults() {
   try {
     resultsView.renderSpinner();
-    console.log(resultsView);
     // Get Search query
     const query = searchView.getQuery();
     if (!query) return;
