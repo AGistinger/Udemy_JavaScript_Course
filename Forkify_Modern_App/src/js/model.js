@@ -1,4 +1,5 @@
 import { API_URL } from "./config.js";
+import { RES_PER_PAGE } from "./config.js";
 import { getJSON } from "./helpers.js";
 
 export const state = {
@@ -6,6 +7,8 @@ export const state = {
   search: {
     query: "",
     results: [],
+    page: 1,
+    resultsPerPage: RES_PER_PAGE,
   },
 };
 
@@ -46,4 +49,22 @@ export async function loadSearchResults(query) {
   } catch (err) {
     throw err;
   }
+}
+
+// Will slice 10 search results from the results array based on the page passed in
+export function getSearchResultsPage(page = state.search.page) {
+  state.search.page = page;
+  const start = (page - 1) * state.search.resultsPerPage;
+  const end = page * state.search.resultsPerPage;
+
+  return state.search.results.slice(start, end);
+}
+
+export function updateServings(newServings) {
+  state.recipe.ingredients.forEach((ingredient) => {
+    ingredient.quantity =
+      (ingredient.quantity * newServings) / state.recipe.servings;
+  });
+
+  state.recipe.servings = newServings;
 }
