@@ -4,6 +4,14 @@ export default class View {
   _data;
 
   // Methods
+  /**
+   * Render the received object to the DOM
+   * @param {Object | Object[]} data - The data to be rendered
+   * @param {boolean} [render=true] - If false, create markup string instead of rendering to the DOM
+   * @returns {undefined | string} - A markup string is returned if render=false
+   * @this {Object} View instance
+   * @author Adrianne Gistinger
+   */
   render(data, render = true) {
     // Checks if there is data or if the data is an empty array
     if (!data || (Array.isArray(data) && data.length === 0))
